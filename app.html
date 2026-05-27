@@ -9,6 +9,13 @@
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <style>
+  :root {
+    --phone-w: 320px;
+    --phone-h: 672px;
+    --phone-radius: 46px;
+    --showcase-gap: 72px;
+    --copy-max: 520px;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
@@ -25,7 +32,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 60px 0;
+    padding: 24px 0;
     position: relative;
     overflow: hidden;
   }
@@ -45,7 +52,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 72px;
+    gap: var(--showcase-gap);
     max-width: 1240px;
     width: 100%;
     margin: 0 auto;
@@ -56,7 +63,7 @@
 
   /* ─── LEFT COPY ─────────────────────────── */
   .copy-col {
-    flex: 0 1 520px;
+    flex: 0 1 var(--copy-max);
     min-width: 0;
     text-align: left;
   }
@@ -198,10 +205,10 @@
 
   /* ─── PHONE FRAME ───────────────────────── */
   .phone-bezel {
-    width: 320px;
-    height: 672px;
+    width: var(--phone-w);
+    height: var(--phone-h);
     background: #0F0F0F;
-    border-radius: 46px;
+    border-radius: var(--phone-radius);
     padding: 10px;
     box-shadow:
       0 0 0 1px #2a2a2a,
@@ -401,8 +408,7 @@
     </a>
     <div style="display:flex; gap:32px;">
       <a href="index.html#menu"   style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Menu</a>
-      <a href="index.html#stores" style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Stores</a>
-      <a href="index.html#about"  style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
+<a href="index.html#about"  style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
       <a href="app.html"          style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#1D391A; text-decoration:none;">App</a>
     </div>
     <div style="width:40px;"></div>
@@ -412,6 +418,7 @@
 <div id="root"></div>
 
 <script type="text/babel" src="screens.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
@@ -432,6 +439,14 @@ const APP_TABS = [
 ];
 
 const INTERVAL_MS = 3200;
+
+const APP_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "phoneWidth": 320,
+  "phoneHeight": 672,
+  "showcaseGap": 72,
+  "copyWidth": 520,
+  "autoplay": true
+}/*EDITMODE-END*/;
 
 function StatusBar({ dark }) {
   return (
@@ -520,7 +535,7 @@ function PhoneShowcase() {
   };
 
   return (
-    <section className="showcase-section">
+    <>
       {/* Decorative monstera leaves */}
       <svg className="leaf-deco" style={{ top: -80, right: -60, width: 400, height: 400 }} viewBox="0 0 200 200">
         <path d="M100 20 Q150 40 160 80 Q170 120 140 145 Q110 170 80 160 Q50 155 40 130 Q25 100 40 70 Q55 40 100 20Z" fill="#F8F3EE"/>
@@ -635,6 +650,17 @@ function PhoneShowcase() {
         </div>
       </div>
     </section>
+    <TweaksPanel title="Tweaks">
+      <TweakSection title="Phone size">
+        <TweakSlider label="Width"  value={t.phoneWidth}  min={240} max={400} step={10} onChange={v => setTweak('phoneWidth',  v)} />
+        <TweakSlider label="Height" value={t.phoneHeight} min={480} max={800} step={10} onChange={v => setTweak('phoneHeight', v)} />
+      </TweakSection>
+      <TweakSection title="Layout">
+        <TweakSlider label="Gap between text & phone" value={t.showcaseGap} min={24} max={160} step={8} onChange={v => setTweak('showcaseGap', v)} />
+        <TweakSlider label="Copy column width"        value={t.copyWidth}   min={300} max={680} step={20} onChange={v => setTweak('copyWidth',   v)} />
+      </TweakSection>
+    </TweaksPanel>
+    </>
   );
 }
 
