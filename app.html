@@ -9,6 +9,16 @@
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <style>
+  :root {
+    --phone-w: 320px;
+    --phone-h: 672px;
+    --phone-radius: 46px;
+    --showcase-gap: 72px;
+    --copy-max: 520px;
+    --content-scale: 1;
+    --headline-scale: 1;
+    --body-scale: 1;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
@@ -21,11 +31,11 @@
   /* ─── SECTION WRAPPER ───────────────────── */
   .showcase-section {
     width: 100%;
-    min-height: calc(100vh - 64px);
+    height: calc(100vh - 64px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 60px 0;
+    padding: 0;
     position: relative;
     overflow: hidden;
   }
@@ -45,7 +55,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 72px;
+    gap: var(--showcase-gap);
+    transform: scale(var(--content-scale));
+    transform-origin: center center;
     max-width: 1240px;
     width: 100%;
     margin: 0 auto;
@@ -56,7 +68,7 @@
 
   /* ─── LEFT COPY ─────────────────────────── */
   .copy-col {
-    flex: 0 1 520px;
+    flex: 0 1 var(--copy-max);
     min-width: 0;
     text-align: left;
   }
@@ -73,6 +85,8 @@
   }
 
   .headline {
+    transform: scale(var(--headline-scale));
+    transform-origin: left top;
     font-family: 'Fraunces', serif;
     font-weight: 900;
     font-size: clamp(42px, 5vw, 68px);
@@ -88,6 +102,8 @@
   }
 
   .subtext {
+    transform: scale(var(--body-scale));
+    transform-origin: left top;
     font-family: 'Inter', sans-serif;
     font-size: 17px;
     color: rgba(248,243,238,0.65);
@@ -198,10 +214,10 @@
 
   /* ─── PHONE FRAME ───────────────────────── */
   .phone-bezel {
-    width: 320px;
-    height: 672px;
+    width: var(--phone-w);
+    height: var(--phone-h);
     background: #0F0F0F;
-    border-radius: 46px;
+    border-radius: var(--phone-radius);
     padding: 10px;
     box-shadow:
       0 0 0 1px #2a2a2a,
@@ -401,8 +417,7 @@
     </a>
     <div style="display:flex; gap:32px;">
       <a href="index.html#menu"   style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Menu</a>
-      <a href="index.html#stores" style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Stores</a>
-      <a href="index.html#about"  style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
+<a href="index.html#about"  style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
       <a href="app.html"          style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#1D391A; text-decoration:none;">App</a>
     </div>
     <div style="width:40px;"></div>
@@ -412,6 +427,7 @@
 <div id="root"></div>
 
 <script type="text/babel" src="screens.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
@@ -432,6 +448,22 @@ const APP_TABS = [
 ];
 
 const INTERVAL_MS = 3200;
+
+const APP_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "phoneWidth": 330,
+  "phoneHeight": 730,
+  "showcaseGap": 112,
+  "copyWidth": 520,
+  "autoplay": true,
+  "contentScale": 90,
+  "phoneOffsetX": -160,
+  "phoneOffsetY": 25,
+  "textOffsetX": -50,
+  "textOffsetY": 20,
+  "headlineSize": 110,
+  "bodySize": 115,
+  "phoneScale": 75
+}/*EDITMODE-END*/;
 
 function StatusBar({ dark }) {
   return (
@@ -475,6 +507,40 @@ function TabBar({ activeScreen, onNavigate }) {
 
 function PhoneShowcase() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [t, setTweak] = useTweaks(APP_TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--phone-w', t.phoneWidth + 'px');
+    r.style.setProperty('--phone-h', t.phoneHeight + 'px');
+    r.style.setProperty('--phone-radius', Math.round(t.phoneWidth * 0.144) + 'px');
+    r.style.setProperty('--showcase-gap', t.showcaseGap + 'px');
+    r.style.setProperty('--copy-max', t.copyWidth + 'px');
+    r.style.setProperty('--headline-scale', (t.headlineSize / 100).toString());
+    r.style.setProperty('--body-scale', (t.bodySize / 100).toString());
+  }, [t]);
+
+  // Auto-fit: scale .showcase-inner to fit within the section without scroll
+  React.useEffect(() => {
+    const section = document.querySelector('.showcase-section');
+    const inner = document.querySelector('.showcase-inner');
+    if (!section || !inner) return;
+    function fit() {
+      inner.style.transform = 'none';
+      const sH = section.clientHeight;
+      const sW = section.clientWidth;
+      const iH = inner.scrollHeight;
+      const iW = inner.scrollWidth;
+      const scaleY = sH / (iH + 32);
+      const scaleX = sW / (iW + 32);
+      const s = Math.min(scaleY, scaleX, 1);
+      const final = s * (t.contentScale / 100);
+      inner.style.transform = `scale(${final})`;
+    }
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [t]);
   const [prevIdx, setPrevIdx] = useState(null);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef(null);
@@ -520,7 +586,8 @@ function PhoneShowcase() {
   };
 
   return (
-    <section className="showcase-section">
+    <>
+      <section className="showcase-section">
       {/* Decorative monstera leaves */}
       <svg className="leaf-deco" style={{ top: -80, right: -60, width: 400, height: 400 }} viewBox="0 0 200 200">
         <path d="M100 20 Q150 40 160 80 Q170 120 140 145 Q110 170 80 160 Q50 155 40 130 Q25 100 40 70 Q55 40 100 20Z" fill="#F8F3EE"/>
@@ -539,7 +606,7 @@ function PhoneShowcase() {
 
       <div className="showcase-inner">
         {/* ─── LEFT COPY ─── */}
-        <div className="copy-col">
+        <div className="copy-col" style={{ transform: `translate(${t.textOffsetX}px, ${t.textOffsetY}px)` }}>
           <div className="eyebrow">PLNTD Rewards · Available now</div>
           <h2 className="headline">
             Earn. Scan.<br/><em>Drink free.</em>
@@ -566,9 +633,8 @@ function PhoneShowcase() {
           <div className="store-badges">
             {/* Apple App Store badge */}
             <a href="#" className="badge">
-              <svg width="24" height="28" viewBox="0 0 814 1000" fill="#F8F3EE">
-                <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-42.3-150.3-109.7C45.1 710.7 1 547.8 1 389.8c0-248.3 160.7-379.4 319.1-379.4 84.2 0 154.4 55.5 207.3 55.5 50.6 0 130.1-58.8 226.8-58.8 35.8 0 138.1 3.2 209.4 117.8z"/>
-                <path d="M549.8 99.8c15.5-20.3 26.4-48.8 26.4-77.3 0-3.8-.3-7.7-.9-11.5C545.1 12.8 491 36 457.1 72.3c-13.5 14.5-26.9 37.3-26.9 66.2 0 4.1.6 8.3 1 9.7 1.7.3 4.5.7 7.3.7 27.1 0 59.4-18.3 111.3-48.9z"/>
+              <svg width="22" height="26" viewBox="0 0 384 512" fill="#F8F3EE">
+                <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
               </svg>
               <div className="badge-label">
                 <span className="badge-sub">Download on the</span>
@@ -580,8 +646,8 @@ function PhoneShowcase() {
               <svg width="24" height="26" viewBox="0 0 512 512">
                 <path d="M48 432L284 256 48 80v352z" fill="#EA4335"/>
                 <path d="M48 80l236 176 68-50.8L96 48C76 36.5 56 49.3 48 80z" fill="#FBBC04"/>
-                <path d="M48 432c8 30.7 28 43.5 48 32l256-187.2-68-50.8L48 432z" fill="#34A853"/>
-                <path d="M400.6 223.2L352 192l-68 64 68 50.8 49.4-32c22.4-14.5 22.4-37.1.2-51.6z" fill="#4285F4"/>
+                <path d="M352 205.2L284 256l68 50.8 76-44C447.5 251.5 447.5 260.5 428 250l-76-44.8z" fill="#34A853"/>
+                <path d="M96 464l256-152.8-68-50.8L48 432c8 30.7 28 43.5 48 32z" fill="#4285F4"/>
               </svg>
               <div className="badge-label">
                 <span className="badge-sub">Get it on</span>
@@ -589,10 +655,11 @@ function PhoneShowcase() {
               </div>
             </a>
           </div>
+          </div>
         </div>
 
         {/* ─── PHONE ─── */}
-        <div className="phone-col"
+        <div className="phone-col" style={{ transform: `translate(${t.phoneOffsetX}px, ${t.phoneOffsetY}px) scale(${t.phoneScale / 100})`, transformOrigin: 'center center' }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -633,8 +700,30 @@ function PhoneShowcase() {
             <div className="screen-label-text">{activeTab.label}</div>
           </div>
         </div>
-      </div>
     </section>
+    <TweaksPanel title="Tweaks">
+      <TweakSection title="Phone size">
+        <TweakSlider label="Width"  value={t.phoneWidth}  min={240} max={400} step={10} onChange={v => setTweak('phoneWidth',  v)} />
+        <TweakSlider label="Height" value={t.phoneHeight} min={480} max={800} step={10} onChange={v => setTweak('phoneHeight', v)} />
+      </TweakSection>
+      <TweakSection title="Layout">
+        <TweakSlider label="Gap between text & phone" value={t.showcaseGap} min={24} max={160} step={8} onChange={v => setTweak('showcaseGap', v)} />
+        <TweakSlider label="Copy column width"        value={t.copyWidth}   min={300} max={680} step={20} onChange={v => setTweak('copyWidth',   v)} />
+        <TweakSlider label="Content scale"            value={t.contentScale} min={60} max={120} step={5} onChange={v => setTweak('contentScale', v)} />
+      </TweakSection>
+      <TweakSection title="Text size">
+        <TweakSlider label="Headline"  value={t.headlineSize} min={60} max={150} step={5} onChange={v => setTweak('headlineSize', v)} />
+        <TweakSlider label="Body text" value={t.bodySize}     min={60} max={150} step={5} onChange={v => setTweak('bodySize', v)} />
+      </TweakSection>
+      <TweakSection title="Position">
+        <TweakSlider label="Text horizontal" value={t.textOffsetX}  min={-200} max={200} step={5} onChange={v => setTweak('textOffsetX', v)} />
+        <TweakSlider label="Text vertical"   value={t.textOffsetY}  min={-200} max={200} step={5} onChange={v => setTweak('textOffsetY', v)} />
+        <TweakSlider label="Phone horizontal" value={t.phoneOffsetX} min={-200} max={200} step={5} onChange={v => setTweak('phoneOffsetX', v)} />
+        <TweakSlider label="Phone vertical"   value={t.phoneOffsetY} min={-200} max={200} step={5} onChange={v => setTweak('phoneOffsetY', v)} />
+        <TweakSlider label="Phone scale"      value={t.phoneScale}   min={50}   max={150} step={5} onChange={v => setTweak('phoneScale',   v)} />
+      </TweakSection>
+    </TweaksPanel>
+    </>
   );
 }
 
