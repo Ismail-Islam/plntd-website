@@ -21,11 +21,11 @@
   /* ─── SECTION WRAPPER ───────────────────── */
   .showcase-section {
     width: 100%;
-    height: calc(100vh - 64px);
+    min-height: calc(100vh - 64px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 0;
+    padding: 60px 0;
     position: relative;
     overflow: hidden;
   }
@@ -89,19 +89,19 @@
 
   .subtext {
     font-family: 'Inter', sans-serif;
-    font-size: 16px;
+    font-size: 17px;
     color: rgba(248,243,238,0.65);
-    line-height: 1.55;
+    line-height: 1.65;
     max-width: 400px;
-    margin-bottom: 28px;
+    margin-bottom: 48px;
   }
 
   .feature-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 28px;
+    gap: 16px;
+    margin-bottom: 48px;
   }
 
   .feature-item {
@@ -193,15 +193,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 28px;
   }
 
   /* ─── PHONE FRAME ───────────────────────── */
-  /* Height scales to fit viewport (nav 64 + section padding 48 + dots/label ~50 = ~162 reserved).
-     Width keeps the 320:672 (≈0.476) bezel aspect ratio so internals stay correct. */
   .phone-bezel {
-    height: min(672px, calc(100vh - 64px - 48px - 60px));
-    aspect-ratio: 320 / 672;
+    width: 320px;
+    height: 672px;
     background: #0F0F0F;
     border-radius: 46px;
     padding: 10px;
@@ -402,9 +400,10 @@
       PLNTD<span style="font-size:11px; vertical-align:super; margin-left:2px; opacity:0.7; letter-spacing:0;">co.</span>
     </a>
     <div style="display:flex; gap:32px;">
-      <a href="index.html#menu" style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Menu</a>
-      <a href="story.html"      style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
-      <a href="app.html"        style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#1D391A; text-decoration:none;">App</a>
+      <a href="index.html#menu"   style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Menu</a>
+      <a href="index.html#stores" style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Stores</a>
+      <a href="index.html#about"  style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
+      <a href="app.html"          style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#1D391A; text-decoration:none;">App</a>
     </div>
     <div style="width:40px;"></div>
   </div>
