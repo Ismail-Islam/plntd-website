@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Story — PLNTD co.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800;9..144,900&family=Archivo:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #F8F3EE; color: #14230E; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Nav (matches index) ── */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(248,243,238,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #E8E1D4;
+    }
+    .nav-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 24px;
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 0.02em; color: #1D391A; }
+    .nav-logo .co { font-size: 11px; vertical-align: super; margin-left: 2px; opacity: 0.7; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #14230E; opacity: 0.75; transition: opacity 120ms; }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; }
+
+    /* ── Hero banner ── */
+    .story-hero {
+      background: #1D391A;
+      padding: 96px 24px 120px;
+      position: relative; overflow: hidden;
+    }
+    .story-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(63,140,63,0.2), transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      font-family: 'Archivo', sans-serif; font-weight: 700;
+      font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(248,243,238,0.6); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: rgba(248,243,238,0.4); }
+    .story-hero h1 {
+      font-family: 'Fraunces', serif; font-weight: 900;
+      font-size: clamp(52px, 7vw, 88px); line-height: 0.95;
+      letter-spacing: -0.03em; color: #F8F3EE;
+      margin-bottom: 28px;
+    }
+    .story-hero h1 em { font-style: italic; color: #CBA258; }
+    .story-hero p {
+      font-size: 18px; line-height: 1.65;
+      color: rgba(248,243,238,0.75); max-width: 560px;
+    }
+
+    /* ── Content ── */
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+    /* Intro pull-quote */
+    .pull-quote {
+      padding: 80px 0 64px;
+      border-bottom: 1px solid #E8E1D4;
+    }
+    .pull-quote blockquote {
+      font-family: 'Fraunces', serif; font-weight: 800;
+      font-size: clamp(28px, 4vw, 48px); line-height: 1.1;
+      letter-spacing: -0.02em; color: #1D391A;
+      max-width: 840px;
+    }
+    .pull-quote .attr {
+      margin-top: 24px;
+      font-family: 'Archivo', sans-serif; font-weight: 700;
+      font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: #3F8C3F;
+    }
+
+    /* Story sections */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      padding: 80px 0;
+      border-bottom: 1px solid #E8E1D4;
+      align-items: center;
+    }
+    .story-grid.flip { direction: rtl; }
+    .story-grid.flip > * { direction: ltr; }
+    .story-text .label {
+      font-family: 'Archivo', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: #3F8C3F; margin-bottom: 16px;
+    }
+    .story-text h2 {
+      font-family: 'Fraunces', serif; font-weight: 800;
+      font-size: clamp(32px, 4vw, 52px); line-height: 1.0;
+      letter-spacing: -0.025em; color: #1D391A; margin-bottom: 20px;
+    }
+    .story-text p {
+      font-size: 16px; line-height: 1.7; color: rgba(20,35,14,0.7);
+      margin-bottom: 16px;
+    }
+    .story-text p:last-child { margin-bottom: 0; }
+    .story-img {
+      aspect-ratio: 4/3;
+      border-radius: 20px;
+      background: #1D391A;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .story-img-placeholder {
+      font-family: 'Archivo', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(248,243,238,0.3);
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .story-img-placeholder svg { width: 40px; height: 40px; opacity: 0.3; color: white; }
+
+    /* Values bar */
+    .values-section { padding: 80px 0; border-bottom: 1px solid #E8E1D4; }
+    .values-section .section-label {
+      font-family: 'Archivo', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: #3F8C3F; margin-bottom: 40px;
+    }
+    .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .value-card {
+      background: white; border-radius: 16px; padding: 28px 24px;
+      border: 1px solid #E8E1D4;
+    }
+    .value-num {
+      font-family: 'Fraunces', serif; font-weight: 900;
+      font-size: 48px; line-height: 1; color: #E8E1D4;
+      margin-bottom: 12px;
+    }
+    .value-card h3 {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 22px; color: #1D391A; margin-bottom: 10px;
+      letter-spacing: -0.015em;
+    }
+    .value-card p { font-size: 14px; line-height: 1.6; color: rgba(20,35,14,0.65); }
+
+    /* Team */
+    .team-section { padding: 80px 0; }
+    .team-section h2 {
+      font-family: 'Fraunces', serif; font-weight: 800;
+      font-size: clamp(36px, 4vw, 52px); letter-spacing: -0.025em;
+      margin-bottom: 48px;
+    }
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .team-card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #E8E1D4; }
+    .team-photo {
+      aspect-ratio: 1/1; background: #1D391A;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .team-photo-init {
+      font-family: 'Fraunces', serif; font-weight: 900;
+      font-size: 56px; color: rgba(248,243,238,0.15);
+    }
+    .team-info { padding: 22px; }
+    .team-info .name {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 22px; margin-bottom: 4px; letter-spacing: -0.01em;
+    }
+    .team-info .role {
+      font-family: 'Archivo', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #3F8C3F; margin-bottom: 12px;
+    }
+    .team-info p { font-size: 13px; line-height: 1.6; color: rgba(20,35,14,0.65); }
+
+    /* Brand bar + footer */
+    .brand-bar { background: #14230E; color: white; padding: 24px 0; }
+    .brand-bar-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .brand-tag {
+      font-family: 'Archivo', sans-serif; font-weight: 700;
+      font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .brand-div { width: 1px; height: 16px; background: rgba(255,255,255,0.3); }
+    .footer { background: #0F0F0F; color: white; padding: 40px 0; }
+    .footer-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .story-grid.flip { direction: ltr; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">PLNTD<span class="co">co.</span></a>
+      <div class="nav-links">
+        <a href="index.html#menu">Menu</a>
+        <a href="story.html" class="active">Our story</a>
+        <a href="app.html">App</a>
+      </div>
+      <a href="index.html#menu" style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; padding:10px 20px; border-radius:999px; background:#1D391A; color:white;">Order now</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="story-hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Est. 2026 · Leyton, London</div>
+      <h1>Good things<br/><em>grow here.</em></h1>
+      <p>PLNTD started with a blender, a market stall, and a stubbornly simple idea — that a cold-pressed juice should taste like the fruit it's made from, and nothing else.</p>
+    </div>
+  </section>
+
+  <!-- Pull quote -->
+  <div class="container">
+    <div class="pull-quote">
+      <blockquote>"We were tired of paying £8 for something that was 40% apple juice from concentrate. So we quit our jobs and made something better."</blockquote>
+      <div class="attr">— Kwame &amp; Isla, Co-founders</div>
+    </div>
+  </div>
+
+  <!-- Story: The beginning -->
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-text">
+        <div class="label">How it started</div>
+        <h2>A market stall in Hackney.</h2>
+        <p>In the summer of 2026, Kwame Asante and Isla Reid turned up to Broadway Market with a cold-press juicer, a borrowed gazebo, and 40 kilos of produce from New Spitalfields. They sold out in two hours.</p>
+        <p>Word spread. Within three months they were at three markets a week. By spring 2023 they'd signed a lease on 144 High Road Leyton — a former fishmonger's they spent four months converting themselves, tile by tile.</p>
+      </div>
+      <div class="story-img">
+        <div class="story-img-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-9 9"/></svg>
+          Market stall photo
+        </div>
+      </div>
+    </div>
+
+    <!-- Story: The mission -->
+    <div class="story-grid flip">
+      <div class="story-text">
+        <div class="label">The mission</div>
+        <h2>Real food.<br/>No shortcuts.</h2>
+        <p>Every juice is pressed on-site each morning. Every smoothie is blended to order. There's no pre-made, no concentrate, no sitting in a chilled bag since Thursday. If a fruit isn't in season, it's not on the menu.</p>
+        <p>The coffee comes from a small roaster in Bermondsey who sources single-origin beans direct from cooperatives in Ethiopia and Colombia. Oat milk as standard, no surcharge.</p>
+      </div>
+      <div class="story-img" style="background:#14230E;">
+        <div class="story-img-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-9 9"/></svg>
+          In-store photo
+        </div>
+      </div>
+    </div>
+
+    <!-- Story: Community -->
+    <div class="story-grid">
+      <div class="story-text">
+        <div class="label">Community</div>
+        <h2>Built for the neighbourhood.</h2>
+        <p>Leyton isn't Shoreditch. We're not trying to be a concept store or a lifestyle brand. We're a corner bar where you grab a green juice on the way to work, or sit in with a flat white on a Saturday morning.</p>
+        <p>We partner with local schools on nutrition workshops, source produce from two East London growers, and run a pay-it-forward wall where customers can leave a drink for someone who needs it.</p>
+      </div>
+      <div class="story-img" style="background:#1A2D14;">
+        <div class="story-img-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-9 9"/></svg>
+          Community photo
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <div style="background: white; margin-top: 0;">
+    <div class="container">
+      <div class="values-section">
+        <div class="section-label">What we stand for</div>
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-num">01</div>
+            <h3>Real ingredients</h3>
+            <p>If we can't name where it came from, it's not going in the cup. No fillers, no flavourings, no concentrates.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-num">02</div>
+            <h3>Made fresh</h3>
+            <p>Everything is pressed or blended the same day it's served. We close early when we run out — and we're fine with that.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-num">03</div>
+            <h3>Low waste</h3>
+            <p>Pulp goes to a local bakery for bread. Packaging is compostable. We track our food waste weekly and publish it monthly.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-num">04</div>
+            <h3>Fair prices</h3>
+            <p>A cold-pressed juice shouldn't cost more than a pint. We keep margins honest and pass the savings on.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand bar -->
+  <div class="brand-bar">
+    <div class="brand-bar-inner">
+      <div class="brand-tag">
+        <span>EAT CLEAN.</span><span class="brand-div"></span>
+        <span>LIVE GREEN.</span><span class="brand-div"></span>
+        <span>FEEL GOOD.</span>
+      </div>
+      <div style="font-family:'Inter',sans-serif; font-size:14px; opacity:0.7;">@plntdlondon</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>© 2026 PLNTD co. All rights reserved.</div>
+      <div>Terms · Privacy · Allergens</div>
+    </div>
+  </footer>
+
+</body>
+</html>

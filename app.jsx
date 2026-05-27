@@ -2,6 +2,11 @@
 
 const { useState, useEffect, useRef, useMemo } = React;
 
+// Tweak defaults (persisted via EDITMODE markers)
+window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "darkMode": false
+}/*EDITMODE-END*/;
+
 // ─── Icons ──────────────────────────────────────────────
 const Icon = {
   cart: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>,
@@ -28,9 +33,8 @@ function Nav({ cartCount, onOpenCart }) {
         <a href="#" className="nav-logo">PLNTD<span className="co">co.</span></a>
         <div className="nav-links">
           <a href="#menu">Menu</a>
-          <a href="#stores">Stores</a>
-          <a href="#about">Our story</a>
-          <a href="#">Rewards</a>
+          <a href="story.html">Our story</a>
+          <a href="app.html">App</a>
         </div>
         <div className="nav-actions">
           <button className="nav-icon-btn" aria-label="Account"><Icon.user /></button>
@@ -45,136 +49,125 @@ function Nav({ cartCount, onOpenCart }) {
   );
 }
 
-// ─── Hero ───────────────────────────────────────────────
-function Hero({ store }) {
+// ─── Slim Banner + Status Cards ──────────────────────────
+function LeafSvg(props) {
   return (
-    <section className="hero">
-      <svg className="hero-leaf" viewBox="0 0 24 24" fill="currentColor" style={{ color: 'white' }}>
-        <path d="M17 3c-4 0-7 1-9 3-2.5 2.5-4 6-4 11h2c0-2.5.5-4.5 1.5-6.2L13 17l1.4-1.4L7.8 9C9.3 7.7 11.3 7 14 7h.5L9 12.5l1.4 1.4L17.5 6.8c.4 1.4.5 3 .5 5 0 4-1 7-3 9h2c2-2 3-5 3-9 0-3-1-6-3-9Z"/>
-      </svg>
-      <div className="container">
-        <div className="hero-inner">
-          <div>
-            <div className="hero-eyebrow">Plant-powered · London</div>
-            <h1>PLNTD<span className="city">{store.name}.</span></h1>
-            <p>Cold-pressed juices, real-fruit smoothies and specialty coffee — made fresh every morning at {store.address}.</p>
-          </div>
-          <div className="hero-photo">
-            <div className="hero-photo-placeholder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <circle cx="9" cy="11" r="2"/>
-                <path d="m21 17-5-5-9 9"/>
-              </svg>
-              <div>Store photo<br/>placeholder</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M17 3c-4 0-7 1-9 3-2.5 2.5-4 6-4 11h2c0-2.5.5-4.5 1.5-6.2L13 17l1.4-1.4L7.8 9C9.3 7.7 11.3 7 14 7h.5L9 12.5l1.4 1.4L17.5 6.8c.4 1.4.5 3 .5 5 0 4-1 7-3 9h2c2-2 3-5 3-9 0-3-1-6-3-9Z"/>
+    </svg>
   );
 }
 
-// ─── Store Info Card ────────────────────────────────────
-function StoreInfo({ store }) {
+function StoreHeader({ store }) {
   const [hoursOpen, setHoursOpen] = useState(false);
   const today = store.hours[store.todayIndex];
+  const now = new Date();
+  const hh = now.getHours() + now.getMinutes() / 60;
+  const [openH, openM] = today.open.split(':').map(Number);
+  const [closeH, closeM] = today.close.split(':').map(Number);
+  const isOpen = hh >= (openH + openM/60) && hh < (closeH + closeM/60);
 
   return (
-    <div className="container info-wrap">
-      <div className="info-card">
-        <div className="info-block">
-          <div className="label">Address</div>
-          <div className="value">{store.address}</div>
-          <div className="sub">{store.addressLine2}</div>
-        </div>
-        <div className="info-block" style={{ cursor: 'pointer' }} onClick={() => setHoursOpen(!hoursOpen)}>
-          <div className="label">Hours today</div>
-          <div className="value">
-            <span className="status-dot"></span>
-            Open · {today.open}–{today.close}
+    <>
+      <section className="banner">
+        <div className="banner-bg"></div>
+        <div className="banner-overlay"></div>
+        <div className="banner-label">
+          <div className="banner-label-inner">
+            PLNTD.
+            <span className="sub">Plant-powered · Leyton</span>
           </div>
-          <div className="sub" style={{ color: 'var(--fg-link)', fontWeight: 500 }}>
-            {hoursOpen ? 'Hide week ▲' : 'See full week ▼'}
-          </div>
-          {hoursOpen && (
-            <div className="hours-week open" style={{ marginTop: 16 }} onClick={(e) => e.stopPropagation()}>
-              {store.hours.map((h, i) => (
-                <div key={h.day} className={`hours-row ${i === store.todayIndex ? 'today' : ''}`}>
-                  <span>{h.day}</span>
-                  <span>{h.open}–{h.close}</span>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
-        <div className="info-block">
-          <div className="label">Contact</div>
-          <div className="value">{store.phone}</div>
-          <div className="sub">@plntdlondon</div>
-        </div>
-        <div className="cta-stack">
-          <a href="#menu" className="btn btn-primary">Order Pickup</a>
-          <a href="#menu" className="btn btn-secondary">Order Delivery</a>
-        </div>
-      </div>
+        <div className="banner-ph-tag"></div>
+      </section>
 
-      <div className="features-bar">
-        <div className="feature-pill"><Icon.check /> Pickup ready in 5–10 min</div>
-        <div className="feature-pill"><Icon.check /> Delivery via Uber Eats &amp; Deliveroo</div>
-        <div className="feature-pill"><Icon.check /> Dine-in</div>
-        <div className="feature-pill"><Icon.wifi /> Free Wi-Fi</div>
-        <div className="feature-pill"><Icon.leaf /> Earn ★ on every drink</div>
+      <div className="container">
+        <div className="status-wrap">
+          <div className="status-card action" onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+            <div className="status-icon"><Icon.bag /></div>
+            <div className="status-text">
+              <div className="top">Pick up from</div>
+              <div className="main"><Icon.pin /> {store.address}, {store.addressLine2}</div>
+            </div>
+            <div className="chev"><Icon.arrow /></div>
+          </div>
+          <div className="status-card action" onClick={() => setHoursOpen(!hoursOpen)}>
+            <div className="status-icon"><Icon.clock /></div>
+            <div className="status-text">
+              <div className="top">{isOpen ? <span className="open">Store is: open</span> : <span className="closed">Store is: closed</span>}</div>
+              <div className="main">{isOpen ? `Until ${today.close}` : `Opens ${today.open}`}</div>
+            </div>
+            <div className="chev"><Icon.arrow /></div>
+          </div>
+        </div>
+        {hoursOpen && (
+          <div style={{ background: 'white', borderRadius: 'var(--radius-card)', boxShadow: 'var(--shadow-card)', padding: '8px 24px', marginTop: 12 }}>
+            {store.hours.map((h, i) => (
+              <div key={h.day} className={`hours-row ${i === store.todayIndex ? 'today' : ''}`}>
+                <span>{h.day}</span>
+                <span>{h.open}–{h.close}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 }
 
 // ─── Menu Section ───────────────────────────────────────
+// Mini category icons
+const CatIcon = {
+  all: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6Z"/></svg>,
+  smoothies: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 7h10l-1.5 12a2 2 0 0 1-2 1.8h-3a2 2 0 0 1-2-1.8Z"/><path d="M9 4c1-1 5-1 6 0"/><path d="M8 11h8"/></svg>,
+  juices: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6h8l-1 13a2 2 0 0 1-2 1.8h-2a2 2 0 0 1-2-1.8Z"/><path d="M10 6V4h4v2"/></svg>,
+  coffee: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M16 10h2a3 3 0 0 1 0 6h-2"/><path d="M7 4v2M10 4v2M13 4v2"/></svg>,
+  tea: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z"/><path d="M16 11h2a3 3 0 0 1 0 6h-2"/><path d="M9 5c.5-1 0-2-1-2.5M12 5c.5-1 0-2-1-2.5"/></svg>,
+};
+
 function MenuSection({ onAdd }) {
   const [activeTab, setActiveTab] = useState('all');
-  const tabs = [{ id: 'all', title: 'All' }, ...window.MENU.map(s => ({ id: s.id, title: s.title }))];
-
+  const tabs = [
+    { id: 'all', title: 'All drinks', icon: CatIcon.all },
+    { id: 'smoothies', title: 'Smoothies', icon: CatIcon.smoothies },
+    { id: 'juices', title: 'Fresh Juices', icon: CatIcon.juices },
+    { id: 'coffee', title: 'Coffee', icon: CatIcon.coffee },
+    { id: 'tea', title: 'Tea', icon: CatIcon.tea },
+  ];
   const sections = activeTab === 'all' ? window.MENU : window.MENU.filter(s => s.id === activeTab);
 
   return (
-    <section id="menu" className="menu-section">
+    <section id="menu" className="menu-section" style={{ padding: 0 }}>
       <div className="container">
-        <div className="menu-head">
+        <div className="menu-layout">
           <div>
-            <div className="menu-eyebrow">Available at this store</div>
-            <h2>The menu.</h2>
-          </div>
-          <p className="menu-blurb">Every drink made to order. Swap dairy for oat or almond at no extra cost.</p>
-        </div>
+            <div className="cat-row">
+              {tabs.map(t => {
+                const IconC = t.icon;
+                return (
+                  <button key={t.id} className={`cat-chip ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
+                    <span className="ico"><IconC /></span>
+                    <span className="label">{t.title}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-        <div className="menu-tabs">
-          {tabs.map(t => (
-            <button
-              key={t.id}
-              className={`menu-tab ${activeTab === t.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(t.id)}
-            >{t.title}</button>
-          ))}
-        </div>
-
-        {sections.map(section => (
-          <div key={section.id} style={{ marginBottom: 56 }}>
-            {activeTab === 'all' && (
-              <div style={{ marginBottom: 20, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 32, letterSpacing: '-0.02em' }}>{section.title}</h3>
-                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--fg-muted)' }}>
-                  {section.eyebrow}
+            {sections.map(section => (
+              <div key={section.id} className="section-block">
+                <div className="section-head">
+                  <h3>{section.title}</h3>
+                  <div className="eyebrow">{section.eyebrow}</div>
+                </div>
+                <div className="product-grid">
+                  {section.items.map(item => (
+                    <ProductCard key={item.name} item={item} onAdd={onAdd} />
+                  ))}
                 </div>
               </div>
-            )}
-            <div className="product-grid">
-              {section.items.map(item => (
-                <ProductCard key={item.name} item={item} onAdd={onAdd} />
-              ))}
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
@@ -182,17 +175,39 @@ function MenuSection({ onAdd }) {
 
 function ProductCard({ item, onAdd }) {
   const [added, setAdded] = useState(false);
+  const cardRef = useRef(null);
+  useEffect(() => {
+    const node = cardRef.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      node.classList.add('in-view');
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            node.classList.add('in-view');
+            obs.unobserve(node);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    obs.observe(node);
+    return () => obs.disconnect();
+  }, []);
   const handleAdd = () => {
     onAdd(item);
     setAdded(true);
     setTimeout(() => setAdded(false), 900);
   };
   return (
-    <div className="product-card">
+    <div className="product-card" ref={cardRef}>
       <div className="product-image">
         {item.img
           ? <img src={item.img} alt={item.name} />
-          : <div className="product-image-fallback">{item.kind === 'tea' ? 'T' : '☕'.replace('☕', 'C')}</div>
+          : <div className="product-image-fallback">{item.kind === 'tea' ? 'T' : 'C'}</div>
         }
       </div>
       <div className="product-name-row">
@@ -210,7 +225,57 @@ function ProductCard({ item, onAdd }) {
   );
 }
 
-// ─── About this store ──────────────────────────────────
+// ─── Order Sidebar (inline) ────────────────────────
+function OrderSidebar({ items, onIncrement, onDecrement }) {
+  const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
+  const totalQty = items.reduce((n, i) => n + i.qty, 0);
+  return (
+    <aside className="order-side">
+      <div className="order-head">
+        <h3>Order overview</h3>
+        <div className="count">{totalQty === 0 ? 'Basket is empty' : `${totalQty} item${totalQty === 1 ? '' : 's'}`}</div>
+      </div>
+      <div className="order-body">
+        {items.length === 0 ? (
+          <div className="order-empty">
+            <Icon.bag />
+            <p>Pick something from the menu to start your order.</p>
+          </div>
+        ) : items.map(it => (
+          <div className="order-item" key={it.name}>
+            <div className="order-item-img">
+              {it.img ? <img src={it.img} alt={it.name} /> : <Icon.bag />}
+            </div>
+            <div>
+              <div className="order-item-name">
+                {it.color && <span className="product-dot" style={{ background: it.color }}></span>}
+                {it.name}
+              </div>
+              <div className="order-item-price">£{(it.price * it.qty).toFixed(2)}</div>
+            </div>
+            <div className="order-qty">
+              <button onClick={() => onDecrement(it)} aria-label="Decrease"><Icon.minus /></button>
+              <span className="n">{it.qty}</span>
+              <button onClick={() => onIncrement(it)} aria-label="Increase"><Icon.plus /></button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {items.length > 0 && (
+        <div className="order-foot">
+          <div className="order-totals">
+            <div className="row"><span>Subtotal</span><span>£{subtotal.toFixed(2)}</span></div>
+            <div className="row"><span>Pickup</span><span>Free</span></div>
+            <div className="row total"><span>Total</span><span>£{subtotal.toFixed(2)}</span></div>
+          </div>
+          <button className="btn btn-primary" style={{ width: '100%' }}>Reserve for pickup <Icon.arrow /></button>
+        </div>
+      )}
+    </aside>
+  );
+}
+
+// ─── About this store ────────────────────────────────────
 function About() {
   return (
     <section id="about" className="about-section">
@@ -219,8 +284,8 @@ function About() {
           <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--fg-muted)', marginBottom: 12 }}>
             About this store
           </div>
-          <h2>A small green corner of Soho.</h2>
-          <p>Tucked behind Greek Street, our Soho bar opens at 7am for the morning rush — flat whites, cold-pressed greens and grab-and-go bowls (coming soon).</p>
+          <h2>A small green corner of Leyton.</h2>
+          <p>On the High Road, a few minutes from Leyton tube, our bar opens early for the morning rush — flat whites, cold-pressed greens and grab-and-go bowls (coming soon).</p>
           <p>Everything is plant-based. Juices are pressed in-store each morning, smoothies are blended to order, and our beans come from a small London roaster.</p>
           <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
             <button className="btn btn-secondary">Read our story</button>
@@ -341,7 +406,7 @@ function Footer() {
             <h4>Visit</h4>
             <ul>
               <li><a href="#stores">All stores</a></li>
-              <li><a href="#">Soho</a></li>
+              <li><a href="#">Leyton</a></li>
               <li><a href="#">Shoreditch</a></li>
               <li><a href="#">Borough</a></li>
               <li><a href="#">Marylebone</a></li>
@@ -351,7 +416,6 @@ function Footer() {
             <h4>Order</h4>
             <ul>
               <li><a href="#">Pickup</a></li>
-              <li><a href="#">Delivery</a></li>
               <li><a href="#">Catering</a></li>
               <li><a href="#">Rewards</a></li>
             </ul>
@@ -377,10 +441,8 @@ function Footer() {
 
 // ─── Cart Drawer ───────────────────────────────────────
 function CartDrawer({ open, onClose, items, onIncrement, onDecrement }) {
-  const [method, setMethod] = useState('pickup');
   const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
-  const fee = method === 'delivery' ? 1.99 : 0;
-  const total = subtotal + fee;
+  const total = subtotal;
 
   return (
     <>
@@ -421,17 +483,17 @@ function CartDrawer({ open, onClose, items, onIncrement, onDecrement }) {
         </div>
         {items.length > 0 && (
           <div className="cart-foot">
-            <div className="cart-method">
-              <button className={method === 'pickup' ? 'active' : ''} onClick={() => setMethod('pickup')}>Pickup</button>
-              <button className={method === 'delivery' ? 'active' : ''} onClick={() => setMethod('delivery')}>Delivery</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: 'var(--plntd-leaf-soft)', borderRadius: 'var(--radius-input)', marginBottom: 16, fontSize: 13, color: 'var(--plntd-leaf-dark)', fontFamily: 'var(--font-body)', fontWeight: 500 }}>
+              <Icon.bag />
+              <span>Reserve now — pick up at 144 High Rd, Leyton.</span>
             </div>
             <div className="cart-totals">
               <div className="row"><span>Subtotal</span><span>£{subtotal.toFixed(2)}</span></div>
-              <div className="row"><span>{method === 'delivery' ? 'Delivery fee' : 'Pickup'}</span><span>{method === 'delivery' ? `£${fee.toFixed(2)}` : 'Free'}</span></div>
+              <div className="row"><span>Pickup</span><span>Free</span></div>
               <div className="row total"><span>Total</span><span>£{total.toFixed(2)}</span></div>
             </div>
             <button className="btn btn-primary" style={{ width: '100%' }}>
-              {method === 'pickup' ? 'Reserve for pickup' : 'Checkout'} <Icon.arrow />
+              Reserve for pickup <Icon.arrow />
             </button>
           </div>
         )}
@@ -444,6 +506,11 @@ function CartDrawer({ open, onClose, items, onIncrement, onDecrement }) {
 function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [t, setTweak] = useTweaks(window.TWEAK_DEFAULTS);
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', !!t.darkMode);
+  }, [t.darkMode]);
 
   const addToCart = (item) => {
     setCart(prev => {
@@ -463,14 +530,16 @@ function App() {
   return (
     <div className="shell">
       <Nav cartCount={cartCount} onOpenCart={() => setCartOpen(true)} />
-      <Hero store={window.STORE} />
-      <StoreInfo store={window.STORE} />
+      <StoreHeader store={window.STORE} />
       <MenuSection onAdd={addToCart} />
-      <About />
-      <MapSection store={window.STORE} />
-      <OtherStores />
       <BrandBar />
       <Footer />
+      {cartCount > 0 && (
+        <button className="mobile-cart-bar" onClick={() => setCartOpen(true)}>
+          <span><span className="badge">{cartCount}</span>View basket</span>
+          <span>£{cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2)}</span>
+        </button>
+      )}
       <CartDrawer
         open={cartOpen}
         onClose={() => setCartOpen(false)}
@@ -478,6 +547,16 @@ function App() {
         onIncrement={increment}
         onDecrement={decrement}
       />
+      <TweaksPanel title="Tweaks">
+        <TweakSection title="Appearance">
+          <TweakToggle
+            label="Dark mode"
+            sub="Swap to the night palette"
+            value={t.darkMode}
+            onChange={(v) => setTweak('darkMode', v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
     </div>
   );
 }

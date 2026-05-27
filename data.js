@@ -34,29 +34,37 @@ window.MENU = [
   },
   {
     id: 'coffee',
-    title: 'Coffee & Tea',
+    title: 'Coffee',
     eyebrow: 'Specialty roast',
     blurb: 'Single-origin beans, oat or almond milk on request.',
     items: [
-      { name: 'Espresso',   ingr: 'single shot', price: 2.50, kind: 'coffee' },
-      { name: 'Americano',  ingr: 'espresso, hot water', price: 3.00, kind: 'coffee' },
-      { name: 'Cortado',    ingr: 'espresso, warm milk', price: 3.00, kind: 'coffee' },
-      { name: 'Flat White', ingr: 'double ristretto, micro-foam', price: 3.50, kind: 'coffee' },
-      { name: 'Cappuccino', ingr: 'espresso, steamed milk, foam', price: 3.50, kind: 'coffee' },
-      { name: 'Latte',      ingr: 'espresso, steamed milk', price: 3.50, kind: 'coffee' },
-      { name: 'Iced Coffee',ingr: 'cold-brew, ice', price: 3.80, kind: 'coffee' },
-      { name: 'English Tea',ingr: 'black tea blend', price: 2.00, kind: 'tea' },
-      { name: 'Green Tea',  ingr: 'loose-leaf sencha', price: 2.00, kind: 'tea' },
+      { name: 'Espresso',    ingr: 'single shot',                price: 2.50, color: '#3D2817', img: 'assets/drinks/coffee-espresso.png' },
+      { name: 'Americano',   ingr: 'espresso, hot water',        price: 3.00, color: '#3D2817', img: 'assets/drinks/coffee-americano.png' },
+      { name: 'Cortado',     ingr: 'espresso, warm milk',        price: 3.00, color: '#A07856', img: 'assets/drinks/coffee-cortado.png' },
+      { name: 'Flat White',  ingr: 'double ristretto, micro-foam', price: 3.50, color: '#B89373', img: 'assets/drinks/coffee-flat-white.png' },
+      { name: 'Cappuccino',  ingr: 'espresso, steamed milk, foam', price: 3.50, color: '#C9A98A', img: 'assets/drinks/coffee-cappuccino.png' },
+      { name: 'Latte',       ingr: 'espresso, steamed milk',     price: 3.50, color: '#BE9772', img: 'assets/drinks/coffee-latte.png' },
+      { name: 'Iced Coffee', ingr: 'cold-brew, ice',             price: 3.80, color: '#7A5436', img: 'assets/drinks/coffee-iced-coffee.png' },
+    ],
+  },
+  {
+    id: 'tea',
+    title: 'Tea',
+    eyebrow: 'Loose-leaf',
+    blurb: 'Brewed by the cup. Steeped to order.',
+    items: [
+      { name: 'English Tea', ingr: 'black tea blend',  price: 2.00, color: '#9C3D1F', img: 'assets/drinks/coffee-english-tea.png' },
+      { name: 'Green Tea',   ingr: 'loose-leaf sencha', price: 2.00, color: '#7A8A2D', img: 'assets/drinks/coffee-green-tea.png' },
     ],
   },
 ];
 
 // Store info — placeholders, ask user to confirm
 window.STORE = {
-  name: 'Soho',
-  fullName: 'PLNTD — Soho',
-  address: '12 Greek Street',
-  addressLine2: 'Soho, London W1D 4DL',
+  name: 'Leyton',
+  fullName: 'PLNTD — Leyton',
+  address: '144 High Road Leyton',
+  addressLine2: 'London E15 2BX',
   phone: '020 7000 0000',
   hours: [
     { day: 'Monday',    open: '07:00', close: '19:00' },
@@ -68,7 +76,7 @@ window.STORE = {
     { day: 'Sunday',    open: '09:00', close: '18:00' },
   ],
   todayIndex: new Date().getDay() === 0 ? 6 : new Date().getDay() - 1, // monday-first
-  features: ['Pickup', 'Delivery', 'Dine-in', 'Wi-Fi'],
+  features: ['Pickup', 'Dine-in', 'Wi-Fi'],
 };
 
 window.OTHER_STORES = [
