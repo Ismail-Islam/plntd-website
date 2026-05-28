@@ -26,21 +26,47 @@ const Icon = {
   eye: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>
 };
 
+// ─── Mobile Nav Drawer ──────────────────────────────────
+function MobileNav({ open, onClose }) {
+  return (
+    <>
+      <div className={`mobile-nav-overlay ${open ? 'open' : ''}`} onClick={onClose}></div>
+      <aside className={`mobile-nav-drawer ${open ? 'open' : ''}`}>
+        <div className="mobile-nav-head">
+          <a href="#" className="nav-logo">PLNTD<span className="co">co.</span></a>
+          <button className="nav-icon-btn" onClick={onClose} aria-label="Close menu"><Icon.close /></button>
+        </div>
+        <nav className="mobile-nav-links">
+          <a href="#menu" onClick={onClose}>Menu</a>
+          <a href="story.html" onClick={onClose}>Our Story</a>
+          <a href="app.html" onClick={onClose}>App</a>
+        </nav>
+      </aside>
+    </>);
+}
+
 // ─── Top Nav ────────────────────────────────────────────
 function Nav({ cartCount, onOpenCart }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <nav className="nav">
-      <div className="container nav-inner">
-        <a href="#" className="nav-logo">PLNTD<span className="co">co.</span></a>
-        <div className="nav-links">
-          <a href="#menu">Menu</a>
-          <a href="story.html">Our story</a>
-          <a href="app.html">App</a>
+    <>
+      <nav className="nav">
+        <div className="container nav-inner">
+          <a href="#" className="nav-logo">PLNTD<span className="co">co.</span></a>
+          <div className="nav-links">
+            <a href="#menu">Menu</a>
+            <a href="story.html">Our story</a>
+            <a href="app.html">App</a>
+          </div>
+          <div className="nav-actions">
+            <button className="nav-hamburger" onClick={() => setMenuOpen(true)} aria-label="Open menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            </button>
+          </div>
         </div>
-        <div className="nav-actions"></div>
-      </div>
-    </nav>);
-
+      </nav>
+      <MobileNav open={menuOpen} onClose={() => setMenuOpen(false)} />
+    </>);
 }
 
 // ─── Slim Banner + Status Cards ──────────────────────────
