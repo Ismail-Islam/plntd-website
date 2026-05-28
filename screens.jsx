@@ -244,26 +244,7 @@ function ScanScreen({ t, onNavigate, isRedeem }) {
   function QR() {
     return (
       <div style={{ width: '200px', height: '200px', padding: '12px', background: '#fff', border: `1px solid ${t.border}`, borderRadius: '14px' }}>
-        <svg viewBox="0 0 21 21" width="100%" height="100%" style={{ display: 'block' }}>
-          <rect x="0" y="0" width="7" height="7" rx="1" fill="none" stroke={t.ink} strokeWidth="0.8"/>
-          <rect x="2" y="2" width="3" height="3" fill={t.ink}/>
-          <rect x="14" y="0" width="7" height="7" rx="1" fill="none" stroke={t.ink} strokeWidth="0.8"/>
-          <rect x="16" y="2" width="3" height="3" fill={t.ink}/>
-          <rect x="0" y="14" width="7" height="7" rx="1" fill="none" stroke={t.ink} strokeWidth="0.8"/>
-          <rect x="2" y="16" width="3" height="3" fill={t.ink}/>
-          {[8,9,10,11,12,13].map(x => [8,9,10,11,12,13].map(y =>
-            (x * 3 + y * 7) % 3 === 0 ? <rect key={`d${x}${y}`} x={x} y={y} width="1" height="1" fill={t.ink} /> : null
-          ))}
-          {[8,13,15,17,19].map(x => [2,3,4,5,8].map(y =>
-            (x + y) % 2 === 0 ? <rect key={`s${x}${y}`} x={x} y={y} width="1" height="1" fill={t.ink} /> : null
-          ))}
-          {[2,3,4,5,8,13].map(y =>
-            y % 2 === 0 ? <rect key={`h${y}`} x={8} y={y} width="1" height="1" fill={t.ink} /> : null
-          )}
-          {[9,11,13,15,17,19].map(x =>
-            (x % 3) === 0 ? <rect key={`b${x}`} x={x} y={13} width="1" height="1" fill={t.ink} /> : null
-          )}
-        </svg>
+        <img src="assets/qr-code.png" alt="Member QR code" style={{ width: '100%', height: '100%', display: 'block', imageRendering: 'pixelated' }} />
       </div>
     );
   }
