@@ -573,8 +573,8 @@ function NutritionModal({ item, onClose }) {
           {renderItem.allergens && renderItem.allergens.length > 0 ?
           renderItem.allergens.map((a) =>
           <div className="nut-row" key={a}>
-                <span className="nut-row-label">{a}</span>
-                <span className="nut-row-val">Contains</span>
+                <span className="nut-row-label">Contains</span>
+                <span className="nut-row-val">{a}</span>
               </div>
           ) :
 
