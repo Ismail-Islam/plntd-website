@@ -8,12 +8,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800;9..144,900&family=Archivo:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --story-bg: #1D391A;
+      --story-headline: #F8F3EE;
+      --story-body: rgba(248,243,238,0.75);
+      --story-label: #CBA258;
+      --story-col-text: 1.4fr;
+      --story-col-img: 1fr;
+      --story-img-radius: 20px;
+      --story-img-max: 420px;
+      --story-gap: var(--story-gap);
+      --story-pad: 96px;
+      --story-body-size: 17px;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { background: #F8F3EE; color: #14230E; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+    html, body { background: var(--story-bg); color: #F8F3EE; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
 
-    /* ── Nav (matches index) ── */
+    /* Nav */
     .nav {
       position: sticky; top: 0; z-index: 50;
       background: rgba(248,243,238,0.92);
@@ -30,155 +44,47 @@
     .nav-links a { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #14230E; opacity: 0.75; transition: opacity 120ms; }
     .nav-links a:hover, .nav-links a.active { opacity: 1; }
 
-    /* ── Hero banner ── */
-    .story-hero {
-      background: #1D391A;
-      padding: 96px 24px 120px;
-      position: relative; overflow: hidden;
-    }
-    .story-hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 80% 50%, rgba(63,140,63,0.2), transparent 60%);
-      pointer-events: none;
-    }
-    .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
-    .hero-eyebrow {
-      font-family: 'Archivo', sans-serif; font-weight: 700;
-      font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
-      color: rgba(248,243,238,0.6); margin-bottom: 20px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: rgba(248,243,238,0.4); }
-    .story-hero h1 {
-      font-family: 'Fraunces', serif; font-weight: 900;
-      font-size: clamp(52px, 7vw, 88px); line-height: 0.95;
-      letter-spacing: -0.03em; color: #F8F3EE;
-      margin-bottom: 28px;
-    }
-    .story-hero h1 em { font-style: italic; color: #CBA258; }
-    .story-hero p {
-      font-size: 18px; line-height: 1.65;
-      color: rgba(248,243,238,0.75); max-width: 560px;
-    }
-
-    /* ── Content ── */
-    .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
-
-    /* Intro pull-quote */
-    .pull-quote {
-      padding: 80px 0 64px;
-      border-bottom: 1px solid #E8E1D4;
-    }
-    .pull-quote blockquote {
-      font-family: 'Fraunces', serif; font-weight: 800;
-      font-size: clamp(28px, 4vw, 48px); line-height: 1.1;
-      letter-spacing: -0.02em; color: #1D391A;
-      max-width: 840px;
-    }
-    .pull-quote .attr {
-      margin-top: 24px;
-      font-family: 'Archivo', sans-serif; font-weight: 700;
-      font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
-      color: #3F8C3F;
-    }
-
     /* Story sections */
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
     .story-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      padding: 80px 0;
-      border-bottom: 1px solid #E8E1D4;
+      grid-template-columns: var(--story-col-text) var(--story-col-img);
+      gap: 64px;
+      padding: var(--story-pad) 0;
       align-items: center;
     }
     .story-grid.flip { direction: rtl; }
     .story-grid.flip > * { direction: ltr; }
+    .story-grid + .story-grid { border-top: 1px solid rgba(248,243,238,0.1); }
     .story-text .label {
       font-family: 'Archivo', sans-serif; font-weight: 700;
       font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
-      color: #3F8C3F; margin-bottom: 16px;
+      color: var(--story-label); margin-bottom: 16px;
     }
     .story-text h2 {
       font-family: 'Fraunces', serif; font-weight: 800;
-      font-size: clamp(32px, 4vw, 52px); line-height: 1.0;
-      letter-spacing: -0.025em; color: #1D391A; margin-bottom: 20px;
+      font-size: clamp(36px, 4.5vw, 56px); line-height: 1.0;
+      letter-spacing: -0.025em; color: var(--story-headline); margin-bottom: 24px;
     }
     .story-text p {
-      font-size: 16px; line-height: 1.7; color: rgba(20,35,14,0.7);
+      font-size: var(--story-body-size); line-height: 1.7; color: var(--story-body);
       margin-bottom: 16px;
     }
     .story-text p:last-child { margin-bottom: 0; }
     .story-img {
-      aspect-ratio: 4/3;
-      border-radius: 20px;
-      background: #1D391A;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; position: relative;
+      aspect-ratio: 4/5;
+      border-radius: var(--story-img-radius);
+      background: #14230E;
+      overflow: hidden;
+      max-width: var(--story-img-max);
+      width: 100%;
+      justify-self: end;
     }
-    .story-img-placeholder {
-      font-family: 'Archivo', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
-      color: rgba(248,243,238,0.3);
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-    }
-    .story-img-placeholder svg { width: 40px; height: 40px; opacity: 0.3; color: white; }
-
-    /* Values bar */
-    .values-section { padding: 80px 0; border-bottom: 1px solid #E8E1D4; }
-    .values-section .section-label {
-      font-family: 'Archivo', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
-      color: #3F8C3F; margin-bottom: 40px;
-    }
-    .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .value-card {
-      background: white; border-radius: 16px; padding: 28px 24px;
-      border: 1px solid #E8E1D4;
-    }
-    .value-num {
-      font-family: 'Fraunces', serif; font-weight: 900;
-      font-size: 48px; line-height: 1; color: #E8E1D4;
-      margin-bottom: 12px;
-    }
-    .value-card h3 {
-      font-family: 'Fraunces', serif; font-weight: 700;
-      font-size: 22px; color: #1D391A; margin-bottom: 10px;
-      letter-spacing: -0.015em;
-    }
-    .value-card p { font-size: 14px; line-height: 1.6; color: rgba(20,35,14,0.65); }
-
-    /* Team */
-    .team-section { padding: 80px 0; }
-    .team-section h2 {
-      font-family: 'Fraunces', serif; font-weight: 800;
-      font-size: clamp(36px, 4vw, 52px); letter-spacing: -0.025em;
-      margin-bottom: 48px;
-    }
-    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .team-card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #E8E1D4; }
-    .team-photo {
-      aspect-ratio: 1/1; background: #1D391A;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .team-photo-init {
-      font-family: 'Fraunces', serif; font-weight: 900;
-      font-size: 56px; color: rgba(248,243,238,0.15);
-    }
-    .team-info { padding: 22px; }
-    .team-info .name {
-      font-family: 'Fraunces', serif; font-weight: 700;
-      font-size: 22px; margin-bottom: 4px; letter-spacing: -0.01em;
-    }
-    .team-info .role {
-      font-family: 'Archivo', sans-serif; font-weight: 700;
-      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-      color: #3F8C3F; margin-bottom: 12px;
-    }
-    .team-info p { font-size: 13px; line-height: 1.6; color: rgba(20,35,14,0.65); }
+    .story-grid.flip .story-img { justify-self: start; }
+    .story-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     /* Brand bar + footer */
-    .brand-bar { background: #14230E; color: white; padding: 24px 0; }
+    .brand-bar { background: #14230E; color: white; padding: 24px 0; border-top: 1px solid rgba(248,243,238,0.05); }
     .brand-bar-inner {
       max-width: 1240px; margin: 0 auto; padding: 0 24px;
       display: flex; align-items: center; justify-content: space-between; gap: 24px;
@@ -196,12 +102,9 @@
       font-size: 13px; opacity: 0.5;
     }
 
-    /* Responsive */
     @media (max-width: 900px) {
-      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .story-grid { grid-template-columns: 1fr; gap: 32px; padding: 56px 0; }
       .story-grid.flip { direction: ltr; }
-      .values-grid { grid-template-columns: 1fr 1fr; }
-      .team-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
     }
   </style>
@@ -221,102 +124,34 @@
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="story-hero">
-    <div class="hero-inner">
-      <div class="hero-eyebrow">Est. 2026 · Leyton, London</div>
-      <h1>Good things<br/><em>grow here.</em></h1>
-      <p>PLNTD started with a blender, a market stall, and a stubbornly simple idea — that a cold-pressed juice should taste like the fruit it's made from, and nothing else.</p>
-    </div>
-  </section>
-
-  <!-- Pull quote -->
   <div class="container">
-    <div class="pull-quote">
-      <blockquote>"We were tired of paying £8 for something that was 40% apple juice from concentrate. So we quit our jobs and made something better."</blockquote>
-      <div class="attr">— Kwame &amp; Isla, Co-founders</div>
-    </div>
-  </div>
 
-  <!-- Story: The beginning -->
-  <div class="container">
+    <!-- The Mission (interior photo) -->
     <div class="story-grid">
       <div class="story-text">
-        <div class="label">How it started</div>
-        <h2>A market stall in Hackney.</h2>
-        <p>In the summer of 2026, Kwame Asante and Isla Reid turned up to Broadway Market with a cold-press juicer, a borrowed gazebo, and 40 kilos of produce from New Spitalfields. They sold out in two hours.</p>
-        <p>Word spread. Within three months they were at three markets a week. By spring 2023 they'd signed a lease on 144 High Road Leyton — a former fishmonger's they spent four months converting themselves, tile by tile.</p>
+        <div class="label">Why we exist</div>
+        <h2>Made here.<br/>Every morning.</h2>
+        <p>PLNTD is a small corner bar in Leyton with a simple promise: every juice is pressed on-site each morning, every smoothie is blended to order, and nothing comes from a concentrate or a pre-made bag.</p>
+        <p>We built the room you're looking at ourselves — tile by tile, plant by plant. It's where neighbours grab a green juice on the way to work and stay for a flat white on a Saturday. That's the whole brand. Real food, served fresh, in a space that feels like yours.</p>
       </div>
       <div class="story-img">
-        <div class="story-img-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-9 9"/></svg>
-          Market stall photo
-        </div>
+        <img src="uploads/pasted-1779889089774-0.png" alt="Inside the PLNTD Leyton shop" />
       </div>
     </div>
 
-    <!-- Story: The mission -->
+    <!-- The Machine (coffee photo) -->
     <div class="story-grid flip">
       <div class="story-text">
-        <div class="label">The mission</div>
-        <h2>Real food.<br/>No shortcuts.</h2>
-        <p>Every juice is pressed on-site each morning. Every smoothie is blended to order. There's no pre-made, no concentrate, no sitting in a chilled bag since Thursday. If a fruit isn't in season, it's not on the menu.</p>
-        <p>The coffee comes from a small roaster in Bermondsey who sources single-origin beans direct from cooperatives in Ethiopia and Colombia. Oat milk as standard, no surcharge.</p>
+        <div class="label">The coffee bar</div>
+        <h2>A serious machine for a serious cup.</h2>
+        <p>This is the heart of the bar — a three-group Italian espresso machine pulled out of a workshop in Florence and rebuilt by our barista lead. Pre-infusion, pressure profiling, individually heated groups. It's overkill for a juice shop. We don't care.</p>
+        <p>Pair it with single-origin beans from a small Bermondsey roaster, oat milk as standard, and a team that takes their dial-ins seriously, and you get a flat white worth queuing for. That cup of coffee is non-negotiable for us.</p>
       </div>
-      <div class="story-img" style="background:#14230E;">
-        <div class="story-img-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-9 9"/></svg>
-          In-store photo
-        </div>
+      <div class="story-img">
+        <img src="uploads/pasted-1779889275367-0.png" alt="The PLNTD espresso machine" />
       </div>
     </div>
 
-    <!-- Story: Community -->
-    <div class="story-grid">
-      <div class="story-text">
-        <div class="label">Community</div>
-        <h2>Built for the neighbourhood.</h2>
-        <p>Leyton isn't Shoreditch. We're not trying to be a concept store or a lifestyle brand. We're a corner bar where you grab a green juice on the way to work, or sit in with a flat white on a Saturday morning.</p>
-        <p>We partner with local schools on nutrition workshops, source produce from two East London growers, and run a pay-it-forward wall where customers can leave a drink for someone who needs it.</p>
-      </div>
-      <div class="story-img" style="background:#1A2D14;">
-        <div class="story-img-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-9 9"/></svg>
-          Community photo
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Values -->
-  <div style="background: white; margin-top: 0;">
-    <div class="container">
-      <div class="values-section">
-        <div class="section-label">What we stand for</div>
-        <div class="values-grid">
-          <div class="value-card">
-            <div class="value-num">01</div>
-            <h3>Real ingredients</h3>
-            <p>If we can't name where it came from, it's not going in the cup. No fillers, no flavourings, no concentrates.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-num">02</div>
-            <h3>Made fresh</h3>
-            <p>Everything is pressed or blended the same day it's served. We close early when we run out — and we're fine with that.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-num">03</div>
-            <h3>Low waste</h3>
-            <p>Pulp goes to a local bakery for bread. Packaging is compostable. We track our food waste weekly and publish it monthly.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-num">04</div>
-            <h3>Fair prices</h3>
-            <p>A cold-pressed juice shouldn't cost more than a pint. We keep margins honest and pass the savings on.</p>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- Brand bar -->
@@ -338,6 +173,107 @@
       <div>Terms · Privacy · Allergens</div>
     </div>
   </footer>
+
+
+  <div id="tweaks-root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="story-tweaks/tweaks-panel.jsx"></script>
+  <script type="text/babel">
+    const storyDefaults = /*EDITMODE-BEGIN*/{
+      "bgColor": "#14230E",
+      "textSize": 21,
+      "imageSize": 420,
+      "sectionPad": 88,
+      "gap": 72,
+      "imageRadius": 20,
+      "lightMode": false
+    }/*EDITMODE-END*/;
+
+    function StoryTweaks() {
+      const [t, setTweak] = useTweaks(storyDefaults);
+      const root = document.documentElement;
+
+      React.useEffect(() => {
+        if (t.lightMode) {
+          root.style.setProperty('--story-bg', '#F8F3EE');
+          root.style.setProperty('--story-headline', '#1D391A');
+          root.style.setProperty('--story-body', 'rgba(20,35,14,0.7)');
+          root.style.setProperty('--story-label', '#3F8C3F');
+        } else {
+          root.style.setProperty('--story-bg', t.bgColor);
+          root.style.setProperty('--story-headline', '#F8F3EE');
+          root.style.setProperty('--story-body', 'rgba(248,243,238,0.75)');
+          root.style.setProperty('--story-label', '#CBA258');
+        }
+        root.style.setProperty('--story-body-size', t.textSize + 'px');
+        root.style.setProperty('--story-img-max', t.imageSize + 'px');
+        root.style.setProperty('--story-pad', t.sectionPad + 'px');
+        root.style.setProperty('--story-gap', t.gap + 'px');
+        root.style.setProperty('--story-img-radius', t.imageRadius + 'px');
+      }, [t]);
+
+      return (
+        <TweaksPanel title="Tweaks">
+          <TweakSection title="Colour">
+            <TweakToggle
+              label="Light mode"
+              sub="Swap to the cream palette"
+              value={t.lightMode}
+              onChange={v => setTweak('lightMode', v)}
+            />
+            {!t.lightMode && (
+              <TweakColor
+                label="Background"
+                value={t.bgColor}
+                options={['#1D391A', '#14230E', '#0F1A0C', '#3E7A1E', '#CBA258', '#CA3D00', '#C1002F', '#2E0096']}
+                onChange={v => setTweak('bgColor', v)}
+              />
+            )}
+          </TweakSection>
+          <TweakSection title="Typography">
+            <TweakSlider
+              label="Body text size"
+              value={t.textSize}
+              min={14} max={22} step={1}
+              onChange={v => setTweak('textSize', v)}
+            />
+          </TweakSection>
+          <TweakSection title="Layout">
+            <TweakSlider
+              label="Section padding"
+              value={t.sectionPad}
+              min={40} max={160} step={8}
+              onChange={v => setTweak('sectionPad', v)}
+            />
+            <TweakSlider
+              label="Column gap"
+              value={t.gap}
+              min={24} max={120} step={8}
+              onChange={v => setTweak('gap', v)}
+            />
+          </TweakSection>
+          <TweakSection title="Images">
+            <TweakSlider
+              label="Image width"
+              value={t.imageSize}
+              min={240} max={600} step={20}
+              onChange={v => setTweak('imageSize', v)}
+            />
+            <TweakSlider
+              label="Corner radius"
+              value={t.imageRadius}
+              min={0} max={40} step={4}
+              onChange={v => setTweak('imageRadius', v)}
+            />
+          </TweakSection>
+        </TweaksPanel>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<StoryTweaks />);
+  </script>
 
 </body>
 </html>
