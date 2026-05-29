@@ -392,8 +392,11 @@
   }
 
   @media (max-width: 900px) {
-    .showcase-inner { flex-direction: column; gap: 60px; }
-    .copy-col { text-align: left; }
+    body { overflow-x: hidden; }
+    .showcase-section { height: auto; min-height: calc(100vh - 64px); overflow: visible; padding: 48px 0 64px; }
+    .showcase-inner { flex-direction: column; gap: 48px; transform: none !important; padding: 0 24px; }
+    .copy-col { text-align: left; transform: none !important; flex: 1 1 auto; width: 100%; max-width: 520px; }
+    .phone-col { transform: none !important; }
     .subtext { max-width: 100%; }
     .feature-list { align-items: flex-start; }
     .store-badges { justify-content: flex-start; }
@@ -528,6 +531,7 @@ function PhoneShowcase() {
     if (!section || !inner) return;
     function fit() {
       inner.style.transform = 'none';
+      if (window.innerWidth <= 900) return;
       const sH = section.clientHeight;
       const sW = section.clientWidth;
       const iH = inner.scrollHeight;
