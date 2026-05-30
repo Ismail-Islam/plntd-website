@@ -44,6 +44,7 @@
     .nav-links { display: flex; gap: 32px; }
     .nav-links a { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #14230E; opacity: 0.75; transition: opacity 120ms; }
     .nav-links a:hover, .nav-links a.active { opacity: 1; }
+    .nav-actions { display: flex; align-items: center; }
     .nav-hamburger { display: none; width: 40px; height: 40px; border-radius: 999px; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: #14230E; transition: background 120ms; }
     .nav-hamburger svg { width: 22px; height: 22px; }
     .nav-hamburger:hover { background: #ECE4D8; }
@@ -136,9 +137,11 @@
         <a href="/story" class="active">Our story</a>
         <a href="/app">App</a>
       </div>
-      <button class="nav-hamburger" aria-label="Open menu" onclick="document.getElementById('mobileNav').classList.add('open');document.getElementById('mobileNavOverlay').classList.add('open');">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </button>
+      <div class="nav-actions">
+        <button class="nav-hamburger" aria-label="Open menu" onclick="document.getElementById('mobileNav').classList.add('open');document.getElementById('mobileNavOverlay').classList.add('open');">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
     </div>
   </nav>
 
