@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PLNTD — App</title>
+<link rel="icon" type="image/png" href="assets/icon.png?v=2" />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800;9..144,900&family=Archivo:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -20,7 +21,7 @@
     --body-scale: 1;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
+  html, body { height: 100%; overflow-x: hidden; }
   body {
     background: #1D391A;
     font-family: 'Inter', sans-serif;
@@ -410,11 +411,13 @@
     body { overflow-x: hidden; }
     .app-nav-links { display: none !important; }
     .app-nav-hamburger { display: flex; }
-    .showcase-section { height: auto; min-height: calc(100vh - 64px); overflow: visible; padding: 48px 0 64px; }
-    .showcase-inner { flex-direction: column; gap: 48px; transform: none !important; padding: 0 24px; }
-    .copy-col { text-align: left; transform: none !important; flex: 1 1 auto; width: 100%; max-width: 520px; }
-    .phone-col { transform: none !important; }
-    .subtext { max-width: 100%; }
+    .showcase-section { display: block; height: auto; min-height: 0; overflow: visible; padding: 40px 0 64px; }
+    .showcase-inner { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 44px; transform: none !important; width: 100%; max-width: 100%; margin: 0; padding: 0 24px; }
+    .copy-col { text-align: left; transform: none !important; flex: 0 0 auto; width: 100%; max-width: 100%; }
+    .headline { transform: none !important; }
+    .phone-col { transform: none !important; align-self: center; flex: 0 0 auto; margin-top: 28px; }
+    .phone-bezel { width: min(320px, 78vw); height: auto; aspect-ratio: 320 / 672; }
+    .subtext { max-width: 100%; transform: none !important; }
     .feature-list { align-items: flex-start; }
     .store-badges { justify-content: flex-start; }
   }
@@ -432,13 +435,13 @@
   font-family: 'Archivo', sans-serif;
 ">
   <div style="max-width:1240px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between;">
-    <a href="index.html" style="font-family:'Archivo',sans-serif; font-weight:900; font-size:22px; letter-spacing:0.02em; color:#1D391A; text-decoration:none;">
-      PLNTD<span style="font-size:11px; vertical-align:super; margin-left:2px; opacity:0.7; letter-spacing:0;">co.</span>
+    <a href="/" style="font-family:'Archivo',sans-serif; font-weight:900; font-size:22px; letter-spacing:0.02em; color:#1D391A; text-decoration:none;">
+      PLNTD<span style="font-size:11px; vertical-align:baseline; margin-left:2px; opacity:0.7; letter-spacing:0;">co.</span>
     </a>
     <div class="app-nav-links" style="display:flex; gap:32px;">
-      <a href="index.html#menu"   style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Menu</a>
-<a href="story.html"  style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
-      <a href="app.html"          style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#1D391A; text-decoration:none;">App</a>
+      <a href="/menu"   style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Menu</a>
+<a href="/story"  style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#14230E; opacity:0.75; text-decoration:none;">Our story</a>
+      <a href="/app"          style="font-family:'Archivo',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#1D391A; text-decoration:none;">App</a>
     </div>
     <button class="app-nav-hamburger" aria-label="Open menu" onclick="document.getElementById('appMobileNav').classList.add('open');document.getElementById('appMobileOverlay').classList.add('open');">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -450,15 +453,15 @@
 <div class="app-mobile-overlay" id="appMobileOverlay" onclick="document.getElementById('appMobileNav').classList.remove('open');this.classList.remove('open');"></div>
 <aside class="app-mobile-drawer" id="appMobileNav">
   <div class="app-mobile-head">
-    <a href="index.html" style="font-family:'Archivo',sans-serif; font-weight:900; font-size:22px; letter-spacing:0.02em; color:#1D391A; text-decoration:none;">PLNTD<span style="font-size:11px; vertical-align:super; margin-left:2px; opacity:0.7; letter-spacing:0;">co.</span></a>
+    <a href="/" style="font-family:'Archivo',sans-serif; font-weight:900; font-size:22px; letter-spacing:0.02em; color:#1D391A; text-decoration:none;">PLNTD<span style="font-size:11px; vertical-align:baseline; margin-left:2px; opacity:0.7; letter-spacing:0;">co.</span></a>
     <button class="app-mobile-close" aria-label="Close menu" onclick="document.getElementById('appMobileNav').classList.remove('open');document.getElementById('appMobileOverlay').classList.remove('open');">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M6 18L18 6"/></svg>
     </button>
   </div>
   <nav class="app-mobile-links">
-    <a href="index.html#menu">Menu</a>
-    <a href="story.html">Our Story</a>
-    <a href="app.html" class="active">App</a>
+    <a href="/menu">Menu</a>
+    <a href="/story">Our Story</a>
+    <a href="/app" class="active">App</a>
   </nav>
 </aside>
 
@@ -639,13 +642,13 @@ function PhoneShowcase() {
             Earn. Scan.<br /><em>Drink free.</em>
           </h2>
           <p className="subtext">
-            Show your QR at the till, earn 1 point per drink, and hit 10 for a drink on the house. It's that simple.
+            Show your QR at the till, earn 1 point per transaction, and hit 10 for a drink on the house. It's that simple.
           </p>
 
           <ul className="feature-list">
             <li className="feature-item">
               <div className="feature-dot"><span className="feature-star">★</span></div>
-              <span className="feature-text"><strong>1 point per drink</strong> — scan your QR each time you visit</span>
+              <span className="feature-text"><strong>1 point per transaction</strong> — scan your QR each time you visit</span>
             </li>
             <li className="feature-item">
               <div className="feature-dot"><span className="feature-star">★</span></div>
