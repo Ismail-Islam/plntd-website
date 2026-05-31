@@ -658,11 +658,10 @@ function App() {
     document.body.classList.toggle('dark', !!t.darkMode);
   }, [t.darkMode]);
 
-  // If loaded at /menu (or #menu), scroll to the menu section once rendered.
+  // Always load at the top — don't let the browser restore a prior scroll position on refresh.
   useEffect(() => {
-    if (window.location.pathname === '/menu' || window.location.hash === '#menu') {
-      requestAnimationFrame(() => document.getElementById('menu')?.scrollIntoView({ block: 'start' }));
-    }
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
   }, []);
 
   const addToCart = (item) => {
