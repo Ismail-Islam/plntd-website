@@ -94,9 +94,19 @@ function StoreHeader({ store }) {
   const today = store.hours[store.todayIndex];
   const now = new Date();
   const hh = now.getHours() + now.getMinutes() / 60;
-  const [openH, openM] = today.open.split(':').map(Number);
-  const [closeH, closeM] = today.close.split(':').map(Number);
-  const isOpen = hh >= openH + openM / 60 && hh < closeH + closeM / 60;
+  const toNum = (t) => { const [h, m] = t.split(':').map(Number); return h + m / 60; };
+  const isOpen = today.open && today.close && hh >= toNum(today.open) && hh < toNum(today.close);
+
+  // When closed, find the next opening. Before today's open → opens today;
+  // at/after today's close → walk forward to the next day that has hours.
+  let nextOpen = today;
+  if (!isOpen && (!today.open || hh >= toNum(today.close))) {
+    for (let i = 1; i <= store.hours.length; i++) {
+      const cand = store.hours[(store.todayIndex + i) % store.hours.length];
+      if (cand && cand.open && cand.close) { nextOpen = cand; break; }
+    }
+  }
+  const opensLabel = nextOpen === today ? `Opens ${nextOpen.open}` : `Opens ${nextOpen.day} ${nextOpen.open}`;
 
   return (
     <>
@@ -127,7 +137,7 @@ function StoreHeader({ store }) {
             <div className="status-icon"><Icon.clock /></div>
             <div className="status-text">
               <div className="top">{isOpen ? <span className="open">Store is: open</span> : <span className="closed">Store is: closed</span>}</div>
-              <div className="main">{isOpen ? `Until ${today.close}` : `Opens ${today.open}`}</div>
+              <div className="main">{isOpen ? `Until ${today.close}` : opensLabel}</div>
             </div>
             <div className="chev"><Icon.arrow /></div>
           </div>
