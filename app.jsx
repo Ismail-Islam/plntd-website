@@ -2,6 +2,17 @@
 
 const { useState, useEffect, useRef, useMemo } = React;
 
+// Smooth-scroll to the menu section and reflect a clean /menu URL (homepage only).
+// On other pages the link falls through to a normal navigation to /menu.
+function goMenu(e) {
+  const el = document.getElementById('menu');
+  if (el) {
+    e.preventDefault();
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.pushState(null, '', '/menu');
+  }
+}
+
 // Tweak defaults (persisted via EDITMODE markers)
 window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "darkMode": false
@@ -33,13 +44,13 @@ function MobileNav({ open, onClose }) {
       <div className={`mobile-nav-overlay ${open ? 'open' : ''}`} onClick={onClose}></div>
       <aside className={`mobile-nav-drawer ${open ? 'open' : ''}`}>
         <div className="mobile-nav-head">
-          <a href="#" className="nav-logo">PLNTD<span className="co">co.</span></a>
+          <a href="/" className="nav-logo">PLNTD<span className="co">co.</span></a>
           <button className="nav-icon-btn" onClick={onClose} aria-label="Close menu"><Icon.close /></button>
         </div>
         <nav className="mobile-nav-links">
-          <a href="#menu" onClick={onClose}>Menu</a>
-          <a href="story.html" onClick={onClose}>Our Story</a>
-          <a href="app.html" onClick={onClose}>App</a>
+          <a href="/menu" onClick={(e) => { goMenu(e); onClose(); }}>Menu</a>
+          <a href="/story" onClick={onClose}>Our Story</a>
+          <a href="/app" onClick={onClose}>App</a>
         </nav>
       </aside>
     </>);
@@ -52,11 +63,11 @@ function Nav({ cartCount, onOpenCart }) {
     <>
       <nav className="nav">
         <div className="container nav-inner">
-          <a href="#" className="nav-logo">PLNTD<span className="co">co.</span></a>
+          <a href="/" className="nav-logo">PLNTD<span className="co">co.</span></a>
           <div className="nav-links">
-            <a href="#menu">Menu</a>
-            <a href="story.html">Our story</a>
-            <a href="app.html">App</a>
+            <a href="/menu" onClick={goMenu}>Menu</a>
+            <a href="/story">Our story</a>
+            <a href="/app">App</a>
           </div>
           <div className="nav-actions">
             <button className="nav-hamburger" onClick={() => setMenuOpen(true)} aria-label="Open menu">
@@ -104,11 +115,11 @@ function StoreHeader({ store }) {
 
       <div className="container">
         <div className="status-wrap">
-          <div className="status-card action" onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-            <div className="status-icon"><Icon.bag /></div>
+          <div className="status-card action" onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`PLNTD Co, ${store.address}, ${store.addressLine2}`)}`, '_blank', 'noopener')}>
+            <div className="status-icon"><Icon.pin /></div>
             <div className="status-text">
-              <div className="top">Pick up from</div>
-              <div className="main"><Icon.pin /> {store.address}, {store.addressLine2}</div>
+              <div className="top">Location</div>
+              <div className="main">{store.address}, {store.addressLine2}</div>
             </div>
             <div className="chev"><Icon.arrow /></div>
           </div>
@@ -230,19 +241,26 @@ function ProductCard({ item, onAdd, onView }) {
         <div className="product-image-fallback">{item.kind === 'tea' ? 'T' : 'C'}</div>
         }
       </div>
-      <div className="product-name-row">
-        {item.color && <span className="product-dot" style={{ background: item.color }}></span>}
-        <span className="product-name">{item.name}</span>
+      <div className="product-body">
+        <div className="product-name-row">
+          {item.color && <span className="product-dot" style={{ background: item.color }}></span>}
+          <span className="product-name">{item.name}</span>
+        </div>
+        <div className="product-ingr">{item.ingr}</div>
+        {item.nutrition &&
+        <button className="view-nutrition-btn" onClick={() => onView && onView(item)} aria-label={`View allergens and nutrition for ${item.name}`}>
+            View allergens & nutrition <Icon.eye />
+          </button>
+        }
+        <div className="product-foot">
+          <div className="product-price">£{item.price.toFixed(2)}</div>
+        </div>
       </div>
-      <div className="product-ingr">{item.ingr}</div>
       {item.nutrition &&
-      <button className="view-nutrition-btn" onClick={() => onView && onView(item)} aria-label={`View allergens and nutrition for ${item.name}`}>
-          View allergens & nutrition <Icon.eye />
-        </button>
+      <button className="product-chevron" onClick={() => onView && onView(item)} aria-label={`View allergens and nutrition for ${item.name}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
       }
-      <div className="product-foot">
-        <div className="product-price">£{item.price.toFixed(2)}</div>
-      </div>
     </div>);
 
 }
@@ -422,20 +440,19 @@ function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <div className="logo">PLNTD<span style={{ fontSize: 14, opacity: 0.5 }}> co.</span></div>
-            <p>Plant-based juice, smoothie &amp; specialty coffee bar. Made fresh in London since 2024.</p>
+            <p>Juice, smoothie &amp; specialty coffee bar. Made fresh in London since 2026.</p>
           </div>
           <div>
             <h4>Visit</h4>
             <ul>
-              <li><a href="#">144 High Road Leyton</a></li>
-              <li><a href="#">London E15 2BX</a></li>
+              <li><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`PLNTD Co, ${window.STORE.address}, ${window.STORE.addressLine2}`)}`} target="_blank" rel="noopener noreferrer">{window.STORE.address}, {window.STORE.addressLine2}</a></li>
             </ul>
           </div>
           <div>
             <h4>Company</h4>
             <ul>
-              <li><a href="story.html">Our story</a></li>
-              <li><a href="app.html">App</a></li>
+              <li><a href="/story">Our story</a></li>
+              <li><a href="/app">App</a></li>
             </ul>
           </div>
           <div>
@@ -630,6 +647,13 @@ function App() {
   useEffect(() => {
     document.body.classList.toggle('dark', !!t.darkMode);
   }, [t.darkMode]);
+
+  // If loaded at /menu (or #menu), scroll to the menu section once rendered.
+  useEffect(() => {
+    if (window.location.pathname === '/menu' || window.location.hash === '#menu') {
+      requestAnimationFrame(() => document.getElementById('menu')?.scrollIntoView({ block: 'start' }));
+    }
+  }, []);
 
   const addToCart = (item) => {
     setCart((prev) => {

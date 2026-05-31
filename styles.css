@@ -85,7 +85,7 @@ body.dark .info-card { background: #182814; }
   color: var(--plntd-forest-green);
 }
 .nav-logo .co { font-size: 11px; vertical-align: baseline; margin-left: 2px; letter-spacing: 0; opacity: 0.7; }
-.nav-links { display: flex; gap: 32px; margin-left: auto; }
+.nav-links { display: flex; gap: 32px; }
 .nav-links a {
   font-family: var(--font-heading); font-weight: 700;
   font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
@@ -744,7 +744,7 @@ a.brand-bar-social:hover { opacity: 0.75; }
 }
 .banner-bg {
   position: absolute; inset: 0;
-  background: url('uploads/hero-juices.jpeg') center 50% / cover no-repeat;
+  background: url('uploads/pasted-1779969947690-0.png') center 30% / cover no-repeat;
 }
 .banner-overlay {
   position: absolute; inset: 0;
