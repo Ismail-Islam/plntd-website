@@ -84,8 +84,8 @@ body.dark .info-card { background: #182814; }
   font-size: 22px; letter-spacing: 0.02em;
   color: var(--plntd-forest-green);
 }
-.nav-logo .co { font-size: 11px; vertical-align: super; margin-left: 2px; letter-spacing: 0; opacity: 0.7; }
-.nav-links { display: flex; gap: 32px; }
+.nav-logo .co { font-size: 11px; vertical-align: baseline; margin-left: 2px; letter-spacing: 0; opacity: 0.7; }
+.nav-links { display: flex; gap: 32px; margin-left: auto; }
 .nav-links a {
   font-family: var(--font-heading); font-weight: 700;
   font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
@@ -331,6 +331,8 @@ body.dark .mobile-nav-links a:hover { color: #6FB36F; }
 .product-grid .product-card:nth-child(4n+4).in-view { transition-delay: 240ms; }
 .product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
 .product-card.in-view:hover { transform: translateY(-2px); }
+.product-body { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.product-chevron { display: none; }
 .product-image {
   aspect-ratio: 1 / 1;
   background: var(--plntd-cream);
@@ -742,7 +744,7 @@ a.brand-bar-social:hover { opacity: 0.75; }
 }
 .banner-bg {
   position: absolute; inset: 0;
-  background: url('uploads/pasted-1779969947690-0.png') center 30% / cover no-repeat;
+  background: url('uploads/hero-juices.jpeg') center 50% / cover no-repeat;
 }
 .banner-overlay {
   position: absolute; inset: 0;
@@ -986,6 +988,71 @@ a.brand-bar-social:hover { opacity: 0.75; }
   .product-price { font-size: 14px; }
   .nut-modal { border-radius: 16px 16px 0 0; top: auto; bottom: 0; left: 0; right: 0; width: 100%; max-width: 100%; transform: none; max-height: 90vh; animation: nut-modal-in-mobile 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
   .nut-modal.hiding { animation: nut-modal-out-mobile 200ms ease forwards; }
+}
+/* ─── mobile list layout (JoeJuice-style rows) ─── */
+@media (max-width: 600px) {
+  .menu-layout .product-grid,
+  .product-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  .product-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    overflow: visible;
+    /* no scroll fade-in on mobile */
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .product-card:hover { transform: none !important; box-shadow: none; }
+  .product-card.in-view:hover { transform: none !important; }
+
+  .product-image {
+    flex: 0 0 88px;
+    width: 88px;
+    height: 88px;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 0;
+    border-radius: 12px;
+  }
+  .product-image img { width: 86%; height: 86%; }
+
+  .product-name-row { margin-bottom: 4px; }
+  .product-name { font-size: 16px; font-weight: 700; }
+
+  /* ingredients always visible on mobile rows */
+  .product-ingr {
+    max-height: none;
+    opacity: 1;
+    margin-bottom: 8px;
+    flex: 0 1 auto;
+    font-size: 13px;
+  }
+  .product-card:hover .product-ingr,
+  .product-card:focus-within .product-ingr { margin-bottom: 8px; }
+
+  /* chevron replaces the pill button in row layout */
+  .view-nutrition-btn { display: none; }
+  .product-foot { justify-content: flex-start; }
+  .product-price { font-size: 17px; font-weight: 700; }
+
+  .product-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(20,35,14,0.15);
+    color: var(--plntd-forest-green);
+    cursor: pointer;
+    align-self: center;
+  }
+  .product-chevron svg { width: 18px; height: 18px; }
+  body.dark .product-chevron { border-color: rgba(241,235,226,0.18); color: #BEE3BE; }
 }
 @keyframes nut-modal-in-mobile {
   from { opacity: 0; transform: translateY(40px); }
