@@ -106,7 +106,7 @@ function StoreHeader({ store }) {
       if (cand && cand.open && cand.close) { nextOpen = cand; break; }
     }
   }
-  const opensLabel = nextOpen === today ? `Opens ${nextOpen.open}` : `Opens ${nextOpen.day} ${nextOpen.open}`;
+  const opensLabel = `Opens ${nextOpen.open}`;
 
   return (
     <>
