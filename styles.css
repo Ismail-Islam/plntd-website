@@ -1062,3 +1062,31 @@ a.brand-bar-social:hover { opacity: 0.75; }
   from { opacity: 1; transform: translateY(0); }
   to   { opacity: 0; transform: translateY(40px); }
 }
+
+/* Footer social icons */
+.footer-social {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+}
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--plntd-forest-green, #1D391A);
+  color: var(--plntd-cream, #F8F3EE);
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.social-icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+.social-icon:hover {
+  transform: translateY(-2px);
+  background: var(--plntd-leaf, #3F8C3F);
+  color: var(--plntd-cream, #F8F3EE);
+}

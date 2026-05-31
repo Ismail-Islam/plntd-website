@@ -33,6 +33,7 @@ const Icon = {
   bag: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>,
   wifi: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.55a11 11 0 0 1 14 0" /><path d="M2 8.82a15 15 0 0 1 20 0" /><path d="M8.5 16.05a6 6 0 0 1 7 0" /><circle cx="12" cy="20" r="0.5" /></svg>,
   instagram: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" /></svg>,
+  tiktok: () => <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3h-2.9v12.4a2.3 2.3 0 1 1-2.3-2.3c.2 0 .4 0 .6.07V10.2a5.2 5.2 0 1 0 4.6 5.16V8.9a6.6 6.6 0 0 0 3.8 1.2V7.2a3.8 3.8 0 0 1-3.8-3.8V3z" /></svg>,
   leaf: () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3c-4 0-7 1-9 3-2.5 2.5-4 6-4 11h2c0-2.5.5-4.5 1.5-6.2L13 17l1.4-1.4L7.8 9C9.3 7.7 11.3 7 14 7h.5L9 12.5l1.4 1.4L17.5 6.8c.4 1.4.5 3 .5 5 0 4-1 7-3 9h2c2-2 3-5 3-9 0-3-1-6-3-9Z" /></svg>,
   eye: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>
 };
@@ -434,10 +435,6 @@ function BrandBar() {
           <span className="divider"></span>
           <span>FEEL GOOD.</span>
         </div>
-        <a className="brand-bar-social" href="https://www.instagram.com/plntdlondon/" target="_blank" rel="noopener noreferrer" aria-label="PLNTD on Instagram">
-          <Icon.instagram />
-          <span>@plntdlondon</span>
-        </a>
       </div>
     </div>);
 
@@ -468,13 +465,12 @@ function Footer() {
           <div>
             <h4>Follow us</h4>
             <ul>
-              <li><a href="https://www.instagram.com/plntdlondon/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+              <li className="footer-social"><a className="social-icon" href="https://www.instagram.com/plntdlondon/" target="_blank" rel="noopener noreferrer" aria-label="PLNTD on Instagram"><Icon.instagram /></a><a className="social-icon" href="https://www.tiktok.com/@plntdlondon" target="_blank" rel="noopener noreferrer" aria-label="PLNTD on TikTok"><Icon.tiktok /></a></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
           <div>© 2026 PLNTD co. All rights reserved.</div>
-          <div>Allergens</div>
         </div>
       </div>
     </footer>);
