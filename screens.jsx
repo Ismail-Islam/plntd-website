@@ -283,7 +283,7 @@ function ScanScreen({ t, onNavigate, isRedeem }) {
           </div>
           <div style={{ border: `1.5px solid ${isRedeem ? t.gold : t.gold}`, background: isRedeem ? t.gold : 'transparent', borderRadius: '999px', padding: '5px 14px', marginBottom: '22px' }}>
             <span style={{ fontFamily: "'Archivo', sans-serif", fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: isRedeem ? '#fff' : t.ink }}>
-              {isRedeem ? 'FREE drink' : '1 ★ per drink'}
+              {isRedeem ? 'FREE drink' : '1 ★ per transaction'}
             </span>
           </div>
           <QR />
@@ -382,7 +382,7 @@ function RewardsScreen({ t }) {
       <div style={{ padding: '0 24px 24px' }}>
         <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '20px', color: t.ink, marginBottom: '16px', letterSpacing: '-0.01em' }}>How it works</div>
         {[
-          { title: 'Earn 1 point per drink', body: 'Every smoothie, juice or coffee you buy at PLNTD earns 1 point.' },
+          { title: 'Earn 1 point per transaction', body: 'Every smoothie, juice or coffee you buy at PLNTD earns 1 point.' },
           { title: '10 points = a free drink', body: 'Once you hit 10 points, your next drink is on us.' },
           { title: 'Your QR is private', body: 'Only PLNTD staff can scan your code. Refreshes every minute.' },
         ].map(faq => (
@@ -417,7 +417,7 @@ function MenuScreen({ t }) {
       <div style={{ padding: '16px 24px 8px' }}>
         <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '32px', color: t.ink, letterSpacing: '-0.02em' }}>Menu</div>
         <div style={{ fontFamily: "'Archivo', sans-serif", fontWeight: 700, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.25em', color: t.inkMuted, marginTop: '6px' }}>
-          EAT CLEAN · LIVE GREEN · FEEL GOOD
+          EAT CLEAN · LIVE GREEN ·<br/>FEEL GOOD
         </div>
       </div>
 
