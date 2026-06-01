@@ -99,23 +99,44 @@
     .story-grid.flip .story-img { justify-self: start; }
     .story-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Brand bar + footer */
-    .brand-bar { background: #14230E; color: white; padding: 24px 0; border-top: 1px solid rgba(248,243,238,0.05); }
-    .brand-bar-inner {
-      max-width: 1240px; margin: 0 auto; padding: 0 24px;
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    /* Footer */
+    .footer { background: #0F0F0F; color: white; padding: 64px 0 32px; }
+    .footer-inner { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px; padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
-    .brand-tag {
+    .footer h4 {
       font-family: 'Archivo', sans-serif; font-weight: 700;
-      font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase;
-      display: flex; align-items: center; gap: 14px;
+      font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+      opacity: 0.6; margin-bottom: 16px;
     }
-    .brand-div { width: 1px; height: 16px; background: rgba(255,255,255,0.3); }
-    .footer { background: #0F0F0F; color: white; padding: 40px 0; }
-    .footer-inner {
-      max-width: 1240px; margin: 0 auto; padding: 0 24px;
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 13px; opacity: 0.5;
+    .footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer ul a { font-size: 14px; opacity: 0.85; text-decoration: none; color: white; }
+    .footer ul a:hover { opacity: 1; }
+    .footer-brand .logo {
+      font-family: 'Archivo', sans-serif; font-weight: 900;
+      font-size: 32px; margin-bottom: 12px;
+    }
+    .footer-brand .logo .co { font-size: 14px; opacity: 0.5; }
+    .footer-brand p { font-size: 14px; opacity: 0.7; max-width: 280px; line-height: 1.5; }
+    .footer-bottom { padding-top: 24px; display: flex; justify-content: space-between; font-size: 12px; opacity: 0.5; }
+    .footer-social { display: flex; gap: 12px; list-style: none; flex-direction: row !important; }
+    .social-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; border-radius: 10px;
+      background: #1D391A; color: white;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .social-icon svg { width: 24px; height: 24px; display: block; }
+    .social-icon:hover { transform: translateY(-2px); background: #3F8C3F; }
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 520px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
 
     @media (max-width: 900px) {
@@ -191,23 +212,44 @@
 
   </div>
 
-  <!-- Brand bar -->
-  <div class="brand-bar">
-    <div class="brand-bar-inner">
-      <div class="brand-tag">
-        <span>EAT CLEAN.</span><span class="brand-div"></span>
-        <span>LIVE GREEN.</span><span class="brand-div"></span>
-        <span>FEEL GOOD.</span>
-      </div>
-      <div style="font-family:'Inter',sans-serif; font-size:14px; opacity:0.7;">@plntdlondon</div>
-    </div>
-  </div>
-
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
-      <div>© 2026 PLNTD co. All rights reserved.</div>
-      <div>Terms · Privacy · Allergens</div>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">PLNTD<span class="co"> co.</span></div>
+          <p>Juice, smoothie &amp; specialty coffee bar. Made fresh in London since 2026.</p>
+        </div>
+        <div>
+          <h4>Visit</h4>
+          <ul>
+            <li><a href="#">144 High Road Leyton, London E15 2BX</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/story">Our story</a></li>
+            <li><a href="/app">App</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Follow us</h4>
+          <ul>
+            <li class="footer-social">
+              <a class="social-icon" href="https://www.instagram.com/plntdlondon/" target="_blank" rel="noopener noreferrer" aria-label="PLNTD on Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+              </a>
+              <a class="social-icon" href="https://www.tiktok.com/@plntdlondon" target="_blank" rel="noopener noreferrer" aria-label="PLNTD on TikTok">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3h-2.9v12.4a2.3 2.3 0 1 1-2.3-2.3c.2 0 .4 0 .6.07V10.2a5.2 5.2 0 1 0 4.6 5.16V8.9a6.6 6.6 0 0 0 3.8 1.2V7.2a3.8 3.8 0 0 1-3.8-3.8V3z"/></svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 PLNTD co. All rights reserved.</div>
+      </div>
     </div>
   </footer>
 
