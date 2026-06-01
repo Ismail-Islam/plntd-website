@@ -147,7 +147,7 @@ function HomeScreen({ t, onNavigate }) {
     <div style={{ display: 'flex', flexDirection: 'column', background: t.dark, minHeight: '100%' }}>
       <div style={{ background: t.dark, padding: '20px 24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '26px', color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
-          Good morning <span style={{ fontWeight: 900 }}>Ismail</span>
+          Good day <span style={{ fontWeight: 900 }}>Ismail</span>
         </div>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => onNavigate('Inbox')}>
