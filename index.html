@@ -1,21 +1,485 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PLNTD</title>
-  <link rel="icon" type="image/png" href="assets/icon.png?v=2" />
-  <link rel="stylesheet" href="styles.css?v=20260529e" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLNTD — Home</title>
+<meta name="description" content="Plant-powered cold-pressed juices and drinks. Fresh, real, alive.">
+<link rel="icon" type="image/png" href="assets/icon.png?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --btn-scale: 1.08; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Archivo', system-ui, sans-serif;
+    overflow: hidden;
+    background: #F2F4EC;
+  }
+
+  .page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 42%, #F7F8F2 0%, #EEF1E6 55%, #E7EBDD 100%);
+  }
+
+  #liquid {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .grain {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* ── TOP NAV ── */
+  .nav {
+    position: absolute; top: 0; left: 0; right: 0;
+    z-index: 6;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 26px 48px;
+  }
+  .nav-logo {
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: #2A3623;
+  }
+  .nav-logo .co { font-size: 12px; vertical-align: baseline; margin-left: 3px; letter-spacing: 0; opacity: 0.7; font-weight: 700; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(42,54,35,0.62);
+    transition: opacity 160ms ease;
+  }
+  .nav-links a:hover { opacity: 0.6; }
+
+  /* ── HERO CONTENT ── */
+  .hero-content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .headline {
+    font-weight: 900;
+    font-size: clamp(64px, 13vw, 190px);
+    line-height: 0.92;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: #2A3623;
+    margin-bottom: 54px;
+  }
+  .headline .co {
+    font-size: 0.42em;
+    vertical-align: baseline;
+    opacity: 0.9;
+    margin-left: 0.04em;
+    letter-spacing: -0.02em;
+    font-weight: 900;
+  }
+
+  .cta-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(9px * var(--btn-scale, 1));
+    min-width: calc(230px * var(--btn-scale, 1));
+    font-family: 'Archivo', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: calc(14px * var(--btn-scale, 1));
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 999px;
+    padding: calc(18px * var(--btn-scale, 1)) calc(38px * var(--btn-scale, 1));
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 180ms cubic-bezier(0.22,1,0.36,1);
+  }
+  .btn:focus-visible { outline: 3px solid #2A3623; outline-offset: 3px; }
+  .btn-menu {
+    color: #2A3623;
+    background: #F4F6EE;
+    box-shadow: 0 14px 34px rgba(40,55,30,0.18);
+  }
+  .btn-app {
+    color: #F2F4EC;
+    background: #2A3623;
+    box-shadow: 0 14px 34px rgba(20,30,12,0.3);
+    border: 1.5px solid rgba(242,244,236,0.16);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-app svg { width: calc(16px * var(--btn-scale, 1)); height: calc(16px * var(--btn-scale, 1)); }
+
+
+  /* ── HAMBURGER ── */
+  .nav-hamburger { display: none; width: 40px; height: 40px; border-radius: 999px; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: #2A3623; transition: background 120ms; }
+  .nav-hamburger svg { width: 22px; height: 22px; }
+  .nav-hamburger:hover { background: rgba(42,54,35,0.1); }
+
+  /* ── MOBILE DRAWER ── */
+  .mobile-nav-overlay { position: fixed; inset: 0; background: rgba(20,35,14,0.4); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 240ms cubic-bezier(0.22,1,0.36,1); }
+  .mobile-nav-overlay.open { opacity: 1; pointer-events: auto; }
+  .mobile-nav-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 300px; max-width: 85vw; background: #F8F3EE; z-index: 101; transform: translateX(100%); transition: transform 240ms cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(0,0,0,0.12); }
+  .mobile-nav-drawer.open { transform: translateX(0); }
+  .mobile-nav-head { padding: 0 20px; height: 64px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E8E1D4; }
+  .mobile-nav-close { width: 40px; height: 40px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: #2A3623; }
+  .mobile-nav-close svg { width: 22px; height: 22px; }
+  .mobile-nav-links { display: flex; flex-direction: column; padding: 8px 24px; }
+  .mobile-nav-links a { font-family: 'Archivo', system-ui, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; color: #2A3623; padding: 20px 0; border-bottom: 1px solid #E8E1D4; text-decoration: none; transition: color 120ms; }
+  .mobile-nav-links a:last-child { border-bottom: 0; }
+  .mobile-nav-links a:hover { color: #1D391A; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    .nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
+
+  /* ── REDUCED MOTION ── */
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+    .replay { display: none; }
+  }
+</style>
 </head>
 <body>
-  <div id="root"></div>
 
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<div class="page" id="page">
+  <canvas id="liquid" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
 
-  <script src="data.js"></script>
-  <script type="text/babel" src="tweaks-panel.jsx"></script>
-  <script type="text/babel" src="app.jsx"></script>
+  <nav class="nav">
+    <a class="nav-logo" href="/">PLNTD<span class="co">co.</span></a>
+    <div class="nav-links">
+      <a href="/menu">Menu</a>
+      <a href="/story">Our Story</a>
+      <a href="/app">App</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Open menu" onclick="document.getElementById('mobileNav').classList.add('open');document.getElementById('mobileNavOverlay').classList.add('open');">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </nav>
+
+  <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="document.getElementById('mobileNav').classList.remove('open');this.classList.remove('open');"></div>
+  <aside class="mobile-nav-drawer" id="mobileNav">
+    <div class="mobile-nav-head">
+      <a href="/" class="nav-logo">PLNTD<span class="co">co.</span></a>
+      <button class="mobile-nav-close" aria-label="Close menu" onclick="document.getElementById('mobileNav').classList.remove('open');document.getElementById('mobileNavOverlay').classList.remove('open');">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="/menu">Menu</a>
+      <a href="/story">Our Story</a>
+      <a href="/app">App</a>
+    </nav>
+  </aside>
+
+  <div class="hero-content">
+    <h1 class="headline" id="headline">PLNTD<span class="co">co.</span></h1>
+    <div class="cta-stack">
+      <a class="btn btn-menu" href="/menu">See the Menu</a>
+      <a class="btn btn-app" href="https://www.google.com/maps/search/?api=1&query=PLNTD%20Co%2C%20144%20High%20Road%20Leyton%2C%20London%20E15%202BX" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        Find Us
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CANVAS + DPR ─────────────────────────────────────────────────
+const canvas = document.getElementById('liquid');
+const ctx    = canvas.getContext('2d');
+const page   = document.getElementById('page');
+
+let W = 0, H = 0, DPR = 1;
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width  = Math.round(W * DPR);
+  canvas.height = Math.round(H * DPR);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  cacheFlipTargets();
+}
+
+// ── PALETTE ──────────────────────────────────────────────────────
+const PAGE_LIGHT = [233, 237, 222];
+const LIQ_SURF = '#5d7651';
+const LIQ_MID  = '#43583a';
+const LIQ_DEEP = '#283520';
+const SPEC     = (a) => `rgba(196, 228, 168, ${a})`;
+const FOAM     = (a) => `rgba(232, 243, 222, ${a})`;
+const INK_DARK  = [42, 54, 35];
+const INK_CREAM = [242, 244, 236];
+
+// ── STATE ────────────────────────────────────────────────────────
+let S;
+function reset() {
+  S = {
+    t: 0,
+    phase: 'idle',
+    phaseT: 0,
+    fill: 0,
+    target: 0.91,
+    waveAmp: 0,
+    streamFlow: 0,
+    droplets: [],
+    ripples: [],
+    foamBits: [],
+  };
+}
+reset();
+
+// ── GEOMETRY ─────────────────────────────────────────────────────
+function waterBaseY() { return H * (1 - S.fill); }
+
+function surfaceY(x) {
+  const A = S.waveAmp;
+  const t = S.t;
+  return waterBaseY()
+    + Math.sin(x * 0.0090 + t * 1.9) * A
+    + Math.sin(x * 0.0210 + t * 1.3) * A * 0.5
+    + Math.sin(x * 0.0045 + t * 0.8) * A * 0.4
+    + Math.sin(x * 0.0380 + t * 2.7) * A * 0.12;
+}
+
+// ── PHASE MACHINE ────────────────────────────────────────────────
+const FILL_DUR = 5.4;
+const TOP_DUR  = 0.7;
+const SET_DUR  = 2.8;
+
+function setPhase(p) { S.phase = p; S.phaseT = 0; }
+
+function update(dt) {
+  S.t += dt; S.phaseT += dt;
+
+  switch (S.phase) {
+    case 'pouring': {
+      S.streamFlow = 0;
+      const x = Math.min(1, S.phaseT / FILL_DUR);
+      S.fill = (1 - Math.pow(1 - x, 1.7)) * S.target;
+      S.waveAmp = Math.min(12, S.waveAmp + dt * 22);
+      if (x >= 1) { S.fill = S.target; setPhase('topping'); }
+      break;
+    }
+    case 'topping':
+      S.streamFlow = Math.max(0, 1 - S.phaseT / TOP_DUR);
+      if (S.phaseT > TOP_DUR) setPhase('settling');
+      break;
+    case 'settling':
+      S.streamFlow = 0;
+      S.waveAmp = 2 + 14 * Math.exp(-S.phaseT * 1.5);
+      if (S.phaseT > SET_DUR) { S.waveAmp = 2; setPhase('settled'); }
+      break;
+    case 'settled':
+      S.streamFlow = 0;
+      S.waveAmp = 2;
+      break;
+  }
+
+  stepDroplets(dt);
+  stepRipples(dt);
+  stepFoam(dt);
+}
+
+function stepDroplets(dt) {
+  S.droplets = S.droplets.filter(d => { d.x += d.vx * dt; d.y += d.vy * dt; d.vy += 560 * dt; d.life -= dt; return d.life > 0; });
+}
+function stepRipples(dt) {
+  S.ripples = S.ripples.filter(r => { r.r += r.vr * dt; r.life -= dt * 0.9; return r.life > 0; });
+}
+function stepFoam(dt) {
+  S.foamBits = S.foamBits.filter(f => { f.x += f.drift * dt; f.life -= dt / f.max; return f.life > 0; });
+}
+
+// ── DRAW — LIQUID BODY ───────────────────────────────────────────
+function buildSurfacePath() {
+  const STEP = 4;
+  ctx.beginPath();
+  ctx.moveTo(0, H + 2);
+  ctx.lineTo(0, surfaceY(0));
+  for (let x = 0; x <= W; x += STEP) ctx.lineTo(x, surfaceY(x));
+  ctx.lineTo(W, surfaceY(W));
+  ctx.lineTo(W, H + 2);
+  ctx.closePath();
+}
+
+function drawLiquid() {
+  if (S.fill < 0.002) return;
+  const topY = waterBaseY();
+
+  buildSurfacePath();
+  const g = ctx.createLinearGradient(0, topY - 30, 0, H);
+  g.addColorStop(0,    LIQ_SURF);
+  g.addColorStop(0.18, LIQ_MID);
+  g.addColorStop(1,    LIQ_DEEP);
+  ctx.fillStyle = g;
+  ctx.fill();
+
+  ctx.save();
+  buildSurfacePath();
+  ctx.clip();
+
+  const bandH = Math.min(150, H * 0.22);
+  const bg = ctx.createLinearGradient(0, topY, 0, topY + bandH);
+  bg.addColorStop(0, 'rgba(150, 195, 120, 0.22)');
+  bg.addColorStop(1, 'rgba(150, 195, 120, 0)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, topY, W, bandH);
+
+  S.ripples.forEach(r => {
+    ctx.beginPath();
+    ctx.ellipse(r.x, surfaceY(r.x), r.r, r.r * 0.32, 0, 0, 6.2832);
+    ctx.strokeStyle = SPEC(0.16 * r.life);
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // soft glow line
+  ctx.save();
+  ctx.beginPath();
+  for (let x = 0; x <= W; x += 4) {
+    const y = surfaceY(x);
+    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = SPEC(0.5);
+  ctx.lineWidth = 2.4;
+  ctx.shadowColor = SPEC(0.6);
+  ctx.shadowBlur = 12;
+  ctx.stroke();
+  ctx.restore();
+
+  // crisp meniscus highlight
+  ctx.beginPath();
+  for (let x = 0; x <= W; x += 4) {
+    const y = surfaceY(x) - 1;
+    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = FOAM(0.5);
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+
+  // shadow beneath surface
+  ctx.beginPath();
+  for (let x = 0; x <= W; x += 4) {
+    const y = surfaceY(x) + 4;
+    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = 'rgba(20, 30, 14, 0.18)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  S.foamBits.forEach(f => {
+    ctx.beginPath();
+    ctx.arc(f.x, surfaceY(f.x) + 1, f.r, 0, 6.2832);
+    ctx.fillStyle = FOAM(0.5 * f.life);
+    ctx.fill();
+  });
+}
+
+// ── TEXT FLIP ────────────────────────────────────────────────────
+let flipEls = [];
+function cacheFlipTargets() {
+  const headline = document.getElementById('headline');
+  if (!headline) return;
+  const r = headline.getBoundingClientRect();
+  flipEls = [{ el: headline, cy: r.top + r.height / 2 }];
+}
+
+function rgbStr(c) { return `rgb(${c[0]|0}, ${c[1]|0}, ${c[2]|0})`; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function lerpRGB(a, b, t) { return [lerp(a[0],b[0],t), lerp(a[1],b[1],t), lerp(a[2],b[2],t)]; }
+
+function applyFlips() {
+  const wl = waterBaseY();
+  const BAND = 110;
+  flipEls.forEach(({ el, cy }) => {
+    let p = (cy - wl) / BAND + 0.5;
+    p = Math.max(0, Math.min(1, p));
+    el.style.color = rgbStr(lerpRGB(INK_DARK, INK_CREAM, p));
+  });
+}
+
+// ── REDUCED MOTION — skip fill, show final state ─────────────────
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ── LOOP ─────────────────────────────────────────────────────────
+let last = null;
+function frame(ts) {
+  if (last == null) last = ts;
+  const dt = Math.min((ts - last) / 1000, 0.05);
+  last = ts;
+
+  update(dt);
+  ctx.clearRect(0, 0, W, H);
+  drawLiquid();
+  applyFlips();
+  requestAnimationFrame(frame);
+}
+
+// ── CONTROL ──────────────────────────────────────────────────────
+function start() {
+  reset();
+  last = null;
+  page.style.background = `rgb(${PAGE_LIGHT.join(',')})`;
+
+  if (prefersReduced) {
+    S.fill = S.target;
+    S.waveAmp = 2;
+    S.phase = 'settled';
+    cacheFlipTargets();
+  } else {
+    setTimeout(() => setPhase('pouring'), 450);
+  }
+}
+
+window.addEventListener('resize', resize);
+document.fonts && document.fonts.ready.then(cacheFlipTargets);
+
+resize();
+requestAnimationFrame(frame);
+start();
+</script>
+
 </body>
 </html>
