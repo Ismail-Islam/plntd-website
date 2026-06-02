@@ -10,12 +10,12 @@
 <style>
   :root { --btn-scale: 1.08; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
+  html, body { height: 100%; overflow-x: hidden; }
 
   body {
     font-family: 'Archivo', system-ui, sans-serif;
     overflow: hidden;
-    background: #F2F4EC;
+    background: #F8F3EE;
   }
 
   .page {
@@ -24,26 +24,64 @@
     height: 100vh;
     min-height: 600px;
     overflow: hidden;
-    background: radial-gradient(circle at 50% 42%, #F7F8F2 0%, #EEF1E6 55%, #E7EBDD 100%);
+    background: #F8F3EE;
   }
 
-  #liquid {
+  /* ── VIDEO LAYER (the Seedance render) ── */
+  #liquidVideo {
     position: absolute;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
     z-index: 1;
     pointer-events: none;
   }
+
+  /* ── SETTLED FLAT FILL ──
+     A thin band that fades in at the waterline once the liquid hits the
+     target rest level, hiding the wave peaks/troughs so the surface
+     reads as a clean horizontal edge. The juice depth below it stays
+     the real video pixels. */
+  .settled-liquid {
+    position: absolute;
+    left: 0; right: 0;
+    top: 100%;                        /* off-screen until frozen */
+    height: 36px;                     /* updated by JS to cover the ripple range */
+    z-index: 1;
+    background: #1D391A;              /* live-sampled to match video pixels */
+    opacity: 0;
+    transition: opacity 480ms cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .settled-liquid.visible { opacity: 1; }
 
   .grain {
     position: absolute;
     inset: 0;
     z-index: 2;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.35;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* cream mask strip — hides the part of the video above the nav line
+     so the liquid never visually crosses the nav. */
+  .nav-mask {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 88px;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      #F8F3EE 0%,
+      #F8F3EE 64%,
+      rgba(248, 243, 238, 0.82) 85%,
+      rgba(248, 243, 238, 0) 100%
+    );
   }
 
   /* ── TOP NAV ── */
@@ -94,6 +132,7 @@
     text-transform: uppercase;
     color: #2A3623;
     margin-bottom: 54px;
+    transition: color 250ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .headline .co {
     font-size: 0.42em;
@@ -172,15 +211,17 @@
   /* ── REDUCED MOTION ── */
   @media (prefers-reduced-motion: reduce) {
     .btn { transition: none; }
-    .replay { display: none; }
   }
 </style>
 </head>
 <body>
 
 <div class="page" id="page">
-  <canvas id="liquid" aria-hidden="true"></canvas>
+  <video id="liquidVideo" src="assets/video/juice-pour.mp4"
+         autoplay muted playsinline preload="auto" aria-hidden="true"></video>
+  <div class="settled-liquid" id="settledLiquid"></div>
   <div class="grain" aria-hidden="true"></div>
+  <div class="nav-mask" aria-hidden="true"></div>
 
   <nav class="nav">
     <a class="nav-logo" href="/">PLNTD<span class="co">co.</span></a>
@@ -223,262 +264,150 @@
 </div>
 
 <script>
-// ── CANVAS + DPR ─────────────────────────────────────────────────
-const canvas = document.getElementById('liquid');
-const ctx    = canvas.getContext('2d');
-const page   = document.getElementById('page');
-
-let W = 0, H = 0, DPR = 1;
-function resize() {
-  DPR = Math.min(window.devicePixelRatio || 1, 2);
-  W = window.innerWidth;
-  H = window.innerHeight;
-  canvas.width  = Math.round(W * DPR);
-  canvas.height = Math.round(H * DPR);
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  cacheFlipTargets();
-}
-
-// ── PALETTE ──────────────────────────────────────────────────────
-const PAGE_LIGHT = [233, 237, 222];
-const LIQ_SURF = '#5d7651';
-const LIQ_MID  = '#43583a';
-const LIQ_DEEP = '#283520';
-const SPEC     = (a) => `rgba(196, 228, 168, ${a})`;
-const FOAM     = (a) => `rgba(232, 243, 222, ${a})`;
-const INK_DARK  = [42, 54, 35];
-const INK_CREAM = [242, 244, 236];
-
-// ── STATE ────────────────────────────────────────────────────────
-let S;
-function reset() {
-  S = {
-    t: 0,
-    phase: 'idle',
-    phaseT: 0,
-    fill: 0,
-    target: 0.91,
-    waveAmp: 0,
-    streamFlow: 0,
-    droplets: [],
-    ripples: [],
-    foamBits: [],
-  };
-}
-reset();
-
-// ── GEOMETRY ─────────────────────────────────────────────────────
-function waterBaseY() { return H * (1 - S.fill); }
-
-function surfaceY(x) {
-  const A = S.waveAmp;
-  const t = S.t;
-  return waterBaseY()
-    + Math.sin(x * 0.0090 + t * 1.9) * A
-    + Math.sin(x * 0.0210 + t * 1.3) * A * 0.5
-    + Math.sin(x * 0.0045 + t * 0.8) * A * 0.4
-    + Math.sin(x * 0.0380 + t * 2.7) * A * 0.12;
-}
-
-// ── PHASE MACHINE ────────────────────────────────────────────────
-const FILL_DUR = 5.4;
-const TOP_DUR  = 0.7;
-const SET_DUR  = 2.8;
-
-function setPhase(p) { S.phase = p; S.phaseT = 0; }
-
-function update(dt) {
-  S.t += dt; S.phaseT += dt;
-
-  switch (S.phase) {
-    case 'pouring': {
-      S.streamFlow = 0;
-      const x = Math.min(1, S.phaseT / FILL_DUR);
-      S.fill = (1 - Math.pow(1 - x, 1.7)) * S.target;
-      S.waveAmp = Math.min(12, S.waveAmp + dt * 22);
-      if (x >= 1) { S.fill = S.target; setPhase('topping'); }
-      break;
-    }
-    case 'topping':
-      S.streamFlow = Math.max(0, 1 - S.phaseT / TOP_DUR);
-      if (S.phaseT > TOP_DUR) setPhase('settling');
-      break;
-    case 'settling':
-      S.streamFlow = 0;
-      S.waveAmp = 2 + 14 * Math.exp(-S.phaseT * 1.5);
-      if (S.phaseT > SET_DUR) { S.waveAmp = 2; setPhase('settled'); }
-      break;
-    case 'settled':
-      S.streamFlow = 0;
-      S.waveAmp = 2;
-      break;
-  }
-
-  stepDroplets(dt);
-  stepRipples(dt);
-  stepFoam(dt);
-}
-
-function stepDroplets(dt) {
-  S.droplets = S.droplets.filter(d => { d.x += d.vx * dt; d.y += d.vy * dt; d.vy += 560 * dt; d.life -= dt; return d.life > 0; });
-}
-function stepRipples(dt) {
-  S.ripples = S.ripples.filter(r => { r.r += r.vr * dt; r.life -= dt * 0.9; return r.life > 0; });
-}
-function stepFoam(dt) {
-  S.foamBits = S.foamBits.filter(f => { f.x += f.drift * dt; f.life -= dt / f.max; return f.life > 0; });
-}
-
-// ── DRAW — LIQUID BODY ───────────────────────────────────────────
-function buildSurfacePath() {
-  const STEP = 4;
-  ctx.beginPath();
-  ctx.moveTo(0, H + 2);
-  ctx.lineTo(0, surfaceY(0));
-  for (let x = 0; x <= W; x += STEP) ctx.lineTo(x, surfaceY(x));
-  ctx.lineTo(W, surfaceY(W));
-  ctx.lineTo(W, H + 2);
-  ctx.closePath();
-}
-
-function drawLiquid() {
-  if (S.fill < 0.002) return;
-  const topY = waterBaseY();
-
-  buildSurfacePath();
-  const g = ctx.createLinearGradient(0, topY - 30, 0, H);
-  g.addColorStop(0,    LIQ_SURF);
-  g.addColorStop(0.18, LIQ_MID);
-  g.addColorStop(1,    LIQ_DEEP);
-  ctx.fillStyle = g;
-  ctx.fill();
-
-  ctx.save();
-  buildSurfacePath();
-  ctx.clip();
-
-  const bandH = Math.min(150, H * 0.22);
-  const bg = ctx.createLinearGradient(0, topY, 0, topY + bandH);
-  bg.addColorStop(0, 'rgba(150, 195, 120, 0.22)');
-  bg.addColorStop(1, 'rgba(150, 195, 120, 0)');
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, topY, W, bandH);
-
-  S.ripples.forEach(r => {
-    ctx.beginPath();
-    ctx.ellipse(r.x, surfaceY(r.x), r.r, r.r * 0.32, 0, 0, 6.2832);
-    ctx.strokeStyle = SPEC(0.16 * r.life);
-    ctx.lineWidth = 1.6;
-    ctx.stroke();
-  });
-  ctx.restore();
-
-  // soft glow line
-  ctx.save();
-  ctx.beginPath();
-  for (let x = 0; x <= W; x += 4) {
-    const y = surfaceY(x);
-    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  }
-  ctx.strokeStyle = SPEC(0.5);
-  ctx.lineWidth = 2.4;
-  ctx.shadowColor = SPEC(0.6);
-  ctx.shadowBlur = 12;
-  ctx.stroke();
-  ctx.restore();
-
-  // crisp meniscus highlight
-  ctx.beginPath();
-  for (let x = 0; x <= W; x += 4) {
-    const y = surfaceY(x) - 1;
-    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  }
-  ctx.strokeStyle = FOAM(0.5);
-  ctx.lineWidth = 1.2;
-  ctx.stroke();
-
-  // shadow beneath surface
-  ctx.beginPath();
-  for (let x = 0; x <= W; x += 4) {
-    const y = surfaceY(x) + 4;
-    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  }
-  ctx.strokeStyle = 'rgba(20, 30, 14, 0.18)';
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
-  S.foamBits.forEach(f => {
-    ctx.beginPath();
-    ctx.arc(f.x, surfaceY(f.x) + 1, f.r, 0, 6.2832);
-    ctx.fillStyle = FOAM(0.5 * f.life);
-    ctx.fill();
-  });
-}
-
-// ── TEXT FLIP ────────────────────────────────────────────────────
-let flipEls = [];
-function cacheFlipTargets() {
+  const v        = document.getElementById('liquidVideo');
   const headline = document.getElementById('headline');
-  if (!headline) return;
-  const r = headline.getBoundingClientRect();
-  flipEls = [{ el: headline, cy: r.top + r.height / 2 }];
-}
+  const settled  = document.getElementById('settledLiquid');
 
-function rgbStr(c) { return `rgb(${c[0]|0}, ${c[1]|0}, ${c[2]|0})`; }
-function lerp(a, b, t) { return a + (b - a) * t; }
-function lerpRGB(a, b, t) { return [lerp(a[0],b[0],t), lerp(a[1],b[1],t), lerp(a[2],b[2],t)]; }
+  const INK_DARK  = [42, 54, 35];    // #2A3623
+  const INK_CREAM = [242, 244, 236]; // #F2F4EC
 
-function applyFlips() {
-  const wl = waterBaseY();
-  const BAND = 110;
-  flipEls.forEach(({ el, cy }) => {
-    let p = (cy - wl) / BAND + 0.5;
-    p = Math.max(0, Math.min(1, p));
-    el.style.color = rgbStr(lerpRGB(INK_DARK, INK_CREAM, p));
-  });
-}
+  // ── REST LEVEL ────────────────────────────────────────────────
+  // Where the liquid should settle, as a fraction of viewport height
+  // from the TOP (0 = top under the nav, 1 = bottom). 0.05 ≈ just below
+  // the nav (almost full).
+  let TARGET_LEVEL = 0.05;
+  let frozen = false;
 
-// ── REDUCED MOTION — skip fill, show final state ─────────────────
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function rgb(c) { return `rgb(${c[0]|0}, ${c[1]|0}, ${c[2]|0})`; }
+  function lerpRGB(a, b, t) { return [lerp(a[0],b[0],t), lerp(a[1],b[1],t), lerp(a[2],b[2],t)]; }
 
-// ── LOOP ─────────────────────────────────────────────────────────
-let last = null;
-function frame(ts) {
-  if (last == null) last = ts;
-  const dt = Math.min((ts - last) / 1000, 0.05);
-  last = ts;
+  // Offscreen buffer used to read the video's real pixels so we can find
+  // the actual waterline (cream → green transition) on screen.
+  const buf = document.createElement('canvas');
+  const bctx = buf.getContext('2d', { willReadFrequently: true });
+  const SAMPLE_W = 24;          // we only need one column-ish strip
+  let SAMPLE_H = 240;
 
-  update(dt);
-  ctx.clearRect(0, 0, W, H);
-  drawLiquid();
-  applyFlips();
-  requestAnimationFrame(frame);
-}
-
-// ── CONTROL ──────────────────────────────────────────────────────
-function start() {
-  reset();
-  last = null;
-  page.style.background = `rgb(${PAGE_LIGHT.join(',')})`;
-
-  if (prefersReduced) {
-    S.fill = S.target;
-    S.waveAmp = 2;
-    S.phase = 'settled';
-    cacheFlipTargets();
-  } else {
-    setTimeout(() => setPhase('pouring'), 450);
+  function sizeBuffer() {
+    SAMPLE_H = Math.max(160, Math.round(window.innerHeight / 4));
+    buf.width = SAMPLE_W;
+    buf.height = SAMPLE_H;
   }
-}
+  sizeBuffer();
+  window.addEventListener('resize', sizeBuffer);
 
-window.addEventListener('resize', resize);
-document.fonts && document.fonts.ready.then(cacheFlipTargets);
+  // Draw the video into the buffer using the SAME object-fit:cover +
+  // object-position:center bottom mapping the <video> uses, so buffer
+  // rows map linearly to screen rows.
+  function drawCover() {
+    const W = SAMPLE_W, H = SAMPLE_H;
+    const vw = v.videoWidth || 16, vh = v.videoHeight || 9;
+    const s = Math.max(W / vw, H / vh);
+    const dw = vw * s, dh = vh * s;
+    const dx = (W - dw) / 2;     // center horizontally
+    const dy = H - dh;           // bottom aligned
+    bctx.clearRect(0, 0, W, H);
+    bctx.drawImage(v, dx, dy, dw, dh);
+  }
 
-resize();
-requestAnimationFrame(frame);
-start();
+  // Scan the buffer column from top to bottom; return the waterline as a
+  // fraction of height (0..1) — the first row that reads as liquid (green
+  // & darker than cream). Returns 1 (no liquid visible) if none found.
+  function detectWaterlineFrac() {
+    const W = SAMPLE_W, H = SAMPLE_H;
+    let data;
+    try { data = bctx.getImageData(0, 0, W, H).data; }
+    catch (e) { return null; } // not ready / tainted
+    const cx = (W >> 1);
+    for (let y = 0; y < H; y++) {
+      let r = 0, g = 0, b = 0, n = 0;
+      // average a few px across the middle of the strip for stability
+      for (let x = cx - 3; x <= cx + 3; x++) {
+        const i = (y * W + x) * 4;
+        r += data[i]; g += data[i+1]; b += data[i+2]; n++;
+      }
+      r /= n; g /= n; b /= n;
+      const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+      const isLiquid = (g >= r - 6) && (g > b * 0.85) && (lum < 188);
+      if (isLiquid) return y / H;
+    }
+    return 1; // no liquid found → fully cream
+  }
+
+  let lastWaterFrac = 1;
+
+  // Drop a thin flat band at the waterline to hide the wave peaks/troughs.
+  // The colour is sampled from the video just below the band so it joins
+  // seamlessly with the real liquid below — only the rippling surface line
+  // is hidden; the juice depth and colour stay the video's own.
+  function freezeFlat() {
+    const vh = window.innerHeight;
+    const targetY = TARGET_LEVEL * vh;
+    const ABOVE = 14;                 // cover peaks above the average
+    const BELOW = 22;                 // cover troughs below the average
+    const BAND  = ABOVE + BELOW;
+
+    // average a small patch just below the band for a clean colour match
+    let sumR = 0, sumG = 0, sumB = 0, n = 0;
+    try {
+      for (let dy = 0; dy < 6; dy++) {
+        const sy = Math.min(SAMPLE_H - 1,
+          Math.round(((targetY + BELOW + 4 + dy * 3) / vh) * SAMPLE_H));
+        for (let dx = -4; dx <= 4; dx += 2) {
+          const sx = Math.max(0, Math.min(SAMPLE_W - 1, (SAMPLE_W >> 1) + dx));
+          const px = bctx.getImageData(sx, sy, 1, 1).data;
+          sumR += px[0]; sumG += px[1]; sumB += px[2]; n++;
+        }
+      }
+    } catch (e) {}
+    const r = n ? Math.round(sumR / n) : 29;
+    const g = n ? Math.round(sumG / n) : 57;
+    const b = n ? Math.round(sumB / n) : 26;
+
+    settled.style.background = `rgb(${r}, ${g}, ${b})`;
+    settled.style.top    = (targetY - ABOVE) + 'px';
+    settled.style.height = BAND + 'px';
+    requestAnimationFrame(() => settled.classList.add('visible'));
+  }
+
+  function tick() {
+    // 1) find the real waterline from the video pixels
+    if (v.readyState >= 2) {
+      drawCover();
+      const wf = detectWaterlineFrac();
+      if (wf != null) lastWaterFrac = wf;
+    }
+    const waterlineY = lastWaterFrac * window.innerHeight;
+
+    // 2) freeze the clip once the liquid reaches the target rest level
+    if (!frozen && lastWaterFrac <= TARGET_LEVEL && v.currentTime > 0.2) {
+      v.pause();
+      frozen = true;
+      freezeFlat();
+    }
+
+    // 3) recolor the headline based on where the liquid ACTUALLY is:
+    //    dark while above the waterline, cream once submerged, with a
+    //    soft crossfade band right at the surface.
+    const hl = headline.getBoundingClientRect();
+    const hlY = hl.top + hl.height / 2;
+    const BAND = 90;
+    let p = (hlY - waterlineY) / BAND + 0.5;
+    p = Math.max(0, Math.min(1, p));
+    headline.style.color = rgb(lerpRGB(INK_DARK, INK_CREAM, p));
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // ── REDUCED MOTION — skip the pour, jump to the filled rest state ──
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    v.removeAttribute('autoplay');
+    const goFilled = () => { v.pause(); v.currentTime = Math.max(0, v.duration - 0.05); };
+    if (v.readyState >= 1 && v.duration) goFilled();
+    else v.addEventListener('loadedmetadata', goFilled, { once: true });
+  }
 </script>
 
 </body>
