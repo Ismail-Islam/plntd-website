@@ -259,9 +259,18 @@
   }
   requestAnimationFrame(tick);
 
-  // Hold the final frame. The Seedance clip's tail isn't pure-ripple
-  // (it's still rising), so looping it makes the liquid visibly drop.
-  v.addEventListener('ended', () => { v.pause(); });
+  // Pour up, then HOLD the moment the surface sits just under the nav
+  // (matches the canvas variant's ~91% fill). Playing to the very end
+  // submerges everything into flat green, so we stop short and freeze
+  // on the live-looking surface frame.
+  const HOLD_FRAC = 0.85;
+  function holdAtSurface() {
+    if (v.duration && v.currentTime >= v.duration * HOLD_FRAC) {
+      v.pause();
+      v.currentTime = v.duration * HOLD_FRAC;
+    }
+  }
+  v.addEventListener('timeupdate', holdAtSurface);
 
   replay.addEventListener('click', () => {
     v.currentTime = 0;
