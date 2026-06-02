@@ -40,28 +40,19 @@
   }
 
   /* ── SETTLED FLAT FILL ──
-     When the pour finishes, this fades in over the rippling video surface:
-     a flat-topped juice gradient that fills from a fixed rest line (just
-     under the nav) down to the bottom. Gives a clean horizontal waterline
-     on every viewport, with a subtle meniscus highlight on top. */
+     A thin band that fades in at the waterline once the liquid hits the
+     target rest level, hiding the wave peaks/troughs so the surface
+     reads as a clean horizontal edge. The juice depth below it stays
+     the real video pixels. */
   .settled-liquid {
     position: absolute;
     left: 0; right: 0;
-    top: 100%;                        /* collapsed until frozen; JS sets top */
-    bottom: 0;
+    top: 100%;                        /* off-screen until frozen */
+    height: 36px;                     /* updated by JS to cover the ripple range */
     z-index: 1;
-    background: linear-gradient(
-      to bottom,
-      #5d7651 0%,
-      #43583a 12%,
-      #2d3c22 45%,
-      #1f2c16 100%
-    );
-    box-shadow:
-      inset 0 2px 0 rgba(196, 228, 168, 0.45),   /* meniscus highlight */
-      0 -2px 8px rgba(20, 30, 14, 0.22);          /* soft lip shadow */
+    background: #1D391A;              /* live-sampled to match video pixels */
     opacity: 0;
-    transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 480ms cubic-bezier(0.22, 1, 0.36, 1);
     pointer-events: none;
   }
   .settled-liquid.visible { opacity: 1; }
@@ -282,10 +273,9 @@
 
   // ── REST LEVEL ────────────────────────────────────────────────
   // Where the liquid should settle, as a fraction of viewport height
-  // from the TOP (0 = top under the nav, 1 = bottom). 0.08 ≈ just below
-  // the nav (almost full). If the clip ends before reaching it, we freeze
-  // at the final waterline anyway (see the end fallback in tick()).
-  let TARGET_LEVEL = 0.08;
+  // from the TOP (0 = top under the nav, 1 = bottom). 0.05 ≈ just below
+  // the nav (almost full).
+  let TARGET_LEVEL = 0.05;
   let frozen = false;
 
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -322,17 +312,14 @@
   }
 
   // Scan the buffer column from top to bottom; return the waterline as a
-  // fraction of height (0..1) — the top of the first RUN of consecutive
-  // liquid rows (so a thin surface glint/foam highlight can't trigger it
-  // ~tens of px above the real juice body). Returns 1 if none found.
-  const RUN = 6;
+  // fraction of height (0..1) — the first row that reads as liquid (green
+  // & darker than cream). Returns 1 (no liquid visible) if none found.
   function detectWaterlineFrac() {
     const W = SAMPLE_W, H = SAMPLE_H;
     let data;
     try { data = bctx.getImageData(0, 0, W, H).data; }
     catch (e) { return null; } // not ready / tainted
     const cx = (W >> 1);
-    let run = 0, start = -1;
     for (let y = 0; y < H; y++) {
       let r = 0, g = 0, b = 0, n = 0;
       // average a few px across the middle of the strip for stability
@@ -342,29 +329,45 @@
       }
       r /= n; g /= n; b /= n;
       const lum = 0.2126*r + 0.7152*g + 0.0722*b;
-      // solid juice: clearly green and clearly darker than the cream above
-      const isLiquid = (g >= r - 4) && (g > b * 0.9) && (lum < 170);
-      if (isLiquid) {
-        if (run === 0) start = y;
-        if (++run >= RUN) return start / H;
-      } else {
-        run = 0;
-      }
+      const isLiquid = (g >= r - 6) && (g > b * 0.85) && (lum < 188);
+      if (isLiquid) return y / H;
     }
     return 1; // no liquid found → fully cream
   }
 
   let lastWaterFrac = 1;
 
-  // Settle: fade the flat juice fill in over the rippling video surface.
-  // The rest line sits just under the nav (mask is 88px), so the flat
-  // waterline reads as "filled almost to the top".
-  // px from the top — the flat fill's top edge. Tucked up into the nav
-  // mask's fade zone so the video's wavy surface can't peek out above it;
-  // the mask softens the very top into a clean waterline just under the nav.
-  const REST_Y = 70;
+  // Drop a thin flat band at the waterline to hide the wave peaks/troughs.
+  // The colour is sampled from the video just below the band so it joins
+  // seamlessly with the real liquid below — only the rippling surface line
+  // is hidden; the juice depth and colour stay the video's own.
   function freezeFlat() {
-    settled.style.top = REST_Y + 'px';
+    const vh = window.innerHeight;
+    const targetY = TARGET_LEVEL * vh;
+    const ABOVE = 14;                 // cover peaks above the average
+    const BELOW = 22;                 // cover troughs below the average
+    const BAND  = ABOVE + BELOW;
+
+    // average a small patch just below the band for a clean colour match
+    let sumR = 0, sumG = 0, sumB = 0, n = 0;
+    try {
+      for (let dy = 0; dy < 6; dy++) {
+        const sy = Math.min(SAMPLE_H - 1,
+          Math.round(((targetY + BELOW + 4 + dy * 3) / vh) * SAMPLE_H));
+        for (let dx = -4; dx <= 4; dx += 2) {
+          const sx = Math.max(0, Math.min(SAMPLE_W - 1, (SAMPLE_W >> 1) + dx));
+          const px = bctx.getImageData(sx, sy, 1, 1).data;
+          sumR += px[0]; sumG += px[1]; sumB += px[2]; n++;
+        }
+      }
+    } catch (e) {}
+    const r = n ? Math.round(sumR / n) : 29;
+    const g = n ? Math.round(sumG / n) : 57;
+    const b = n ? Math.round(sumB / n) : 26;
+
+    settled.style.background = `rgb(${r}, ${g}, ${b})`;
+    settled.style.top    = (targetY - ABOVE) + 'px';
+    settled.style.height = BAND + 'px';
     requestAnimationFrame(() => settled.classList.add('visible'));
   }
 
@@ -375,12 +378,10 @@
       const wf = detectWaterlineFrac();
       if (wf != null) lastWaterFrac = wf;
     }
-    const waterlineY = frozen ? REST_Y : lastWaterFrac * window.innerHeight;
+    const waterlineY = lastWaterFrac * window.innerHeight;
 
-    // 2) freeze the clip once the liquid reaches the target rest level —
-    //    or when the clip is about to end, whichever comes first.
-    const nearEnd = v.duration && v.currentTime >= v.duration - 0.12;
-    if (!frozen && v.currentTime > 0.2 && (lastWaterFrac <= TARGET_LEVEL || nearEnd)) {
+    // 2) freeze the clip once the liquid reaches the target rest level
+    if (!frozen && lastWaterFrac <= TARGET_LEVEL && v.currentTime > 0.2) {
       v.pause();
       frozen = true;
       freezeFlat();
