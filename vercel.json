@@ -2,7 +2,6 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/menu", "destination": "/menu.html" },
-    { "source": "/home", "destination": "/index.html" }
+    { "source": "/menu", "destination": "/menu.html" }
   ]
 }

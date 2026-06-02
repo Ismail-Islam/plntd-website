@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLNTD — Home</title>
+<meta name="description" content="Plant-powered cold-pressed juices and drinks. Fresh, real, alive.">
+<link rel="icon" type="image/png" href="assets/icon.png?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --btn-scale: 1.08; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow-x: hidden; }
+
+  body {
+    font-family: 'Archivo', system-ui, sans-serif;
+    overflow: hidden;
+    background: #F8F3EE;
+  }
+
+  .page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    background: #F8F3EE;
+  }
+
+  /* ── VIDEO LAYER (the Seedance render) ── */
+  #liquidVideo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── SETTLED FLAT FILL ──
+     A thin band that fades in at the waterline once the liquid hits the
+     target rest level, hiding the wave peaks/troughs so the surface
+     reads as a clean horizontal edge. The juice depth below it stays
+     the real video pixels. */
+  .settled-liquid {
+    position: absolute;
+    left: 0; right: 0;
+    top: 100%;                        /* off-screen until frozen */
+    height: 36px;                     /* updated by JS to cover the ripple range */
+    z-index: 1;
+    background: #1D391A;              /* live-sampled to match video pixels */
+    opacity: 0;
+    transition: opacity 480ms cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .settled-liquid.visible { opacity: 1; }
+
+  .grain {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* cream mask strip — hides the part of the video above the nav line
+     so the liquid never visually crosses the nav. */
+  .nav-mask {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 88px;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      #F8F3EE 0%,
+      #F8F3EE 64%,
+      rgba(248, 243, 238, 0.82) 85%,
+      rgba(248, 243, 238, 0) 100%
+    );
+  }
+
+  /* ── TOP NAV ── */
+  .nav {
+    position: absolute; top: 0; left: 0; right: 0;
+    z-index: 6;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 26px 48px;
+  }
+  .nav-logo {
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: #2A3623;
+  }
+  .nav-logo .co { font-size: 12px; vertical-align: baseline; margin-left: 3px; letter-spacing: 0; opacity: 0.7; font-weight: 700; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(42,54,35,0.62);
+    transition: opacity 160ms ease;
+  }
+  .nav-links a:hover { opacity: 0.6; }
+
+  /* ── HERO CONTENT ── */
+  .hero-content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .headline {
+    font-weight: 900;
+    font-size: clamp(64px, 13vw, 190px);
+    line-height: 0.92;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: #2A3623;
+    margin-bottom: 54px;
+    transition: color 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .headline .co {
+    font-size: 0.42em;
+    vertical-align: baseline;
+    opacity: 0.9;
+    margin-left: 0.04em;
+    letter-spacing: -0.02em;
+    font-weight: 900;
+  }
+
+  .cta-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(9px * var(--btn-scale, 1));
+    min-width: calc(230px * var(--btn-scale, 1));
+    font-family: 'Archivo', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: calc(14px * var(--btn-scale, 1));
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 999px;
+    padding: calc(18px * var(--btn-scale, 1)) calc(38px * var(--btn-scale, 1));
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 180ms cubic-bezier(0.22,1,0.36,1);
+  }
+  .btn:focus-visible { outline: 3px solid #2A3623; outline-offset: 3px; }
+  .btn-menu {
+    color: #2A3623;
+    background: #F4F6EE;
+    box-shadow: 0 14px 34px rgba(40,55,30,0.18);
+  }
+  .btn-app {
+    color: #F2F4EC;
+    background: #2A3623;
+    box-shadow: 0 14px 34px rgba(20,30,12,0.3);
+    border: 1.5px solid rgba(242,244,236,0.16);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-app svg { width: calc(16px * var(--btn-scale, 1)); height: calc(16px * var(--btn-scale, 1)); }
+
+
+  /* ── HAMBURGER ── */
+  .nav-hamburger { display: none; width: 40px; height: 40px; border-radius: 999px; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: #2A3623; transition: background 120ms; }
+  .nav-hamburger svg { width: 22px; height: 22px; }
+  .nav-hamburger:hover { background: rgba(42,54,35,0.1); }
+
+  /* ── MOBILE DRAWER ── */
+  .mobile-nav-overlay { position: fixed; inset: 0; background: rgba(20,35,14,0.4); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 240ms cubic-bezier(0.22,1,0.36,1); }
+  .mobile-nav-overlay.open { opacity: 1; pointer-events: auto; }
+  .mobile-nav-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 300px; max-width: 85vw; background: #F8F3EE; z-index: 101; transform: translateX(100%); transition: transform 240ms cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(0,0,0,0.12); }
+  .mobile-nav-drawer.open { transform: translateX(0); }
+  .mobile-nav-head { padding: 0 20px; height: 64px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E8E1D4; }
+  .mobile-nav-close { width: 40px; height: 40px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: #2A3623; }
+  .mobile-nav-close svg { width: 22px; height: 22px; }
+  .mobile-nav-links { display: flex; flex-direction: column; padding: 8px 24px; }
+  .mobile-nav-links a { font-family: 'Archivo', system-ui, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; color: #2A3623; padding: 20px 0; border-bottom: 1px solid #E8E1D4; text-decoration: none; transition: color 120ms; }
+  .mobile-nav-links a:last-child { border-bottom: 0; }
+  .mobile-nav-links a:hover { color: #1D391A; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    .nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+  }
+
+  /* ── REDUCED MOTION ── */
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page" id="page">
+  <video id="liquidVideo" src="assets/video/juice-pour.mp4"
+         autoplay muted playsinline preload="auto" aria-hidden="true"></video>
+  <div class="settled-liquid" id="settledLiquid"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="nav-mask" aria-hidden="true"></div>
+
+  <nav class="nav">
+    <a class="nav-logo" href="/">PLNTD<span class="co">co.</span></a>
+    <div class="nav-links">
+      <a href="/menu">Menu</a>
+      <a href="/story">Our Story</a>
+      <a href="/app">App</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Open menu" onclick="document.getElementById('mobileNav').classList.add('open');document.getElementById('mobileNavOverlay').classList.add('open');">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </nav>
+
+  <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="document.getElementById('mobileNav').classList.remove('open');this.classList.remove('open');"></div>
+  <aside class="mobile-nav-drawer" id="mobileNav">
+    <div class="mobile-nav-head">
+      <a href="/" class="nav-logo">PLNTD<span class="co">co.</span></a>
+      <button class="mobile-nav-close" aria-label="Close menu" onclick="document.getElementById('mobileNav').classList.remove('open');document.getElementById('mobileNavOverlay').classList.remove('open');">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="/menu">Menu</a>
+      <a href="/story">Our Story</a>
+      <a href="/app">App</a>
+    </nav>
+  </aside>
+
+  <div class="hero-content">
+    <h1 class="headline" id="headline">PLNTD<span class="co">co.</span></h1>
+    <div class="cta-stack">
+      <a class="btn btn-menu" href="/menu">See the Menu</a>
+      <a class="btn btn-app" href="https://www.google.com/maps/search/?api=1&query=PLNTD%20Co%2C%20144%20High%20Road%20Leyton%2C%20London%20E15%202BX" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        Find Us
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const v        = document.getElementById('liquidVideo');
+  const headline = document.getElementById('headline');
+  const settled  = document.getElementById('settledLiquid');
+
+  const INK_DARK  = [42, 54, 35];    // #2A3623
+  const INK_CREAM = [242, 244, 236]; // #F2F4EC
+
+  // ── REST LEVEL ────────────────────────────────────────────────
+  // Where the liquid should settle, as a fraction of viewport height
+  // from the TOP (0 = top under the nav, 1 = bottom). 0.05 ≈ just below
+  // the nav (almost full).
+  let TARGET_LEVEL = 0.05;
+  let frozen = false;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function rgb(c) { return `rgb(${c[0]|0}, ${c[1]|0}, ${c[2]|0})`; }
+  function lerpRGB(a, b, t) { return [lerp(a[0],b[0],t), lerp(a[1],b[1],t), lerp(a[2],b[2],t)]; }
+
+  // Offscreen buffer used to read the video's real pixels so we can find
+  // the actual waterline (cream → green transition) on screen.
+  const buf = document.createElement('canvas');
+  const bctx = buf.getContext('2d', { willReadFrequently: true });
+  const SAMPLE_W = 24;          // we only need one column-ish strip
+  let SAMPLE_H = 240;
+
+  function sizeBuffer() {
+    SAMPLE_H = Math.max(160, Math.round(window.innerHeight / 4));
+    buf.width = SAMPLE_W;
+    buf.height = SAMPLE_H;
+  }
+  sizeBuffer();
+  window.addEventListener('resize', sizeBuffer);
+
+  // Draw the video into the buffer using the SAME object-fit:cover +
+  // object-position:center bottom mapping the <video> uses, so buffer
+  // rows map linearly to screen rows.
+  function drawCover() {
+    const W = SAMPLE_W, H = SAMPLE_H;
+    const vw = v.videoWidth || 16, vh = v.videoHeight || 9;
+    const s = Math.max(W / vw, H / vh);
+    const dw = vw * s, dh = vh * s;
+    const dx = (W - dw) / 2;     // center horizontally
+    const dy = H - dh;           // bottom aligned
+    bctx.clearRect(0, 0, W, H);
+    bctx.drawImage(v, dx, dy, dw, dh);
+  }
+
+  // Scan the buffer column from top to bottom; return the waterline as a
+  // fraction of height (0..1) — the first row that reads as liquid (green
+  // & darker than cream). Returns 1 (no liquid visible) if none found.
+  function detectWaterlineFrac() {
+    const W = SAMPLE_W, H = SAMPLE_H;
+    let data;
+    try { data = bctx.getImageData(0, 0, W, H).data; }
+    catch (e) { return null; } // not ready / tainted
+    const cx = (W >> 1);
+    for (let y = 0; y < H; y++) {
+      let r = 0, g = 0, b = 0, n = 0;
+      // average a few px across the middle of the strip for stability
+      for (let x = cx - 3; x <= cx + 3; x++) {
+        const i = (y * W + x) * 4;
+        r += data[i]; g += data[i+1]; b += data[i+2]; n++;
+      }
+      r /= n; g /= n; b /= n;
+      const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+      const isLiquid = (g >= r - 6) && (g > b * 0.85) && (lum < 188);
+      if (isLiquid) return y / H;
+    }
+    return 1; // no liquid found → fully cream
+  }
+
+  let lastWaterFrac = 1;
+
+  // Drop a thin flat band at the waterline to hide the wave peaks/troughs.
+  // The colour is sampled from the video just below the band so it joins
+  // seamlessly with the real liquid below — only the rippling surface line
+  // is hidden; the juice depth and colour stay the video's own.
+  function freezeFlat() {
+    const vh = window.innerHeight;
+    const targetY = TARGET_LEVEL * vh;
+    const ABOVE = 14;                 // cover peaks above the average
+    const BELOW = 22;                 // cover troughs below the average
+    const BAND  = ABOVE + BELOW;
+
+    // average a small patch just below the band for a clean colour match
+    let sumR = 0, sumG = 0, sumB = 0, n = 0;
+    try {
+      for (let dy = 0; dy < 6; dy++) {
+        const sy = Math.min(SAMPLE_H - 1,
+          Math.round(((targetY + BELOW + 4 + dy * 3) / vh) * SAMPLE_H));
+        for (let dx = -4; dx <= 4; dx += 2) {
+          const sx = Math.max(0, Math.min(SAMPLE_W - 1, (SAMPLE_W >> 1) + dx));
+          const px = bctx.getImageData(sx, sy, 1, 1).data;
+          sumR += px[0]; sumG += px[1]; sumB += px[2]; n++;
+        }
+      }
+    } catch (e) {}
+    const r = n ? Math.round(sumR / n) : 29;
+    const g = n ? Math.round(sumG / n) : 57;
+    const b = n ? Math.round(sumB / n) : 26;
+
+    settled.style.background = `rgb(${r}, ${g}, ${b})`;
+    settled.style.top    = (targetY - ABOVE) + 'px';
+    settled.style.height = BAND + 'px';
+    requestAnimationFrame(() => settled.classList.add('visible'));
+  }
+
+  function tick() {
+    // 1) find the real waterline from the video pixels
+    if (v.readyState >= 2) {
+      drawCover();
+      const wf = detectWaterlineFrac();
+      if (wf != null) lastWaterFrac = wf;
+    }
+    const waterlineY = lastWaterFrac * window.innerHeight;
+
+    // 2) freeze the clip once the liquid reaches the target rest level
+    if (!frozen && lastWaterFrac <= TARGET_LEVEL && v.currentTime > 0.2) {
+      v.pause();
+      frozen = true;
+      freezeFlat();
+    }
+
+    // 3) recolor the headline based on where the liquid ACTUALLY is:
+    //    dark while above the waterline, cream once submerged, with a
+    //    soft crossfade band right at the surface.
+    const hl = headline.getBoundingClientRect();
+    const hlY = hl.top + hl.height / 2;
+    const BAND = 90;
+    let p = (hlY - waterlineY) / BAND + 0.5;
+    p = Math.max(0, Math.min(1, p));
+    headline.style.color = rgb(lerpRGB(INK_DARK, INK_CREAM, p));
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // ── REDUCED MOTION — skip the pour, jump to the filled rest state ──
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    v.removeAttribute('autoplay');
+    const goFilled = () => { v.pause(); v.currentTime = Math.max(0, v.duration - 0.05); };
+    if (v.readyState >= 1 && v.duration) goFilled();
+    else v.addEventListener('loadedmetadata', goFilled, { once: true });
+  }
+</script>
+
+</body>
+</html>
