@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PLNTD — Real Fruit, Real Cold-Pressed</title>
+  <link rel="icon" type="image/png" href="assets/icon.png?v=2" />
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <style>
+    html, body { overflow-x: hidden; }
+    body { background: var(--plntd-pine); }
+
+    /* ─── Hero shell ─────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 90% at 50% -10%, #234a1f 0%, transparent 55%),
+        radial-gradient(100% 80% at 100% 100%, #1d391a 0%, transparent 60%),
+        var(--plntd-pine);
+      isolation: isolate;
+    }
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background: radial-gradient(140% 120% at 50% 50%, transparent 62%, rgba(0,0,0,0.42) 100%);
+      z-index: 4;
+    }
+
+    /* ─── Falling fruit layer ────────────────────────── */
+    .fruit-field { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+
+    /* outer = continuous vertical fall (never stops) */
+    .fruit {
+      position: absolute;
+      top: 0; left: 0;
+      will-change: transform;
+      animation: fall linear infinite;
+    }
+    /* inner = organic side-to-side float + tumble while it descends */
+    .fruit > .spin {
+      display: block;
+      width: 100%; height: 100%;
+      animation: sway ease-in-out infinite alternate;
+    }
+    .fruit img {
+      display: block; width: 100%; height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 16px 20px rgba(0,0,0,0.4));
+    }
+
+    @keyframes fall {
+      from { transform: translate3d(0, -18vh, 0); }
+      to   { transform: translate3d(0, 118vh, 0); }
+    }
+    @keyframes sway {
+      from { transform: translateX(calc(var(--sway) * -1)) rotate(var(--r0)); }
+      to   { transform: translateX(var(--sway)) rotate(var(--r1)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fruit, .fruit > .spin { animation-duration: 0.001s; animation-iteration-count: 1; }
+    }
+
+    /* ─── Content ────────────────────────────────────── */
+    .hero-inner {
+      position: relative; z-index: 3;
+      width: 100%; max-width: 56rem;
+      margin: 0 auto; padding: 0 var(--space-4);
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: 8px 16px; border-radius: var(--radius-pill);
+      background: rgba(248,243,238,0.06); border: 1px solid rgba(248,243,238,0.16);
+      backdrop-filter: blur(6px); margin-bottom: var(--space-5);
+      font-family: var(--font-heading); font-size: var(--text-label); font-weight: 700;
+      text-transform: uppercase; letter-spacing: var(--tracking-wider);
+      color: rgba(248,243,238,0.82);
+      opacity: 0; animation: rise 0.9s var(--ease-brand) 0.1s forwards;
+    }
+    .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-marigold); box-shadow: 0 0 0 4px rgba(223,154,0,0.18); }
+
+    .hero h1 {
+      font-family: var(--font-display); font-weight: 900;
+      line-height: 0.98; letter-spacing: var(--tracking-tight);
+      font-size: clamp(2.75rem, 9vw, 6.5rem);
+      color: var(--plntd-cream); margin-bottom: var(--space-4);
+    }
+    .hero h1 .line { display: block; overflow: hidden; }
+    .hero h1 .line > span { display: inline-block; opacity: 0; transform: translateY(110%); animation: rise 1s var(--ease-brand) forwards; }
+    .hero h1 .line:nth-child(1) > span { animation-delay: 0.25s; }
+    .hero h1 .line:nth-child(2) > span { animation-delay: 0.42s; }
+    .hero h1 .accent {
+      background: linear-gradient(100deg, var(--accent-marigold), #ffd27a 40%, var(--accent-leaf));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p {
+      font-family: var(--font-body); font-weight: 400;
+      font-size: clamp(1rem, 2.4vw, 1.3rem); line-height: var(--leading-relaxed);
+      color: rgba(248,243,238,0.68); max-width: 34rem; margin: 0 auto var(--space-6);
+      opacity: 0; animation: rise 1s var(--ease-brand) 0.6s forwards;
+    }
+    .cta-row { display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap; opacity: 0; animation: rise 1s var(--ease-brand) 0.78s forwards; }
+    .btn {
+      font-family: var(--font-heading); font-size: var(--text-button); font-weight: 700;
+      text-transform: uppercase; letter-spacing: var(--tracking-wide);
+      padding: 16px 30px; border-radius: var(--radius-pill); border: none; cursor: pointer;
+      transition: transform var(--duration-base) var(--ease-brand), box-shadow var(--duration-base) var(--ease-brand), background var(--duration-base);
+      text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-primary { background: var(--plntd-cream); color: var(--plntd-forest-green); box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(0,0,0,0.45); }
+    .btn-ghost { background: transparent; color: var(--plntd-cream); border: 1.5px solid rgba(248,243,238,0.28); }
+    .btn-ghost:hover { background: rgba(248,243,238,0.08); transform: translateY(-3px); }
+
+    .strip {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+      padding: 14px 0; border-top: 1px solid rgba(248,243,238,0.1);
+      background: rgba(20,35,14,0.4); backdrop-filter: blur(4px);
+      overflow: hidden; white-space: nowrap;
+      opacity: 0; animation: rise 1s var(--ease-brand) 1s forwards;
+    }
+    .strip .track {
+      display: inline-block; animation: marquee 24s linear infinite;
+      font-family: var(--font-heading); font-weight: 700; text-transform: uppercase;
+      letter-spacing: var(--tracking-widest); font-size: var(--text-caption); color: rgba(248,243,238,0.55);
+    }
+    .strip .track span { margin: 0 28px; }
+    .strip .track .star { color: var(--accent-marigold); }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="fruit-field" id="fruitField" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <span class="badge"><span class="dot"></span> Cold-Pressed in London</span>
+      <h1>
+        <span class="line"><span>Real fruit.</span></span>
+        <span class="line"><span class="accent">Nothing else.</span></span>
+      </h1>
+      <p>
+        Juices, smoothies &amp; specialty coffee pressed fresh from whole produce —
+        no concentrates, no added sugar. Just the good stuff, falling straight into your cup.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="index.html">View the menu →</a>
+        <a class="btn btn-ghost" href="story.html">Our story</a>
+      </div>
+    </div>
+
+    <div class="strip"><div class="track" id="track"></div></div>
+  </section>
+
+  <script>
+    /* Real fruit cut-outs (transparent PNGs). Mix of whole + sliced. */
+    const FRUITS = [
+      'assets/fruit/orange-slice.png','assets/fruit/orange-slices.png',
+      'assets/fruit/lemon.png','assets/fruit/lemon-2.png',
+      'assets/fruit/strawberry.png','assets/fruit/strawberry-2.png',
+      'assets/fruit/watermelon-wedge.png','assets/fruit/watermelon-slice.png',
+      'assets/fruit/apple-red.png','assets/fruit/apple-green.png',
+      'assets/fruit/blueberries.png'
+    ];
+
+    const field = document.getElementById('fruitField');
+    const rand = (a,b) => a + Math.random()*(b-a);
+    const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+
+    function randomise(outer, spin){
+      const size = rand(34, 104);               // varied sizes
+      outer.style.width = size + 'px';
+      outer.style.height = size + 'px';
+      outer.style.left = rand(-2, 96) + 'vw';
+      outer.style.opacity = rand(0.6, 1);
+      // continuous fall speed
+      const fallDur = rand(11, 22);
+      outer.style.animationDuration = fallDur + 's';
+      // independent gentle float/tumble while descending
+      spin.style.setProperty('--sway', rand(8, 40) + 'px');
+      spin.style.setProperty('--r0', rand(-30, 30) + 'deg');
+      spin.style.setProperty('--r1', rand(-30, 30) + (Math.random()<.5?'':'') + 'deg');
+      spin.style.animationDuration = rand(2.6, 5.5) + 's';
+    }
+
+    function spawn(initial){
+      const outer = document.createElement('div');
+      outer.className = 'fruit';
+      const spin = document.createElement('span');
+      spin.className = 'spin';
+      const img = document.createElement('img');
+      img.src = pick(FRUITS);
+      img.loading = 'eager';
+      spin.appendChild(img);
+      outer.appendChild(spin);
+      randomise(outer, spin);
+      // negative delay so the sky is already full of fruit on load → seamless, continuous
+      if (initial) outer.style.animationDelay = -rand(0, parseFloat(outer.style.animationDuration)) + 's';
+      // each time a fruit finishes its descent, re-roll it and keep raining
+      outer.addEventListener('animationiteration', () => { img.src = pick(FRUITS); randomise(outer, spin); });
+      field.appendChild(outer);
+    }
+
+    const COUNT = window.innerWidth < 640 ? 14 : 26;
+    for (let i = 0; i < COUNT; i++) spawn(true);
+
+    const items = ['Cold-Pressed','★','No Added Sugar','★','Whole Produce','★','Vegan','★','Made Fresh Daily','★'];
+    const line = items.map(t => `<span class="${t==='★'?'star':''}">${t}</span>`).join('');
+    document.getElementById('track').innerHTML = line + line;
+  </script>
+</body>
+</html>
