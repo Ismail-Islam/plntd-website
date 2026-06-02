@@ -39,6 +39,23 @@
     pointer-events: none;
   }
 
+  /* Fallback still — shown only when autoplay is blocked (e.g. iOS Low
+     Power Mode), so the hero shows filled juice instead of an empty video
+     with a tap-to-play button. Hidden again once the video actually plays. */
+  .hero-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 400ms ease;
+    pointer-events: none;
+  }
+  .hero-fallback.show { opacity: 1; }
+
   /* ── SETTLED FLAT FILL ──
      A thin band that fades in at the waterline once the liquid hits the
      target rest level, hiding the wave peaks/troughs so the surface
@@ -219,6 +236,7 @@
 <div class="page" id="page">
   <video id="liquidVideo" src="assets/video/juice-pour.mp4"
          autoplay muted playsinline preload="auto" aria-hidden="true"></video>
+  <img id="heroFallback" class="hero-fallback" src="assets/video/juice-poster.jpg" alt="" aria-hidden="true">
   <div class="settled-liquid" id="settledLiquid"></div>
   <div class="grain" aria-hidden="true"></div>
   <div class="nav-mask" aria-hidden="true"></div>
@@ -267,6 +285,7 @@
   const v        = document.getElementById('liquidVideo');
   const headline = document.getElementById('headline');
   const settled  = document.getElementById('settledLiquid');
+  const fallback = document.getElementById('heroFallback');
 
   const INK_DARK  = [42, 54, 35];    // #2A3623
   const INK_CREAM = [242, 244, 236]; // #F2F4EC
@@ -277,6 +296,7 @@
   // the nav (almost full).
   let TARGET_LEVEL = 0.05;
   let frozen = false;
+  let posterShown = false;
 
   function lerp(a, b, t) { return a + (b - a) * t; }
   function rgb(c) { return `rgb(${c[0]|0}, ${c[1]|0}, ${c[2]|0})`; }
@@ -372,6 +392,13 @@
   }
 
   function tick() {
+    // While the fallback still is showing (autoplay blocked), the hero is
+    // filled juice — keep the headline cream and skip video detection.
+    if (posterShown) {
+      headline.style.color = rgb(INK_CREAM);
+      requestAnimationFrame(tick);
+      return;
+    }
     // 1) find the real waterline from the video pixels
     if (v.readyState >= 2) {
       drawCover();
@@ -400,6 +427,33 @@
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
+
+  // ── AUTOPLAY FALLBACK ─────────────────────────────────────────
+  // iOS blocks video autoplay in Low Power Mode (and sometimes on first
+  // load). When that happens, show the filled-juice still instead of an
+  // empty video + tap-to-play button. The moment the video does start
+  // (e.g. after the user has navigated and comes back), hide the still.
+  function showPoster() {
+    if (posterShown) return;
+    posterShown = true;
+    fallback.classList.add('show');
+    headline.style.color = rgb(INK_CREAM);
+  }
+  function hidePoster() {
+    if (!posterShown) return;
+    posterShown = false;
+    fallback.classList.remove('show');
+  }
+  v.addEventListener('playing', hidePoster);
+
+  function tryPlay() {
+    const p = v.play && v.play();
+    if (p && p.catch) p.catch(() => showPoster());
+  }
+  if (v.readyState >= 2) tryPlay();
+  else v.addEventListener('canplay', tryPlay, { once: true });
+  // Safety net: if it still hasn't started shortly after load, show the still.
+  setTimeout(() => { if (v.paused && v.currentTime === 0) showPoster(); }, 1200);
 
   // ── REDUCED MOTION — skip the pour, jump to the filled rest state ──
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
