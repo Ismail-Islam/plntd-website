@@ -54,7 +54,6 @@ window.MENU = [
     eyebrow: '',
     blurb: 'Made fresh to order on the day.',
     items: [
-      { name: 'Tomato Cheese',     ingr: 'cheddar cheese, tomato, mixed leaves',                            price: 7.95, color: '#C1002F', img: '', allergens: ['Milk', 'Gluten'] },
       { name: 'Chicken Mayo',      ingr: 'chicken breast, red onion, peppers, house mayo and chilli',       price: 7.50, color: '#C9A227', img: '', allergens: ['Egg', 'Gluten', 'Mustard'] },
       { name: 'Tuna Crunch',       ingr: 'tuna, red onion, mixed peppers, sweet corn, house mayo and chilli', price: 7.50, color: '#D98B2B', img: '', allergens: ['Fish', 'Egg', 'Gluten', 'Mustard'] },
       { name: 'Steak and Peppers', ingr: 'steak, mixed pepper, onion, house marinade',                       price: 7.95, color: '#7A2E1E', img: '', allergens: ['Gluten'] },
