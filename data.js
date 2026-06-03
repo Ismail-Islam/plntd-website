@@ -90,7 +90,7 @@ window.MENU = [
     eyebrow: '',
     blurb: 'Iced and signature drinks, served over ice.',
     items: [
-      { name: 'Iced Americano',     ingr: 'espresso, cold water, ice',     price: 4.00, color: '#3D2817', img: 'assets/drinks/coffee-iced-americano.png?v=1', allergens: [] },
+      { name: 'Iced Americano',     ingr: 'espresso, cold water, ice',     price: 4.00, color: '#3D2817', img: 'assets/drinks/coffee-iced-americano.png?v=2', allergens: [] },
       { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice',      price: 4.50, color: '#BE9772', img: '', allergens: ['Milk'] },
       { name: 'Iced Matcha',        ingr: 'matcha, milk, over ice',        price: 4.50, color: '#5E8A2D', img: '', allergens: ['Milk'] },
       { name: 'Iced Spanish Latte', ingr: 'espresso, condensed milk, ice', price: 4.50, color: '#A07856', img: '', allergens: ['Milk'] },
