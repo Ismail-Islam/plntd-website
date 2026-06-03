@@ -49,6 +49,18 @@ window.MENU = [
     ],
   },
   {
+    id: 'sandwiches',
+    title: 'Sandwiches',
+    eyebrow: '',
+    blurb: 'Made fresh to order on the day.',
+    items: [
+      { name: 'Tomato Cheese',     ingr: 'cheddar cheese, tomato, mixed leaves',                            price: 7.95, color: '#C1002F', img: '', allergens: ['Milk', 'Gluten'] },
+      { name: 'Chicken Mayo',      ingr: 'chicken breast, red onion, peppers, house mayo and chilli',       price: 7.95, color: '#C9A227', img: '', allergens: ['Egg', 'Gluten', 'Mustard'] },
+      { name: 'Tuna Crunch',       ingr: 'tuna, red onion, mixed peppers, sweet corn, house mayo and chilli', price: 7.95, color: '#D98B2B', img: '', allergens: ['Fish', 'Egg', 'Gluten', 'Mustard'] },
+      { name: 'Steak and Peppers', ingr: 'steak, mixed pepper, onion, house marinade',                       price: 7.95, color: '#7A2E1E', img: '', allergens: ['Gluten'] },
+    ],
+  },
+  {
     id: 'coffee',
     title: 'Coffee',
     eyebrow: '',
@@ -66,8 +78,22 @@ window.MENU = [
         allergens: ['Milk'], nutrition: { kj: 380, kcal: 90, fat: 4, satFat: 2.5, carbs: 7, sugars: 7, fibre: 0, protein: 5, sodium: 70 } },
       { name: 'Latte',       ingr: 'espresso, steamed milk',     price: 3.50, color: '#BE9772', img: 'assets/drinks/coffee-latte.png?v=13',
         allergens: ['Milk'], nutrition: { kj: 550, kcal: 130, fat: 6, satFat: 3.5, carbs: 11, sugars: 11, fibre: 0, protein: 7, sodium: 100 } },
+      { name: 'Spanish Latte', ingr: 'espresso, condensed milk', price: 3.90, color: '#B98A5E', img: '',
+        allergens: ['Milk'] },
       { name: 'Iced Coffee', ingr: 'cold-brew, ice',             price: 3.80, color: '#7A5436', img: 'assets/drinks/coffee-iced-coffee.png?v=4',
         allergens: [], nutrition: { kj: 40, kcal: 10, fat: 0, satFat: 0, carbs: 2, sugars: 0, fibre: 0, protein: 0, sodium: 10 } },
+    ],
+  },
+  {
+    id: 'speciality',
+    title: 'Speciality',
+    eyebrow: '',
+    blurb: 'Iced and signature drinks, served over ice.',
+    items: [
+      { name: 'Iced Americano',     ingr: 'espresso, cold water, ice',     price: 4.00, color: '#3D2817', img: '', allergens: [] },
+      { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice',      price: 4.50, color: '#BE9772', img: '', allergens: ['Milk'] },
+      { name: 'Iced Matcha',        ingr: 'matcha, milk, over ice',        price: 4.50, color: '#5E8A2D', img: '', allergens: ['Milk'] },
+      { name: 'Iced Spanish Latte', ingr: 'espresso, condensed milk, ice', price: 4.50, color: '#A07856', img: '', allergens: ['Milk'] },
     ],
   },
   {
@@ -76,10 +102,11 @@ window.MENU = [
     eyebrow: '',
     blurb: 'Brewed by the cup. Steeped to order.',
     items: [
-      { name: 'English Tea', ingr: 'black tea blend',  price: 2.00, color: '#9C3D1F', img: 'assets/drinks/coffee-english-tea.png?v=4',
+      { name: 'English Tea', ingr: 'black tea blend',  price: 2.75, color: '#9C3D1F', img: 'assets/drinks/coffee-english-tea.png?v=4',
         allergens: [], nutrition: { kj: 10, kcal: 2, fat: 0, satFat: 0, carbs: 0, sugars: 0, fibre: 0, protein: 0, sodium: 8 } },
-      { name: 'Green Tea',   ingr: 'loose-leaf sencha', price: 2.00, color: '#7A8A2D', img: 'assets/drinks/coffee-green-tea.png?v=4',
+      { name: 'Green Tea',   ingr: 'loose-leaf sencha', price: 2.75, color: '#7A8A2D', img: 'assets/drinks/coffee-green-tea.png?v=4',
         allergens: [], nutrition: { kj: 5, kcal: 1, fat: 0, satFat: 0, carbs: 0, sugars: 0, fibre: 0, protein: 0, sodium: 5 } },
+      { name: 'Matcha',      ingr: 'ceremonial matcha, hot water', price: 3.50, color: '#5E8A2D', img: '', allergens: [] },
     ],
   },
 ];

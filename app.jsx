@@ -164,16 +164,20 @@ const CatIcon = {
   smoothies: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 7h10l-1.5 12a2 2 0 0 1-2 1.8h-3a2 2 0 0 1-2-1.8Z" /><path d="M9 4c1-1 5-1 6 0" /><path d="M8 11h8" /></svg>,
   juices: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6h8l-1 13a2 2 0 0 1-2 1.8h-2a2 2 0 0 1-2-1.8Z" /><path d="M10 6V4h4v2" /></svg>,
   coffee: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z" /><path d="M16 10h2a3 3 0 0 1 0 6h-2" /><path d="M7 4v2M10 4v2M13 4v2" /></svg>,
-  tea: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z" /><path d="M16 11h2a3 3 0 0 1 0 6h-2" /><path d="M9 5c.5-1 0-2-1-2.5M12 5c.5-1 0-2-1-2.5" /></svg>
+  tea: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z" /><path d="M16 11h2a3 3 0 0 1 0 6h-2" /><path d="M9 5c.5-1 0-2-1-2.5M12 5c.5-1 0-2-1-2.5" /></svg>,
+  speciality: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 8h10l-1 11a2 2 0 0 1-2 1.8h-4a2 2 0 0 1-2-1.8Z" /><path d="M9 11h6" /><path d="M12 3v3M10.5 4.5h3" /></svg>,
+  sandwiches: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8c0-2 3.6-3.5 8-3.5S20 6 20 8" /><path d="M4 8h16" /><path d="M5 12h14" /><path d="M4 15.5h16a0 0 0 0 1 0 0c0 1.9-3.6 3.5-8 3.5s-8-1.6-8-3.5Z" /></svg>
 };
 
 function MenuSection({ onAdd, onView }) {
   const [activeTab, setActiveTab] = useState('all');
   const tabs = [
-  { id: 'all', title: 'All drinks', icon: CatIcon.all },
+  { id: 'all', title: 'All', icon: CatIcon.all },
   { id: 'smoothies', title: 'Smoothies', icon: CatIcon.smoothies },
   { id: 'juices', title: 'Fresh Juices', icon: CatIcon.juices },
+  { id: 'sandwiches', title: 'Sandwiches', icon: CatIcon.sandwiches },
   { id: 'coffee', title: 'Coffee', icon: CatIcon.coffee },
+  { id: 'speciality', title: 'Speciality', icon: CatIcon.speciality },
   { id: 'tea', title: 'Tea', icon: CatIcon.tea }];
 
   const sections = activeTab === 'all' ? window.MENU : window.MENU.filter((s) => s.id === activeTab);
@@ -249,7 +253,7 @@ function ProductCard({ item, onAdd, onView }) {
       <div className="product-image">
         {item.img ?
         <img src={item.img} alt={item.name} /> :
-        <div className="product-image-fallback">{item.kind === 'tea' ? 'T' : 'C'}</div>
+        <div className="product-image-fallback" aria-hidden="true">{item.name.charAt(0).toUpperCase()}</div>
         }
       </div>
       <div className="product-body">
