@@ -34,7 +34,7 @@ window.MENU = [
         allergens: [], nutrition: { kj: 460, kcal: 110, fat: 0.3, satFat: 0, carbs: 26, sugars: 20, fibre: 3, protein: 1, sodium: 35 }, noAddedSugar: true },
       { name: 'Sunrise Carrot',    ingr: 'carrot, orange, lemon', price: 6.00, color: '#CA3D00', img: 'assets/drinks/juice-sunrise-carrot.png?v=6',
         allergens: [], nutrition: { kj: 550, kcal: 130, fat: 0.3, satFat: 0, carbs: 31, sugars: 25, fibre: 4, protein: 2, sodium: 30 }, noAddedSugar: true },
-      { name: 'Daily Cleanse',     ingr: 'apple, carrot, ginger', price: 6.00, color: '#3E7A1E', img: 'assets/drinks/juice-daily-cleanse.png?v=6',
+      { name: 'Daily Cleanse',     ingr: 'apple, carrot, ginger', price: 6.00, color: '#3E7A1E', img: 'assets/drinks/juice-daily-cleanse.png?v=7',
         allergens: [], nutrition: { kj: 630, kcal: 150, fat: 0.4, satFat: 0, carbs: 37, sugars: 30, fibre: 4, protein: 1, sodium: 12 }, noAddedSugar: true },
       { name: 'Citrus Refresher',  ingr: 'apple, mint, ginger, lemon', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-citrus-refresher.png?v=6',
         allergens: [], nutrition: { kj: 590, kcal: 140, fat: 0.3, satFat: 0, carbs: 35, sugars: 28, fibre: 3, protein: 0, sodium: 5 }, noAddedSugar: true },
