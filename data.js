@@ -55,11 +55,11 @@ window.MENU = [
     blurb: 'Made fresh to order on the day.',
     items: [
       { name: 'Chicken Mayo',      ingr: 'chicken breast, red onion, peppers, house mayo and chilli · served in sourdough bread',       price: 7.50, color: '#C9A227', img: 'assets/drinks/sandwich-chicken-mayo.png',
-        allergens: ['Egg', 'Gluten', 'Mustard'], nutrition: { kj: 1630, kcal: 390, fat: 15, satFat: 2.5, carbs: 45, sugars: 4, fibre: 3, protein: 16, sodium: 580 } },
+        allergens: ['Egg', 'Gluten', 'Mustard', 'Sesame'], nutrition: { kj: 2900, kcal: 700, fat: 42, satFat: 7, carbs: 46, sugars: 5, fibre: 3, protein: 37, sodium: 800 } },
       { name: 'Tuna Crunch',       ingr: 'tuna, red onion, mixed peppers, sweet corn, house mayo and chilli · served in sourdough bread', price: 7.50, color: '#D98B2B', img: 'assets/drinks/sandwich-tuna-crunch.png',
-        allergens: ['Fish', 'Egg', 'Gluten', 'Mustard'], nutrition: { kj: 1465, kcal: 350, fat: 12, satFat: 2, carbs: 47, sugars: 5, fibre: 3, protein: 16, sodium: 560 } },
+        allergens: ['Fish', 'Egg', 'Gluten', 'Mustard', 'Sesame'], nutrition: { kj: 2750, kcal: 660, fat: 37, satFat: 6, carbs: 50, sugars: 7, fibre: 3, protein: 27, sodium: 950 } },
       { name: 'Steak and Peppers', ingr: 'steak, mixed pepper, onion, house marinade · served in sourdough bread',                       price: 7.95, color: '#7A2E1E', img: 'assets/drinks/sandwich-steak-peppers.png',
-        allergens: ['Gluten'], nutrition: { kj: 1235, kcal: 295, fat: 5, satFat: 1.5, carbs: 44, sugars: 4, fibre: 3, protein: 19, sodium: 520 } },
+        allergens: ['Gluten', 'Mustard', 'Soya'], nutrition: { kj: 1900, kcal: 455, fat: 13, satFat: 5, carbs: 47, sugars: 5, fibre: 3, protein: 32, sodium: 690 } },
     ],
   },
   {
