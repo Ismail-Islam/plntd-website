@@ -81,7 +81,7 @@ window.MENU = [
         allergens: ['Milk'] },
       { name: 'Iced Americano',     ingr: 'espresso, cold water, ice',     price: 4.00, color: '#3D2817', img: 'assets/drinks/coffee-iced-americano.png', allergens: [] },
       { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice',      price: 4.50, color: '#BE9772', img: 'assets/drinks/coffee-iced-coffee.png?v=4', allergens: ['Milk'] },
-      { name: 'Iced Matcha',        ingr: 'matcha, milk, over ice',        price: 4.50, color: '#5E8A2D', img: 'assets/drinks/coffee-iced-matcha.png', allergens: ['Milk'] },
+      { name: 'Iced Matcha Latte',  ingr: 'matcha, milk, over ice',        price: 4.50, color: '#5E8A2D', img: 'assets/drinks/coffee-iced-matcha.png', allergens: ['Milk'] },
       { name: 'Iced Spanish Latte', ingr: 'espresso, condensed milk, ice', price: 4.50, color: '#A07856', img: 'assets/drinks/coffee-iced-spanish-latte.png', allergens: ['Milk'] },
     ],
   },
@@ -95,7 +95,7 @@ window.MENU = [
         allergens: [], nutrition: { kj: 10, kcal: 2, fat: 0, satFat: 0, carbs: 0, sugars: 0, fibre: 0, protein: 0, sodium: 8 } },
       { name: 'Green Tea',   ingr: 'loose-leaf sencha', price: 2.75, color: '#7A8A2D', img: 'assets/drinks/coffee-green-tea.png?v=6',
         allergens: [], nutrition: { kj: 5, kcal: 1, fat: 0, satFat: 0, carbs: 0, sugars: 0, fibre: 0, protein: 0, sodium: 5 } },
-      { name: 'Matcha',      ingr: 'ceremonial matcha, hot water', price: 3.50, color: '#5E8A2D', img: 'assets/drinks/coffee-matcha.png?v=2', allergens: [] },
+      { name: 'Matcha Latte', ingr: 'ceremonial matcha, hot water', price: 3.50, color: '#5E8A2D', img: 'assets/drinks/coffee-matcha.png?v=2', allergens: [] },
     ],
   },
 ];
