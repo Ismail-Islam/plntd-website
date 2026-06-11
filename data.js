@@ -83,7 +83,7 @@ window.MENU = [
         allergens: [], nutrition: { kj: 15, kcal: 3, fat: 0, satFat: 0, carbs: 0, sugars: 0, fibre: 0, protein: 0, sodium: 5 } },
       { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice',      price: 4.50, color: '#BE9772', img: 'assets/drinks/coffee-iced-coffee.png?v=4',
         allergens: ['Milk'], nutrition: { kj: 350, kcal: 85, fat: 4, satFat: 2.5, carbs: 10, sugars: 10, fibre: 0, protein: 8, sodium: 90 } },
-      { name: 'Iced Matcha Latte',  ingr: 'matcha, milk, over ice',        price: 4.50, color: '#5E8A2D', img: 'assets/drinks/coffee-iced-matcha.png',
+      { name: 'Iced Matcha Latte',  ingr: 'matcha, milk, ice',        price: 4.50, color: '#5E8A2D', img: 'assets/drinks/coffee-iced-matcha.png',
         allergens: ['Milk'], nutrition: { kj: 350, kcal: 84, fat: 3.5, satFat: 2, carbs: 10, sugars: 9, fibre: 0, protein: 8, sodium: 85 } },
       { name: 'Iced Spanish Latte', ingr: 'espresso, condensed milk, ice', price: 4.50, color: '#A07856', img: 'assets/drinks/coffee-iced-spanish-latte.png',
         allergens: ['Milk'], nutrition: { kj: 400, kcal: 95, fat: 2.5, satFat: 1.5, carbs: 17, sugars: 17, fibre: 0, protein: 2.5, sodium: 40 } },
