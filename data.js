@@ -82,7 +82,7 @@ window.MENU = [
       { name: 'Iced Americano',     ingr: 'espresso, cold water, ice',     price: 4.00, color: '#3D2817', img: 'assets/drinks/coffee-iced-americano.png', allergens: [] },
       { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice',      price: 4.50, color: '#BE9772', img: 'assets/drinks/coffee-iced-coffee.png?v=4', allergens: ['Milk'] },
       { name: 'Iced Matcha',        ingr: 'matcha, milk, over ice',        price: 4.50, color: '#5E8A2D', img: 'assets/drinks/coffee-iced-matcha.png', allergens: ['Milk'] },
-      { name: 'Iced Spanish Latte', ingr: 'espresso, condensed milk, ice', price: 4.50, color: '#A07856', img: '', allergens: ['Milk'] },
+      { name: 'Iced Spanish Latte', ingr: 'espresso, condensed milk, ice', price: 4.50, color: '#A07856', img: 'assets/drinks/coffee-iced-spanish-latte.png', allergens: ['Milk'] },
     ],
   },
   {
