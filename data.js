@@ -77,7 +77,7 @@ window.MENU = [
         allergens: ['Milk'], nutrition: { kj: 380, kcal: 90, fat: 4, satFat: 2.5, carbs: 7, sugars: 7, fibre: 0, protein: 5, sodium: 70 } },
       { name: 'Latte',       ingr: 'espresso, steamed milk',     price: 3.90, color: '#BE9772', img: 'assets/drinks/coffee-latte.png?v=13',
         allergens: ['Milk'], nutrition: { kj: 550, kcal: 130, fat: 6, satFat: 3.5, carbs: 11, sugars: 11, fibre: 0, protein: 7, sodium: 100 } },
-      { name: 'Spanish Latte', ingr: 'espresso, condensed milk', price: 3.90, color: '#B98A5E', img: '',
+      { name: 'Spanish Latte', ingr: 'espresso, condensed milk', price: 3.90, color: '#B98A5E', img: 'assets/drinks/coffee-spanish-latte.png',
         allergens: ['Milk'] },
       { name: 'Iced Americano',     ingr: 'espresso, cold water, ice',     price: 4.00, color: '#3D2817', img: 'assets/drinks/coffee-iced-americano.png', allergens: [] },
       { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice',      price: 4.50, color: '#BE9772', img: 'assets/drinks/coffee-iced-coffee.png?v=4', allergens: ['Milk'] },
