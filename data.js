@@ -61,9 +61,9 @@ window.MENU = [
   },
   {
     id: 'coffee',
-    title: 'Coffee',
+    title: 'Specialty Coffee',
     eyebrow: '',
-    blurb: 'Single-origin beans, oat or almond milk on request.',
+    blurb: 'Single-origin beans, oat or almond milk on request. Iced and signature drinks served over ice.',
     items: [
       { name: 'Espresso',    ingr: 'single shot',                price: 3.50, color: '#3D2817', img: 'assets/drinks/coffee-espresso.png?v=4',
         allergens: [], nutrition: { kj: 20, kcal: 5, fat: 0, satFat: 0, carbs: 1, sugars: 0, fibre: 0, protein: 0, sodium: 5 } },
@@ -79,14 +79,6 @@ window.MENU = [
         allergens: ['Milk'], nutrition: { kj: 550, kcal: 130, fat: 6, satFat: 3.5, carbs: 11, sugars: 11, fibre: 0, protein: 7, sodium: 100 } },
       { name: 'Spanish Latte', ingr: 'espresso, condensed milk', price: 3.90, color: '#B98A5E', img: 'assets/drinks/coffee-iced-coffee.png?v=4',
         allergens: ['Milk'] },
-    ],
-  },
-  {
-    id: 'speciality',
-    title: 'Speciality',
-    eyebrow: '',
-    blurb: 'Iced and signature drinks, served over ice.',
-    items: [
       { name: 'Iced Americano',     ingr: 'espresso, cold water, ice',     price: 4.00, color: '#3D2817', img: '', allergens: [] },
       { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice',      price: 4.50, color: '#BE9772', img: '', allergens: ['Milk'] },
       { name: 'Iced Matcha',        ingr: 'matcha, milk, over ice',        price: 4.50, color: '#5E8A2D', img: '', allergens: ['Milk'] },

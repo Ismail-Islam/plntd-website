@@ -176,8 +176,7 @@ function MenuSection({ onAdd, onView }) {
   { id: 'smoothies', title: 'Smoothies', icon: CatIcon.smoothies },
   { id: 'juices', title: 'Fresh Juices', icon: CatIcon.juices },
   { id: 'sandwiches', title: 'Sandwiches', icon: CatIcon.sandwiches },
-  { id: 'coffee', title: 'Coffee', icon: CatIcon.coffee },
-  { id: 'speciality', title: 'Speciality', icon: CatIcon.speciality },
+  { id: 'coffee', title: 'Specialty Coffee', icon: CatIcon.coffee },
   { id: 'tea', title: 'Tea', icon: CatIcon.tea }];
 
   const sections = activeTab === 'all' ? window.MENU : window.MENU.filter((s) => s.id === activeTab);
