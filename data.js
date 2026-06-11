@@ -91,11 +91,11 @@ window.MENU = [
     eyebrow: '',
     blurb: 'Brewed by the cup. Steeped to order.',
     items: [
-      { name: 'English Tea', ingr: 'black tea blend',  price: 2.75, color: '#9C3D1F', img: 'assets/drinks/coffee-english-tea.png?v=5',
+      { name: 'English Tea', ingr: 'black tea blend',  price: 2.75, color: '#9C3D1F', img: 'assets/drinks/coffee-english-tea.png?v=6',
         allergens: [], nutrition: { kj: 10, kcal: 2, fat: 0, satFat: 0, carbs: 0, sugars: 0, fibre: 0, protein: 0, sodium: 8 } },
-      { name: 'Green Tea',   ingr: 'loose-leaf sencha', price: 2.75, color: '#7A8A2D', img: 'assets/drinks/coffee-green-tea.png?v=5',
+      { name: 'Green Tea',   ingr: 'loose-leaf sencha', price: 2.75, color: '#7A8A2D', img: 'assets/drinks/coffee-green-tea.png?v=6',
         allergens: [], nutrition: { kj: 5, kcal: 1, fat: 0, satFat: 0, carbs: 0, sugars: 0, fibre: 0, protein: 0, sodium: 5 } },
-      { name: 'Matcha',      ingr: 'ceremonial matcha, hot water', price: 3.50, color: '#5E8A2D', img: 'assets/drinks/coffee-matcha.png?v=1', allergens: [] },
+      { name: 'Matcha',      ingr: 'ceremonial matcha, hot water', price: 3.50, color: '#5E8A2D', img: 'assets/drinks/coffee-matcha.png?v=2', allergens: [] },
     ],
   },
 ];
