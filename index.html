@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PLNTD — Home</title>
-<meta name="description" content="Plant-powered cold-pressed juices and drinks. Fresh, real, alive.">
+<meta name="description" content="Plant-powered juices and drinks. Fresh, real, alive.">
 <link rel="icon" type="image/png" href="assets/icon.png?v=2">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&display=swap" rel="stylesheet">
 <style>
@@ -462,6 +462,23 @@
     if (v.readyState >= 1 && v.duration) goFilled();
     else v.addEventListener('loadedmetadata', goFilled, { once: true });
   }
+
+  // ── BACK/FORWARD CACHE RESTORE ───────────────────────────────────
+  // When the user navigates away (e.g. to /menu) and taps Back, the
+  // browser restores this page from the bfcache with the video frozen
+  // at its end and the script NOT re-run — so the pour never replays.
+  // On a persisted restore, reset state and play the pour fresh so the
+  // hero always animates on every visit (reduced-motion still opts out).
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;   // genuine fresh loads are handled above
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    frozen = false;
+    lastWaterFrac = 1;
+    hidePoster();
+    settled.classList.remove('visible');
+    try { v.currentTime = 0; } catch (err) {}
+    tryPlay();
+  });
 </script>
 
 </body>
