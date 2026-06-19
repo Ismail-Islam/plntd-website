@@ -37,7 +37,10 @@
     object-position: center bottom;
     z-index: 1;
     pointer-events: none;
+    opacity: 0;                       /* hidden until confirmed at pour start */
+    transition: opacity 200ms ease;
   }
+  #liquidVideo.ready { opacity: 1; }
 
   /* Fallback still — shown only when autoplay is blocked (e.g. iOS Low
      Power Mode), so the hero shows filled juice instead of an empty video
@@ -297,6 +300,15 @@
   let TARGET_LEVEL = 0.05;
   let frozen = false;
   let posterShown = false;
+  let revealed = false;
+
+  // Show the video only once — guarded so the restored end frame never
+  // flashes before the pour (see reveal logic in tick / pageshow).
+  function revealVideo() {
+    if (revealed) return;
+    revealed = true;
+    v.classList.add('ready');
+  }
 
   function lerp(a, b, t) { return a + (b - a) * t; }
   function rgb(c) { return `rgb(${c[0]|0}, ${c[1]|0}, ${c[2]|0})`; }
@@ -400,11 +412,17 @@
       return;
     }
     // 1) find the real waterline from the video pixels
+    let detected = null;
     if (v.readyState >= 2) {
       drawCover();
       const wf = detectWaterlineFrac();
-      if (wf != null) lastWaterFrac = wf;
+      if (wf != null) { lastWaterFrac = wf; detected = wf; }
     }
+    // Reveal the video only when a freshly read frame shows it near-empty
+    // (pour at the start) — never the restored end frame. Uses the live
+    // detected value, not the carried lastWaterFrac, so a reset to 1 can't
+    // reveal a still-full frame before the seek-to-0 lands.
+    if (!revealed && !posterShown && detected != null && detected > 0.6) revealVideo();
     const waterlineY = lastWaterFrac * window.innerHeight;
 
     // 2) freeze the clip once the liquid reaches the target rest level
@@ -447,6 +465,10 @@
   v.addEventListener('playing', hidePoster);
 
   function tryPlay() {
+    // Rewind first: on reload/Back the browser may restore the video at its
+    // end frame (the full rest state). Seeking to 0 before play means the
+    // first frame we ever reveal is the empty start of the pour.
+    try { if (v.currentTime > 0.05) v.currentTime = 0; } catch (e) {}
     const p = v.play && v.play();
     if (p && p.catch) p.catch(() => showPoster());
   }
@@ -454,11 +476,14 @@
   else v.addEventListener('canplay', tryPlay, { once: true });
   // Safety net: if it still hasn't started shortly after load, show the still.
   setTimeout(() => { if (v.paused && v.currentTime === 0) showPoster(); }, 1200);
+  // Reveal safety net — if pixel detection never green-lights (e.g. tinted
+  // frames), show the video anyway so the hero is never stuck on cream.
+  setTimeout(() => { if (!posterShown) revealVideo(); }, 800);
 
   // ── REDUCED MOTION — skip the pour, jump to the filled rest state ──
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     v.removeAttribute('autoplay');
-    const goFilled = () => { v.pause(); v.currentTime = Math.max(0, v.duration - 0.05); };
+    const goFilled = () => { v.pause(); v.currentTime = Math.max(0, v.duration - 0.05); revealVideo(); };
     if (v.readyState >= 1 && v.duration) goFilled();
     else v.addEventListener('loadedmetadata', goFilled, { once: true });
   }
@@ -474,6 +499,8 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     frozen = false;
     lastWaterFrac = 1;
+    revealed = false;
+    v.classList.remove('ready');     // re-hide; tick reveals again at pour start
     hidePoster();
     settled.classList.remove('visible');
     try { v.currentTime = 0; } catch (err) {}
