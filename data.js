@@ -121,8 +121,8 @@ window.STORE = {
     { day: 'Wednesday', open: '07:00', close: '19:00' },
     { day: 'Thursday',  open: '07:00', close: '19:00' },
     { day: 'Friday',    open: '07:00', close: '19:00' },
-    { day: 'Saturday',  open: '10:00', close: '19:00' },
-    { day: 'Sunday',    open: '10:00', close: '17:00' },
+    { day: 'Saturday',  open: '09:00', close: '19:00' },
+    { day: 'Sunday',    open: '09:00', close: '17:00' },
   ],
   todayIndex: new Date().getDay() === 0 ? 6 : new Date().getDay() - 1, // monday-first
   features: ['Pickup', 'Dine-in', 'Wi-Fi'],
