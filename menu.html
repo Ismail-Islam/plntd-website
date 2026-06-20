@@ -3,6 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#F8F3EE" />
+  <!-- Critical first-paint background: styles.css (and its @import chain) is
+       render-blocking and loads after navigation, so without this the menu
+       would flash the browser's default backdrop — dark grey on a phone in
+       dark mode — for a beat before painting. Paint cream immediately. -->
+  <style>html{color-scheme:light}html,body{background:#F8F3EE}</style>
   <title>PLNTD — Menu</title>
   <link rel="icon" type="image/png" href="assets/icon.png?v=2" />
   <link rel="stylesheet" href="styles.css?v=20260529e" />
