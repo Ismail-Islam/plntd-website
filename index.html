@@ -418,11 +418,15 @@
       const wf = detectWaterlineFrac();
       if (wf != null) { lastWaterFrac = wf; detected = wf; }
     }
-    // Reveal the video only when a freshly read frame shows it near-empty
-    // (pour at the start) — never the restored end frame. Uses the live
-    // detected value, not the carried lastWaterFrac, so a reset to 1 can't
-    // reveal a still-full frame before the seek-to-0 lands.
-    if (!revealed && !posterShown && detected != null && detected > 0.6) revealVideo();
+    // Reveal the video only when it's safe to: a freshly read empty/early
+    // frame (primary), or the video genuinely playing an early frame
+    // (secondary — covers fast pours / tinted frames). Requires a decoded
+    // frame (readyState>=2) so we never reveal black, and never the restored
+    // end frame. Until then the cream pre-pour hero shows.
+    if (!revealed && !posterShown && v.readyState >= 2) {
+      if (detected != null && detected > 0.6) revealVideo();
+      else if (!v.paused && v.currentTime > 0.1 && v.currentTime < 1.5) revealVideo();
+    }
     const waterlineY = lastWaterFrac * window.innerHeight;
 
     // 2) freeze the clip once the liquid reaches the target rest level
@@ -470,15 +474,23 @@
     // first frame we ever reveal is the empty start of the pour.
     try { if (v.currentTime > 0.05) v.currentTime = 0; } catch (e) {}
     const p = v.play && v.play();
-    if (p && p.catch) p.catch(() => showPoster());
+    if (p && p.catch) {
+      // Modern browsers: the promise rejects only when autoplay is blocked.
+      // A slow buffer does NOT reject — it resolves once playback begins —
+      // so this never fires the filled still just because the 4MB clip is
+      // still loading on mobile/4G.
+      p.catch(() => showPoster());
+    } else {
+      // Old browsers without a play() promise: only after play has actually
+      // been attempted (we're past canplay), fall back to the still if it's
+      // genuinely stuck — not merely buffering.
+      setTimeout(() => { if (v.paused && v.currentTime === 0) showPoster(); }, 1500);
+    }
   }
   if (v.readyState >= 2) tryPlay();
   else v.addEventListener('canplay', tryPlay, { once: true });
-  // Safety net: if it still hasn't started shortly after load, show the still.
-  setTimeout(() => { if (v.paused && v.currentTime === 0) showPoster(); }, 1200);
-  // Reveal safety net — if pixel detection never green-lights (e.g. tinted
-  // frames), show the video anyway so the hero is never stuck on cream.
-  setTimeout(() => { if (!posterShown) revealVideo(); }, 800);
+  // Genuine failure (decode/network error) → show the filled still.
+  v.addEventListener('error', showPoster);
 
   // ── REDUCED MOTION — skip the pour, jump to the filled rest state ──
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
