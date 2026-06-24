@@ -162,15 +162,15 @@
     }
 
     /* ── Scroll-reveal fade-ins ──
-       Each section reveals as it enters view: the label, headline and image
-       fade in together; the body paragraphs fade in afterwards (once the
-       headline has finished). Same fade as the menu hero. Only active when
+       Each section reveals as it enters view: the label and headline fade in
+       first; the body paragraphs and image then fade in together once the
+       headline has finished. Same fade as the menu hero. Only active when
        JS is running and motion is allowed (the .anim hook is added in <head>),
        so no-JS / reduced-motion visitors always see the content. */
     .anim .story-text .label,
-    .anim .story-text h2,
-    .anim .story-img { opacity: 0; transition: opacity 800ms ease; }
-    .anim .story-text p { opacity: 0; transition: opacity 800ms ease 800ms; }
+    .anim .story-text h2 { opacity: 0; transition: opacity 800ms ease; }
+    .anim .story-text p,
+    .anim .story-img { opacity: 0; transition: opacity 800ms ease 800ms; }
     .anim .story-grid.in .story-text .label,
     .anim .story-grid.in .story-text h2,
     .anim .story-grid.in .story-img,
