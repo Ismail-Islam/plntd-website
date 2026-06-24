@@ -745,7 +745,10 @@ a.brand-bar-social:hover { opacity: 0.75; }
 .banner-bg {
   position: absolute; inset: 0;
   background: url('uploads/hero-juices-2026-06-01.jpg') center 45% / cover no-repeat;
+  animation: bannerFadeIn 800ms ease both;
 }
+@keyframes bannerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .banner-bg { animation: none; } }
 .banner-overlay {
   position: absolute; inset: 0;
   background: rgba(20,35,14,0.52);

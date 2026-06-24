@@ -160,7 +160,32 @@
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
     }
+
+    /* ── Scroll-reveal fade-ins ──
+       Each section reveals as it enters view: the label, headline and image
+       fade in together; the body paragraphs fade in afterwards (once the
+       headline has finished). Same fade as the menu hero. Only active when
+       JS is running and motion is allowed (the .anim hook is added in <head>),
+       so no-JS / reduced-motion visitors always see the content. */
+    .anim .story-text .label,
+    .anim .story-text h2,
+    .anim .story-img { opacity: 0; transition: opacity 800ms ease; }
+    .anim .story-text p { opacity: 0; transition: opacity 800ms ease 800ms; }
+    .anim .story-grid.in .story-text .label,
+    .anim .story-grid.in .story-text h2,
+    .anim .story-grid.in .story-img,
+    .anim .story-grid.in .story-text p { opacity: 1; }
   </style>
+  <script>
+    /* Add the .anim hook before first paint so revealed elements start hidden
+       (no flash of content then hide). Gated on motion + IntersectionObserver
+       so no-JS / reduced-motion users keep the content visible. */
+    (function () {
+      if (!('IntersectionObserver' in window)) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.documentElement.classList.add('anim');
+    })();
+  </script>
 </head>
 <body>
 
@@ -412,6 +437,20 @@
     }
 
     ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<StoryTweaks />);
+  </script>
+
+  <script>
+    /* Reveal each story section when it scrolls into view. The first section
+       is already in view on load, so it fades in immediately. */
+    (function () {
+      if (!document.documentElement.classList.contains('anim')) return;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.18 });
+      document.querySelectorAll('.story-grid').forEach(function (el) { io.observe(el); });
+    })();
   </script>
 
 </body>
