@@ -68,7 +68,7 @@ window.MENU = [
     eyebrow: '',
     blurb: 'Single-origin beans, oat or almond milk on request. Iced and signature drinks served over ice.',
     items: [
-      { name: 'Espresso',    ingr: 'single shot',                price: 3.50, color: '#3D2817', img: 'assets/drinks/coffee-espresso.png?v=4',
+      { name: 'Espresso',    ingr: 'double shot',                price: 3.50, color: '#3D2817', img: 'assets/drinks/coffee-espresso.png?v=4',
         allergens: [], nutrition: { kj: 20, kcal: 5, fat: 0, satFat: 0, carbs: 1, sugars: 0, fibre: 0, protein: 0, sodium: 5 } },
       { name: 'Americano',   ingr: 'espresso, hot water',        price: 3.50, color: '#3D2817', img: 'assets/drinks/coffee-americano.png?v=4',
         allergens: [], nutrition: { kj: 20, kcal: 5, fat: 0, satFat: 0, carbs: 1, sugars: 0, fibre: 0, protein: 0, sodium: 8 } },
