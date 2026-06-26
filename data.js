@@ -74,7 +74,7 @@ window.MENU = [
         allergens: [], nutrition: { kj: 20, kcal: 5, fat: 0, satFat: 0, carbs: 1, sugars: 0, fibre: 0, protein: 0, sodium: 8 } },
       { name: 'Cortado',     ingr: 'espresso, warm milk',        price: 3.50, color: '#A07856', img: 'assets/drinks/coffee-cortado.png?v=16',
         allergens: ['Milk'], nutrition: { kj: 210, kcal: 50, fat: 2.5, satFat: 1.5, carbs: 4, sugars: 4, fibre: 0, protein: 3, sodium: 40 } },
-      { name: 'Flat White',  ingr: 'double ristretto, micro-foam', price: 3.50, color: '#B89373', img: 'assets/drinks/coffee-flat-white.png?v=11',
+      { name: 'Flat White',  ingr: 'espresso, steamed milk', price: 3.50, color: '#B89373', img: 'assets/drinks/coffee-flat-white.png?v=11',
         allergens: ['Milk'], nutrition: { kj: 460, kcal: 110, fat: 5, satFat: 3, carbs: 9, sugars: 9, fibre: 0, protein: 6, sodium: 85 } },
       { name: 'Cappuccino',  ingr: 'espresso, steamed milk, foam', price: 3.90, color: '#C9A98A', img: 'assets/drinks/coffee-cappuccino.png?v=4',
         allergens: ['Milk'], nutrition: { kj: 380, kcal: 90, fat: 4, satFat: 2.5, carbs: 7, sugars: 7, fibre: 0, protein: 5, sodium: 70 } },
