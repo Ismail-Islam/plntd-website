@@ -312,7 +312,7 @@ function ScanScreen({ t, onNavigate, isRedeem }) {
           </div>
           <div style={{ border: `1.5px solid ${isRedeem ? t.gold : t.gold}`, background: isRedeem ? t.gold : 'transparent', borderRadius: '999px', padding: '5px 14px', marginBottom: '22px' }}>
             <span style={{ fontFamily: "'Archivo', sans-serif", fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: isRedeem ? '#fff' : t.ink }}>
-              {isRedeem ? 'FREE drink' : '1 ★ per transaction'}
+              {isRedeem ? 'FREE drink' : '1 ★ per transaction above £3'}
             </span>
           </div>
           <QR />
