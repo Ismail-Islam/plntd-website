@@ -4,13 +4,14 @@
 const { useState, useEffect } = React;
 
 // ─── DATA ────────────────────────────────────────────────────────────
+// Mirrors the live app's src/lib/menu.ts (categories, wording, images).
 const SMOOTHIES = [
-  { name: 'Green Glow',         ingr: 'apple, spinach, avocado, broccoli, lemon', price: 6.50, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-glow.png' },
-  { name: 'Green Machine',      ingr: 'kale, spinach, cucumber, apple, ginger, lemon', price: 6.50, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-machine.png' },
-  { name: 'Pineapple Sunrise',  ingr: 'pineapple, banana, apple', price: 6.50, color: '#DF9A00', img: 'assets/drinks/smoothie-pineapple-sunrise.png' },
-  { name: 'Blueberry Breeze',   ingr: 'blueberry, banana, almond milk', price: 6.50, color: '#2E0096', img: 'assets/drinks/smoothie-blueberry-breeze.png' },
-  { name: 'Strawberry Delight', ingr: 'strawberry, apple', price: 6.50, color: '#C1002F', img: 'assets/drinks/smoothie-strawberry-delight.png' },
-  { name: 'Berry Blast',        ingr: 'strawberry, banana, apple', price: 6.50, color: '#CA0039', img: 'assets/drinks/smoothie-berry-blast.png' },
+  { name: 'Green Glow',         ingr: 'apple, spinach, avocado, broccoli, lemon, coconut water', price: 6.50, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-glow.png' },
+  { name: 'Green Machine',      ingr: 'kale, spinach, cucumber, apple, ginger, lemon, coconut water', price: 6.50, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-machine.png' },
+  { name: 'Pineapple Sunrise',  ingr: 'pineapple, banana, apple, coconut water', price: 6.50, color: '#DF9A00', img: 'assets/drinks/smoothie-pineapple-sunrise.png' },
+  { name: 'Blueberry Breeze',   ingr: 'blueberries, banana, almond milk', price: 6.50, color: '#2E0096', img: 'assets/drinks/smoothie-blueberry-breeze.png' },
+  { name: 'Strawberry Delight', ingr: 'strawberries, apple, coconut water', price: 6.50, color: '#C1002F', img: 'assets/drinks/smoothie-strawberry-delight.png' },
+  { name: 'Berry Blast',        ingr: 'strawberries, banana, apple, coconut water', price: 6.50, color: '#CA0039', img: 'assets/drinks/smoothie-berry-blast.png' },
 ];
 
 const JUICES = [
@@ -18,20 +19,54 @@ const JUICES = [
   { name: 'Carrot Glow',      ingr: 'carrot, apple, ginger', price: 6.00, color: '#CA3D00', img: 'assets/drinks/juice-carrot-glow.png' },
   { name: 'Sunrise Carrot',   ingr: 'carrot, orange, lemon', price: 6.00, color: '#CA3D00', img: 'assets/drinks/juice-sunrise-carrot.png' },
   { name: 'Daily Cleanse',    ingr: 'apple, carrot, ginger', price: 6.00, color: '#3E7A1E', img: 'assets/drinks/juice-daily-cleanse.png' },
-  { name: 'Citrus Refresher', ingr: 'apple, lemon, mint, ginger', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-citrus-refresher.png' },
+  { name: 'Citrus Refresher', ingr: 'apple, mint, ginger, lemon', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-citrus-refresher.png' },
   { name: 'Apple Zing',       ingr: 'apple, mint, ginger', price: 6.00, color: '#3E7A1E', img: 'assets/drinks/juice-apple-zing.png' },
   { name: 'Citrus Boost',     ingr: 'orange, lemon, carrot', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-citrus-boost.png' },
   { name: 'Vitamin C Blast',  ingr: 'orange, pineapple, lemon', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-vitamin-c-blast.png' },
-  { name: 'Berry Fresh',      ingr: 'strawberry, apple, lemon', price: 6.00, color: '#C1002F', img: 'assets/drinks/juice-berry-fresh.png' },
+  { name: 'Berry Fresh',      ingr: 'strawberries, apple, lemon', price: 6.00, color: '#C1002F', img: 'assets/drinks/juice-berry-fresh.png' },
+];
+
+const SANDWICHES = [
+  { name: 'Chicken Mayo',      ingr: 'chicken breast, red onion, peppers, house mayo and chilli · served in focaccia', price: 6.00, color: '#C9A227', img: 'assets/drinks/sandwich-chicken-mayo.png' },
+  { name: 'Tuna Crunch',       ingr: 'tuna, red onion, mixed peppers, sweet corn, house mayo and chilli · served in focaccia', price: 6.00, color: '#D98B2B', img: 'assets/drinks/sandwich-tuna-crunch.png' },
+  { name: 'Steak and Peppers', ingr: 'steak, mixed pepper, onion, house marinade · served in focaccia', price: 6.50, color: '#7A2E1E', img: 'assets/drinks/sandwich-steak-peppers.png' },
 ];
 
 const COFFEES = [
-  { name: 'Espresso', price: 2.50 }, { name: 'Americano', price: 3.00 }, { name: 'Cortado', price: 3.00 },
-  { name: 'Flat White', price: 3.50 }, { name: 'Cappuccino', price: 3.50 }, { name: 'Latte', price: 3.50 },
-  { name: 'Iced Coffee', price: 3.80 },
+  { name: 'Espresso',           ingr: 'single shot', price: 3.50, color: '#3D2817', img: 'assets/drinks/coffee-espresso.png' },
+  { name: 'Americano',          ingr: 'espresso, hot water', price: 3.50, color: '#3D2817', img: 'assets/drinks/coffee-americano.png' },
+  { name: 'Cortado',            ingr: 'espresso, warm milk', price: 3.50, color: '#A07856', img: 'assets/drinks/coffee-cortado.png' },
+  { name: 'Flat White',         ingr: 'espresso, steamed milk', price: 3.50, color: '#B89373', img: 'assets/drinks/coffee-flat-white.png' },
+  { name: 'Cappuccino',         ingr: 'espresso, steamed milk, foam', price: 3.90, color: '#C9A98A', img: 'assets/drinks/coffee-cappuccino.png' },
+  { name: 'Latte',              ingr: 'espresso, steamed milk', price: 3.90, color: '#BE9772', img: 'assets/drinks/coffee-latte.png' },
+  { name: 'Spanish Latte',      ingr: 'espresso, condensed milk', price: 3.90, color: '#B98A5E', img: 'assets/drinks/coffee-spanish-latte.png' },
+  { name: 'Iced Americano',     ingr: 'espresso, cold water, ice', price: 4.00, color: '#3D2817', img: 'assets/drinks/coffee-iced-americano.png' },
+  { name: 'Iced Latte',         ingr: 'espresso, cold milk, ice', price: 4.50, color: '#BE9772', img: 'assets/drinks/coffee-iced-coffee.png' },
+  { name: 'Iced Matcha Latte',  ingr: 'matcha, milk, ice', price: 4.50, color: '#5E8A2D', img: 'assets/drinks/coffee-iced-matcha.png' },
+  { name: 'Iced Spanish Latte', ingr: 'espresso, condensed milk, ice', price: 4.50, color: '#A07856', img: 'assets/drinks/coffee-iced-spanish-latte.png' },
 ];
 
-const TEAS = [{ name: 'English Tea', price: 2.00 }, { name: 'Green Tea', price: 2.00 }];
+const TEAS = [
+  { name: 'English Tea',   ingr: 'black tea blend', price: 2.75, color: '#9C3D1F', img: 'assets/drinks/coffee-english-tea.png' },
+  { name: 'Green Tea',     ingr: 'loose-leaf sencha', price: 2.75, color: '#7A8A2D', img: 'assets/drinks/coffee-green-tea.png' },
+  { name: 'Matcha Latte',  ingr: 'ceremonial matcha, hot water', price: 3.50, color: '#5E8A2D', img: 'assets/drinks/coffee-matcha.png' },
+];
+
+// Curated cross-category picks shown in the Home "Featured" row (mirrors app).
+function pick(list, name) {
+  const item = list.find(i => i.name === name);
+  return item || { name, price: 0 };
+}
+const FEATURED = [
+  pick(SMOOTHIES, 'Pineapple Sunrise'),
+  pick(SMOOTHIES, 'Blueberry Breeze'),
+  pick(JUICES, 'Apple Zing'),
+  pick(JUICES, 'Vitamin C Blast'),
+  pick(SANDWICHES, 'Steak and Peppers'),
+  pick(SANDWICHES, 'Tuna Crunch'),
+  pick(COFFEES, 'Iced Matcha Latte'),
+  pick(COFFEES, 'Iced Latte'),
+];
 
 const POINTS = 7;
 const TARGET = 10;
@@ -147,7 +182,7 @@ function HomeScreen({ t, onNavigate }) {
     <div style={{ display: 'flex', flexDirection: 'column', background: t.dark, minHeight: '100%' }}>
       <div style={{ background: t.dark, padding: '20px 24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '26px', color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
-          Good day <span style={{ fontWeight: 900 }}>Ismail</span>
+          Good Day <span style={{ fontWeight: 900 }}>Ismail</span>
         </div>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => onNavigate('Inbox')}>
@@ -176,7 +211,7 @@ function HomeScreen({ t, onNavigate }) {
             <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: t.inkFaint }}>10 = free drink</span>
           </div>
           <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: t.ink, marginBottom: '20px' }}>
-            {remaining} more drinks until your free one.
+            {remaining} more orders until your free one.
           </div>
           <GhostBtn t={t} onClick={() => onNavigate('Rewards')}>Explore Rewards</GhostBtn>
         </div>
@@ -184,19 +219,18 @@ function HomeScreen({ t, onNavigate }) {
         <div style={{ height: '1px', background: t.border, margin: '28px 24px' }}></div>
 
         <div style={{ padding: '0 24px' }}>
-          <Label t={t}>Your Store</Label>
-          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '24px', color: t.ink, marginTop: '6px', letterSpacing: '-0.01em' }}>PLNTD · London</div>
+          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '24px', color: t.ink, letterSpacing: '-0.01em' }}>PLNTD · London</div>
           <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: t.inkMuted, marginTop: '4px', marginBottom: '16px' }}>Eat clean. Live green. Feel good.</div>
           <PrimaryBtn t={t} onClick={() => onNavigate('Scan')}>Show my QR</PrimaryBtn>
         </div>
 
         <div style={{ marginTop: '32px' }}>
-          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '20px', color: t.ink, padding: '0 24px', marginBottom: '16px', letterSpacing: '-0.01em' }}>Featured Smoothies</div>
+          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '20px', color: t.ink, padding: '0 24px', marginBottom: '16px', letterSpacing: '-0.01em' }}>Featured</div>
           <div style={{ display: 'flex', gap: '16px', padding: '0 24px', overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: '6px' }}>
-            {SMOOTHIES.slice(0, 5).map(s => (
+            {FEATURED.map(s => (
               <div key={s.name} style={{ flexShrink: 0, width: '110px' }}>
                 <div style={{ width: '110px', height: '110px', borderRadius: '50%', background: t.cream, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <img src={s.img} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={s.img} alt={s.name} style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '10px' }}>
                   <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: s.color, flexShrink: 0 }}></div>
@@ -212,8 +246,8 @@ function HomeScreen({ t, onNavigate }) {
           <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: t.leaf, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
             <Icon name="leaf" size={18} color="#fff" />
           </div>
-          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '22px', color: t.ink, marginBottom: '6px', letterSpacing: '-0.01em' }}>Eat clean. Live green.</div>
-          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: t.inkMuted, lineHeight: 1.5 }}>Every smoothie & juice on the menu is made fresh, on-site, with real fruit and veg. No syrups, no shortcuts.</div>
+          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '22px', color: t.ink, marginBottom: '6px', letterSpacing: '-0.01em' }}>Eat clean. Live green. Feel good.</div>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: t.inkMuted, lineHeight: 1.5 }}>Juice, smoothie & specialty coffee bar. Made fresh in London since 2026.</div>
         </div>
 
         {/* Brand footer bar */}
@@ -233,14 +267,6 @@ function HomeScreen({ t, onNavigate }) {
 
 // ─── SCAN ───────────────────────────────────────────────────────────
 function ScanScreen({ t, onNavigate, isRedeem }) {
-  const [countdown, setCountdown] = useState(42);
-  const pct = (countdown / 60) * 100;
-
-  useEffect(() => {
-    const timer = setInterval(() => setCountdown(c => c > 0 ? c - 1 : 60), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   function QR() {
     return (
       <div style={{ width: '200px', height: '200px', padding: '12px', background: '#fff', border: `1px solid ${t.border}`, borderRadius: '14px' }}>
@@ -288,14 +314,8 @@ function ScanScreen({ t, onNavigate, isRedeem }) {
           </div>
           <QR />
 
-          <div style={{ width: '100%', marginTop: '24px' }}>
-            <div style={{ height: '6px', background: t.border, borderRadius: '999px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: t.leaf, borderRadius: '999px', width: `${pct}%`, transition: 'width 1s linear' }}></div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: t.inkFaint }}>Refreshes in</span>
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 600, color: t.inkMuted }}>{countdown}s</span>
-            </div>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: t.inkFaint, marginTop: '20px' }}>
+            Staff will scan this at the till
           </div>
         </div>
       </div>
@@ -382,9 +402,10 @@ function RewardsScreen({ t }) {
       <div style={{ padding: '0 24px 24px' }}>
         <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '20px', color: t.ink, marginBottom: '16px', letterSpacing: '-0.01em' }}>How it works</div>
         {[
-          { title: 'Earn 1 point per transaction', body: 'Every smoothie, juice or coffee you buy at PLNTD earns 1 point.' },
-          { title: '10 points = a free drink', body: 'Once you hit 10 points, your next drink is on us.' },
-          { title: 'Your QR is private', body: 'Only PLNTD staff can scan your code. Refreshes every minute.' },
+          { title: '1 point per transaction above £3', body: "Spend over £3 in a single transaction and you'll earn a point. Just show your QR at the till and PLNTD staff scan it." },
+          { title: '10 points = a free drink', body: 'Once you hit 10 points, your next drink is on us. Pick anything from the menu.' },
+          { title: 'Your QR is private', body: "Only PLNTD staff can scan your code to add a point. It's tied to your account, so points always land on the right card." },
+          { title: 'Points reset after redeeming', body: "When you cash in your free drink, your balance starts again at 0. Then you're collecting toward the next one." },
         ].map(faq => (
           <div key={faq.title} style={{ display: 'flex', gap: '12px', marginBottom: '18px' }}>
             <span style={{ color: t.gold, fontSize: '14px', marginTop: '2px', flexShrink: 0 }}>★</span>
@@ -401,12 +422,13 @@ function RewardsScreen({ t }) {
 
 // ─── MENU ───────────────────────────────────────────────────────────
 const MENU_DATA = [
-  { title: 'Smoothies', blurb: 'Some smoothies contain coconut water.', items: SMOOTHIES },
-  { title: 'Fresh Juices', items: JUICES },
-  { title: 'Coffee & More', items: COFFEES },
-  { title: 'Teas', items: TEAS },
+  { title: 'Smoothies', blurb: 'Nutrient packed, smooth blends. Smoothies may include coconut water.', items: SMOOTHIES },
+  { title: 'Fresh Juices', blurb: 'Freshly prepared and juiced. Never from concentrate.', items: JUICES },
+  { title: 'Sandwiches', blurb: 'Protein packed. Made fresh to order on the day.', items: SANDWICHES },
+  { title: 'Specialty Coffee', blurb: 'Single origin speciality beans. Alternative milks and iced signature drinks.', items: COFFEES },
+  { title: 'Tea', blurb: 'Brewed by the cup. Steeped to order.', items: TEAS },
 ];
-const TABS = ['Smoothies', 'Fresh Juices', 'Coffee & More', 'Teas'];
+const TABS = ['Smoothies', 'Fresh Juices', 'Sandwiches', 'Specialty Coffee', 'Tea'];
 
 function MenuScreen({ t }) {
   const [activeTab, setActiveTab] = useState('Smoothies');
@@ -518,7 +540,7 @@ function SettingsScreen({ t, onNavigate }) {
       </div>
 
       <div style={{ padding: '20px 24px' }}>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: t.inkFaint }}>v1.0.0 · PLNTD</div>
+        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: t.inkFaint }}>v1.0.4 · PLNTD</div>
       </div>
     </div>
   );
