@@ -276,18 +276,21 @@ function ScanScreen({ t, onNavigate, isRedeem }) {
   }
 
   return (
-    <div style={{ background: t.surface, minHeight: '100%' }}>
-      <div style={{ padding: '12px 24px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div style={{ background: t.surface, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '20px 24px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-          <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: '15px', color: t.ink }}>{POINTS}</span>
-          <span style={{ color: t.gold, fontSize: '15px' }}>★</span>
-          <span style={{ color: t.inkFaint, fontFamily: "'Inter', sans-serif", fontSize: '14px' }}>/ {TARGET}</span>
+          <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: '17px', color: t.ink }}>{POINTS}</span>
+          <span style={{ color: t.gold, fontSize: '17px' }}>★</span>
+          <span style={{ color: t.inkFaint, fontFamily: "'Inter', sans-serif", fontSize: '16px' }}>/ {TARGET}</span>
         </div>
-        <span style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '20px', color: t.ink, letterSpacing: '-0.01em' }}>Ismail</span>
+        <span style={{ fontFamily: "'Fraunces', serif", fontWeight: 800, fontSize: '22px', color: t.ink, letterSpacing: '-0.01em' }}>Ismail</span>
         <div style={{ width: '48px' }}></div>
       </div>
 
-      <div style={{ margin: '0 16px', border: `1px solid ${t.border}`, borderRadius: '24px', overflow: 'hidden', background: t.surface }}>
+      <div style={{ height: '1px', background: t.border, margin: '0 24px' }}></div>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 20px 24px' }}>
+      <div style={{ border: `1px solid ${t.border}`, borderRadius: '24px', overflow: 'hidden', background: t.surface }}>
         <div style={{ background: t.dark, padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '72px', height: '72px', borderRadius: '16px', background: t.gold, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -318,6 +321,7 @@ function ScanScreen({ t, onNavigate, isRedeem }) {
             Staff will scan this at the till
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
