@@ -19,6 +19,12 @@
     --content-scale: 1;
     --headline-scale: 1;
     --body-scale: 1;
+    /* The app screens (screens.jsx) use absolute px sizes tuned for a real
+       ~400px-wide phone. The mock's screen is narrower, so we render the
+       screen content at --screen-design-w and scale it down to fit — this
+       de-zooms the content so it matches the real device's proportions. */
+    --screen-design-w: 400px;
+    --screen-scale: 1;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow-x: hidden; }
@@ -298,7 +304,12 @@
 
   .screen-slide {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: var(--screen-design-w);
+    height: calc(100% / var(--screen-scale));
+    transform: scale(var(--screen-scale));
+    transform-origin: top left;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
@@ -531,7 +542,7 @@ function TabBar({ activeScreen, onNavigate }) {
     Home: { active: 'home', inactive: 'home' },
     Scan: { active: 'qr', inactive: 'qr' },
     Rewards: { active: 'star', inactive: 'star-o' },
-    Menu: { active: 'menu', inactive: 'menu' }
+    Menu: { active: 'utensils', inactive: 'utensils' }
   };
   return (
     <div className="phone-tabbar">
@@ -558,6 +569,11 @@ function PhoneShowcase() {
     r.style.setProperty('--phone-w', t.phoneWidth + 'px');
     r.style.setProperty('--phone-h', t.phoneHeight + 'px');
     r.style.setProperty('--phone-radius', Math.round(t.phoneWidth * 0.144) + 'px');
+    // De-zoom: render app screens at SCREEN_DESIGN_W and scale to the real
+    // screen width (phone width minus the 10px bezel padding each side).
+    const SCREEN_DESIGN_W = 400;
+    r.style.setProperty('--screen-design-w', SCREEN_DESIGN_W + 'px');
+    r.style.setProperty('--screen-scale', ((t.phoneWidth - 20) / SCREEN_DESIGN_W).toString());
     r.style.setProperty('--showcase-gap', t.showcaseGap + 'px');
     r.style.setProperty('--copy-max', t.copyWidth + 'px');
     r.style.setProperty('--headline-scale', (t.headlineSize / 100).toString());
