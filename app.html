@@ -613,10 +613,10 @@ function PhoneShowcase() {
   // Real screenshots of the live app (replaces the earlier re-created UI).
   // Each shot already includes the phone status bar and bottom tab bar.
   const APP_SHOTS = {
-    Home:    'assets/app/app-home.jpg',
-    Scan:    'assets/app/app-scan.jpg',
-    Rewards: 'assets/app/app-rewards.jpg',
-    Menu:    'assets/app/app-menu.jpg'
+    Home:    'assets/app/app-home.jpg?v=2',
+    Scan:    'assets/app/app-scan.jpg?v=2',
+    Rewards: 'assets/app/app-rewards.jpg?v=2',
+    Menu:    'assets/app/app-menu.jpg?v=2'
   };
   const renderScreen = (id) =>
     <img className="app-shot" src={APP_SHOTS[id]} alt={`PLNTD app — ${id}`} draggable="false" />;
