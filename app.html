@@ -585,7 +585,17 @@ function PhoneShowcase() {
     const section = document.querySelector('.showcase-section');
     const inner = document.querySelector('.showcase-inner');
     if (!section || !inner) return;
+    const SCREEN_DESIGN_W = 400;
     function fit() {
+      // Scale the app screens to the ACTUAL rendered screen width so content
+      // never overflows/clips. The phone bezel is min(320px, 78vw) on mobile —
+      // narrower than the desktop --phone-w — so a fixed scale would clip the
+      // right edge (e.g. the price) on smaller phones. Measure and recompute.
+      const slider = document.querySelector('.screen-slider');
+      if (slider && slider.clientWidth > 0) {
+        document.documentElement.style.setProperty(
+          '--screen-scale', (slider.clientWidth / SCREEN_DESIGN_W).toString());
+      }
       inner.style.transform = 'none';
       if (window.innerWidth <= 900) return;
       const sH = section.clientHeight;
