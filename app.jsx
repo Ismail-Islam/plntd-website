@@ -166,7 +166,8 @@ const CatIcon = {
   coffee: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z" /><path d="M16 10h2a3 3 0 0 1 0 6h-2" /><path d="M7 4v2M10 4v2M13 4v2" /></svg>,
   tea: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z" /><path d="M16 11h2a3 3 0 0 1 0 6h-2" /><path d="M9 5c.5-1 0-2-1-2.5M12 5c.5-1 0-2-1-2.5" /></svg>,
   speciality: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 8h10l-1 11a2 2 0 0 1-2 1.8h-4a2 2 0 0 1-2-1.8Z" /><path d="M9 11h6" /><path d="M12 3v3M10.5 4.5h3" /></svg>,
-  sandwiches: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8c0-2 3.6-3.5 8-3.5S20 6 20 8" /><path d="M4 8h16" /><path d="M5 12h14" /><path d="M4 15.5h16a0 0 0 0 1 0 0c0 1.9-3.6 3.5-8 3.5s-8-1.6-8-3.5Z" /></svg>
+  sandwiches: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8c0-2 3.6-3.5 8-3.5S20 6 20 8" /><path d="M4 8h16" /><path d="M5 12h14" /><path d="M4 15.5h16a0 0 0 0 1 0 0c0 1.9-3.6 3.5-8 3.5s-8-1.6-8-3.5Z" /></svg>,
+  bakes: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 16c2-8 14-8 16 0-3-2-6-1-8-1s-5-1-8 1Z" /><path d="M8 15 9.5 11.5M12 15V11M16 15 14.5 11.5" /></svg>
 };
 
 function MenuSection({ onAdd, onView }) {
@@ -177,7 +178,8 @@ function MenuSection({ onAdd, onView }) {
   { id: 'juices', title: 'Fresh Juices', icon: CatIcon.juices },
   { id: 'sandwiches', title: 'Sandwiches', icon: CatIcon.sandwiches },
   { id: 'coffee', title: 'Specialty Coffee', icon: CatIcon.coffee },
-  { id: 'tea', title: 'Tea', icon: CatIcon.tea }];
+  { id: 'tea', title: 'Tea', icon: CatIcon.tea },
+  { id: 'bakes', title: 'Artisan Bakes', icon: CatIcon.bakes }];
 
   const sections = activeTab === 'all' ? window.MENU : window.MENU.filter((s) => s.id === activeTab);
 
