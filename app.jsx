@@ -167,7 +167,7 @@ const CatIcon = {
   tea: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z" /><path d="M16 11h2a3 3 0 0 1 0 6h-2" /><path d="M9 5c.5-1 0-2-1-2.5M12 5c.5-1 0-2-1-2.5" /></svg>,
   speciality: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 8h10l-1 11a2 2 0 0 1-2 1.8h-4a2 2 0 0 1-2-1.8Z" /><path d="M9 11h6" /><path d="M12 3v3M10.5 4.5h3" /></svg>,
   sandwiches: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8c0-2 3.6-3.5 8-3.5S20 6 20 8" /><path d="M4 8h16" /><path d="M5 12h14" /><path d="M4 15.5h16a0 0 0 0 1 0 0c0 1.9-3.6 3.5-8 3.5s-8-1.6-8-3.5Z" /></svg>,
-  bakes: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 16c2-8 14-8 16 0-3-2-6-1-8-1s-5-1-8 1Z" /><path d="M8 15 9.5 11.5M12 15V11M16 15 14.5 11.5" /></svg>
+  bakes: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m4.6 13.11 5.79-3.21c1.89-1.05 4.79 1.78 3.71 3.71l-3.22 5.81C8.8 23.16.79 15.23 4.6 13.11Z" /><path d="m10.5 9.5-1-2.29C9.2 6.48 8.8 6 8 6H4.5C2.79 6 2 6.5 2 8.5a7.71 7.71 0 0 0 2 4.83" /><path d="M8 6c0-1.55.24-4-2-4-2 0-2.5 2.17-2.5 4" /><path d="m14.5 13.5 2.29 1c.73.3 1.21.7 1.21 1.5v3.5c0 1.71-.5 2.5-2.5 2.5a7.71 7.71 0 0 1-4.83-2" /><path d="M18 16c1.55 0 4-.24 4 2 0 2-2.17 2.5-4 2.5" /></svg>
 };
 
 function MenuSection({ onAdd, onView }) {
