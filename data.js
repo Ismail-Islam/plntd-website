@@ -113,13 +113,13 @@ window.MENU = [
     blurb: 'Freshly baked. Best enjoyed with a coffee.',
     items: [
       // NOTE: ingredients and nutrition below are placeholders — replace with real values.
-      { name: 'Plain Croissant',   ingr: 'butter, flour', price: 3.00, color: '#C68A3E', img: 'assets/drinks/bake-plain-croissant.png?v=5',
+      { name: 'Plain Croissant',   ingr: 'butter, flour', price: 3.00, color: '#C68A3E', img: 'assets/drinks/bake-plain-croissant.png?v=6',
         allergens: ['Gluten', 'Milk', 'Egg'], nutrition: { kj: 1130, kcal: 270, fat: 14, satFat: 8, carbs: 30, sugars: 6, fibre: 1.5, protein: 5, sodium: 300 } },
-      { name: 'Almond Croissant',  ingr: 'almond frangipane, flaked almonds', price: 3.50, color: '#B98A5E', img: 'assets/drinks/bake-almond-croissant.png?v=5',
+      { name: 'Almond Croissant',  ingr: 'almond frangipane, flaked almonds', price: 3.50, color: '#B98A5E', img: 'assets/drinks/bake-almond-croissant.png?v=6',
         allergens: ['Gluten', 'Milk', 'Egg', 'Tree nuts (almond)'], nutrition: { kj: 1760, kcal: 420, fat: 24, satFat: 10, carbs: 42, sugars: 18, fibre: 3, protein: 9, sodium: 320 } },
-      { name: 'Blueberry Muffin',  ingr: 'blueberries, vanilla', price: 3.50, color: '#3E5AA0', img: 'assets/drinks/bake-blueberry-muffin.png?v=5',
+      { name: 'Blueberry Muffin',  ingr: 'blueberries, vanilla', price: 3.50, color: '#3E5AA0', img: 'assets/drinks/bake-blueberry-muffin.png?v=6',
         allergens: ['Gluten', 'Milk', 'Egg'], nutrition: { kj: 1590, kcal: 380, fat: 16, satFat: 3, carbs: 54, sugars: 30, fibre: 2, protein: 5, sodium: 350 } },
-      { name: 'Cinnamon Roll',     ingr: 'cinnamon, brown sugar, icing', price: 4.50, color: '#8B5A2B', img: 'assets/drinks/bake-cinnamon-roll.png?v=5',
+      { name: 'Cinnamon Roll',     ingr: 'cinnamon, brown sugar, icing', price: 4.50, color: '#8B5A2B', img: 'assets/drinks/bake-cinnamon-roll.png?v=6',
         allergens: ['Gluten', 'Milk', 'Egg'], nutrition: { kj: 1510, kcal: 360, fat: 12, satFat: 5, carbs: 56, sugars: 26, fibre: 2, protein: 6, sodium: 340 } },
     ],
   },
