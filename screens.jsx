@@ -6,24 +6,24 @@ const { useState, useEffect } = React;
 // ─── DATA ────────────────────────────────────────────────────────────
 // Mirrors the live app's src/lib/menu.ts (categories, wording, images).
 const SMOOTHIES = [
-  { name: 'Green Glow',         ingr: 'apple, spinach, avocado, broccoli, lemon, coconut water', price: 6.50, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-glow.png' },
-  { name: 'Green Machine',      ingr: 'kale, spinach, cucumber, apple, ginger, lemon, coconut water', price: 6.50, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-machine.png' },
-  { name: 'Pineapple Sunrise',  ingr: 'pineapple, banana, apple, coconut water', price: 6.50, color: '#DF9A00', img: 'assets/drinks/smoothie-pineapple-sunrise.png' },
-  { name: 'Blueberry Breeze',   ingr: 'blueberries, banana, almond milk', price: 6.50, color: '#2E0096', img: 'assets/drinks/smoothie-blueberry-breeze.png' },
-  { name: 'Strawberry Delight', ingr: 'strawberries, apple, coconut water', price: 6.50, color: '#C1002F', img: 'assets/drinks/smoothie-strawberry-delight.png' },
-  { name: 'Berry Blast',        ingr: 'strawberries, banana, apple, coconut water', price: 6.50, color: '#CA0039', img: 'assets/drinks/smoothie-berry-blast.png' },
+  { name: 'Green Glow',         ingr: 'apple, spinach, avocado, broccoli, lemon, coconut water', price: 5.49, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-glow.png' },
+  { name: 'Green Machine',      ingr: 'kale, spinach, cucumber, apple, ginger, lemon, coconut water', price: 5.49, color: '#3E7A1E', img: 'assets/drinks/smoothie-green-machine.png' },
+  { name: 'Pineapple Sunrise',  ingr: 'pineapple, banana, apple, coconut water', price: 5.49, color: '#DF9A00', img: 'assets/drinks/smoothie-pineapple-sunrise.png' },
+  { name: 'Blueberry Breeze',   ingr: 'blueberries, banana, almond milk', price: 5.49, color: '#2E0096', img: 'assets/drinks/smoothie-blueberry-breeze.png' },
+  { name: 'Strawberry Delight', ingr: 'strawberries, apple, coconut water', price: 5.49, color: '#C1002F', img: 'assets/drinks/smoothie-strawberry-delight.png' },
+  { name: 'Berry Blast',        ingr: 'strawberries, banana, apple, coconut water', price: 5.49, color: '#CA0039', img: 'assets/drinks/smoothie-berry-blast.png' },
 ];
 
 const JUICES = [
-  { name: 'Garden Green',     ingr: 'cucumber, celery, kale', price: 6.00, color: '#3E7A1E', img: 'assets/drinks/juice-garden-green.png' },
-  { name: 'Carrot Glow',      ingr: 'carrot, apple, ginger', price: 6.00, color: '#CA3D00', img: 'assets/drinks/juice-carrot-glow.png' },
-  { name: 'Sunrise Carrot',   ingr: 'carrot, orange, lemon', price: 6.00, color: '#CA3D00', img: 'assets/drinks/juice-sunrise-carrot.png' },
-  { name: 'Daily Cleanse',    ingr: 'apple, carrot, ginger', price: 6.00, color: '#3E7A1E', img: 'assets/drinks/juice-daily-cleanse.png' },
-  { name: 'Citrus Refresher', ingr: 'apple, mint, ginger, lemon', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-citrus-refresher.png' },
-  { name: 'Apple Zing',       ingr: 'apple, mint, ginger', price: 6.00, color: '#3E7A1E', img: 'assets/drinks/juice-apple-zing.png' },
-  { name: 'Citrus Boost',     ingr: 'orange, lemon, carrot', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-citrus-boost.png' },
-  { name: 'Vitamin C Blast',  ingr: 'orange, pineapple, lemon', price: 6.00, color: '#DF9A00', img: 'assets/drinks/juice-vitamin-c-blast.png' },
-  { name: 'Berry Fresh',      ingr: 'strawberries, apple, lemon', price: 6.00, color: '#C1002F', img: 'assets/drinks/juice-berry-fresh.png' },
+  { name: 'Garden Green',     ingr: 'cucumber, celery, kale', price: 4.99, color: '#3E7A1E', img: 'assets/drinks/juice-garden-green.png' },
+  { name: 'Carrot Glow',      ingr: 'carrot, apple, ginger', price: 4.99, color: '#CA3D00', img: 'assets/drinks/juice-carrot-glow.png' },
+  { name: 'Sunrise Carrot',   ingr: 'carrot, orange, lemon', price: 4.99, color: '#CA3D00', img: 'assets/drinks/juice-sunrise-carrot.png' },
+  { name: 'Daily Cleanse',    ingr: 'apple, carrot, ginger', price: 4.99, color: '#3E7A1E', img: 'assets/drinks/juice-daily-cleanse.png' },
+  { name: 'Citrus Refresher', ingr: 'apple, mint, ginger, lemon', price: 4.99, color: '#DF9A00', img: 'assets/drinks/juice-citrus-refresher.png' },
+  { name: 'Apple Zing',       ingr: 'apple, mint, ginger', price: 4.99, color: '#3E7A1E', img: 'assets/drinks/juice-apple-zing.png' },
+  { name: 'Citrus Boost',     ingr: 'orange, lemon, carrot', price: 4.99, color: '#DF9A00', img: 'assets/drinks/juice-citrus-boost.png' },
+  { name: 'Vitamin C Blast',  ingr: 'orange, pineapple, lemon', price: 4.99, color: '#DF9A00', img: 'assets/drinks/juice-vitamin-c-blast.png' },
+  { name: 'Berry Fresh',      ingr: 'strawberries, apple, lemon', price: 4.99, color: '#C1002F', img: 'assets/drinks/juice-berry-fresh.png' },
 ];
 
 const SANDWICHES = [
